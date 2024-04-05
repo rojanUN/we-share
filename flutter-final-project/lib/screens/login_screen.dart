@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project/services/firebase_auth_service.dart';
 import 'package:form_validator/form_validator.dart';
 
 class Login extends StatefulWidget {
@@ -10,18 +11,40 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _showPassword = false;
-  String _email = '';
-  String _password = '';
-
-  RegExp passwordRgx = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#!%*?&])[A-Za-z\d@$#!%*?&]{8,}$');
 
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuthService _authService = FirebaseAuthService();
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void signInHandler() async {
+    if (_formKey.currentState!.validate()) {
+      final user = await _authService.signInWithEmailAndPassword(
+        emailController.text,
+        passwordController.text,
+      );
+      if (user != null) {
+        print('User signed in successfully');
+        Navigator.pushNamed(context, "/");
+      } else {
+        print('User sign in failed');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login Page"),
+        title: Text("We Share"),
       ),
       body: Form(
         key: _formKey,
@@ -43,11 +66,7 @@ class _LoginState extends State<Login> {
               ),
               const SizedBox(height: 20.0),
               TextFormField(
-                onChanged: (value) => {
-                  setState(
-                    () => _email = value,
-                  )
-                },
+                controller: emailController,
                 validator: ValidationBuilder().email().maxLength(50).build(),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -57,16 +76,9 @@ class _LoginState extends State<Login> {
               ),
               const SizedBox(height: 10.0),
               TextFormField(
-                onChanged: (value) => {
-                  setState(
-                    () => _password = value,
-                  )
-                },
-                validator: ValidationBuilder()
-                    .regExp(passwordRgx, "Please enter strong password")
-                    .minLength(5)
-                    .maxLength(50)
-                    .build(),
+                controller: passwordController,
+                validator:
+                    ValidationBuilder().minLength(5).maxLength(50).build(),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password*',
@@ -101,13 +113,27 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    print('email: $_email, password: $_password');
-                    Navigator.pushNamed(context, "/");
-                  }
-                },
-                child: Text('Login'),
+                onPressed: signInHandler,
+                child: Text('Sign In'),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Don't have an account?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/signup");
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.blue),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
