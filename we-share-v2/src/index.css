@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+    @apply text-h1 font-h my-h;
+}
+h2 {
+    @apply text-h2 font-h my-h;
+}
+h3 {
+    @apply text-h3 font-h my-h;
+}
+h4 {
+    @apply text-h4 font-h my-h;
+}
+h5 {
+    @apply text-h5 font-h my-h;
+}
+h6 {
+    @apply text-h6 font-h my-h;
+}
