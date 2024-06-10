@@ -33,6 +33,6 @@ module.exports = {
     //   },
     // ],
     "no-async-promise-executor": "off",
-    "no-console": "error",
+    // "no-console": "error",
   },
 };
