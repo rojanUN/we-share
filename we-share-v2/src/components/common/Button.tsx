@@ -1,19 +1,37 @@
+import React from 'react';
 interface ButtonType {
     children: React.ReactNode;
-    variant: 'secondary' | 'primary';
+    variant: 'primary' | 'danger';
     disabled?: boolean;
+    outline?: boolean;
     handleBtnClick: () => void;
 }
 
-function Button({ children, variant, disabled, handleBtnClick }: ButtonType) {
+function Button({
+    children,
+    variant,
+    disabled,
+    outline,
+    handleBtnClick,
+}: ButtonType) {
+    const baseClasses =
+        'border-2 border-solid h-fit rounded-[7px] py-[5px] px-[20px] text-[18px] tracking-wide font-bold';
+    const cursorClasses = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
+    const outlineClasses = outline ? 'bg-transparent' : 'text-white';
+
+    const variantClasses = {
+        danger: `border-red-500 ${outline ? 'text-red-500' : 'bg-red-500 text-white'}`,
+        primary: `border-[#1935CA] ${outline ? 'text-[#1935CA]' : 'bg-[#1935CA] text-white'}`,
+    };
+
+    const disabledClasses = `disabled:border-gray-400 ${!outline && 'disabled:bg-gray-400'} disabled:text-gray-300`;
+
     return (
         <button
             type="button"
             onClick={handleBtnClick}
             disabled={disabled}
-            className={`border-2 border-solid h-fit ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'} rounded-[7px] py-[5px] px-[20px] text-[18px] tracking-wide font-bold 
-            ${variant === 'secondary' ? 'border-[#1935CA] text-[#1935CA]' : 'border-[#1935CA] bg-[#1935CA] text-white'} 
-            ${variant === 'secondary' ? 'disabled:border-gray-400 disabled:text-gray-400' : 'disabled:border-gray-400 disabled:bg-gray-400 disabled:text-gray-300'}`}
+            className={`${baseClasses} ${cursorClasses} ${outlineClasses} ${variantClasses[variant]} ${disabledClasses}`}
         >
             {children}
         </button>

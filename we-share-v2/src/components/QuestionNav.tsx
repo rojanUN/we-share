@@ -5,9 +5,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setQuestions, setSelectedQuestion } from '../feature/exam/examSlice';
 
 function QuestionNav() {
-    const selectedQuestionIndex = useAppSelector(
-        (state) => state.exam.activeQuesIndex
-    );
+    const selectedQuestion = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -15,6 +13,13 @@ function QuestionNav() {
         dispatch(setSelectedQuestion(questions[0]));
         // dispatch(setSelectedQuestion({ ...questions[0], questionNo: 0 }));
     }, [dispatch]);
+
+    function isSolved(id: number) {
+        const isQuesSolved = selectedQuestion?.checkedQuestions?.find(
+            (q) => q.id === id
+        );
+        return isQuesSolved ? true : false;
+    }
     return (
         <div className="mt-4">
             <h2>Questions</h2>
@@ -24,7 +29,8 @@ function QuestionNav() {
                         <QuestionIndicator
                             key={i}
                             index={i}
-                            isActive={selectedQuestionIndex === i}
+                            isActive={selectedQuestion?.activeQuesIndex === i}
+                            isChecked={isSolved(question?.id)}
                             question={question}
                             // question={{ ...question, questionNo: i }}
                         >

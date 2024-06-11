@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import { detectNoise } from '../helper/helper';
+// import { detectNoise } from '../helper/helper';
 import { Toast } from '../helper/toast';
 import { CustomError } from '../types';
 
@@ -8,8 +8,8 @@ const WebCam = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    const [isNoise, setIsNoise] = useState(false);
-    const [noiseLevel, setNoiseLevel] = useState(0);
+    // const [isNoise, setIsNoise] = useState(false);
+    // const [noiseLevel, setNoiseLevel] = useState(0);
 
     useEffect(() => {
         // Load models and start detection
@@ -47,9 +47,13 @@ const WebCam = () => {
                                 };
                             }
                         })
-                        .catch((err) =>
-                            console.error('getUserMedia error:', err)
-                        );
+                        .catch((err) => {
+                            console.error('getUserMedia error:', err);
+                            Toast.Error(
+                                'Please look at your screen',
+                                CustomError.webCamError
+                            );
+                        });
                 }
             };
 
@@ -129,7 +133,7 @@ const WebCam = () => {
             )}
             <video
                 ref={videoRef}
-                className={`rounded-xl  max-h-[340px] my-2.5 ${isNoise ? 'outline outline-4 outline-offset-0 outline-[#1935CA]' : ''}`}
+                // className={`rounded-xl  max-h-[340px] my-2.5 ${isNoise ? 'outline outline-4 outline-offset-0 outline-[#1935CA]' : ''}`}
             />
         </div>
     );
