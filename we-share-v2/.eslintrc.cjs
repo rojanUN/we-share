@@ -3,6 +3,7 @@ module.exports = {
     env: { browser: true, es2020: true },
     extends: [
         'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
         'plugin:react/jsx-runtime',
         'plugin:react-hooks/recommended',
@@ -18,6 +19,8 @@ module.exports = {
             { allowConstantExport: true },
         ],
         '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-console': 'error', // for preventing console.log to commit
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+        // 'no-console': 'error', // for preventing console.log to commit
     },
 };

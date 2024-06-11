@@ -1,5 +1,6 @@
 export const questions = [
     {
+        id: 1,
         question:
             'What is the correct syntax to print a message in the console in JavaScript?',
         options: [
@@ -11,16 +12,19 @@ export const questions = [
         correctAnswer: 2,
     },
     {
+        id: 2,
         question: 'Which of the following is a JavaScript data type?',
         options: ['Number', 'String', 'Boolean', 'All of the above'],
         correctAnswer: 3,
     },
     {
+        id: 3,
         question: 'Which company developed JavaScript?',
         options: ['Mozilla', 'Netscape', 'Microsoft', 'Sun Microsystems'],
         correctAnswer: 1,
     },
     {
+        id: 4,
         question: 'How do you create a function in JavaScript?',
         options: [
             'function myFunction() {}',
@@ -31,6 +35,7 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 5,
         question:
             "How do you call a function named 'myFunction' in JavaScript?",
         options: [
@@ -42,11 +47,13 @@ export const questions = [
         correctAnswer: 2,
     },
     {
+        id: 6,
         question: 'Which event occurs when the user clicks on an HTML element?',
         options: ['onchange', 'onclick', 'onmouseover', 'onmouseclick'],
         correctAnswer: 1,
     },
     {
+        id: 7,
         question: 'What is the correct way to write a JavaScript array?',
         options: [
             "var colors = 1 = ('red'), 2 = ('green'), 3 = ('blue')",
@@ -57,6 +64,7 @@ export const questions = [
         correctAnswer: 2,
     },
     {
+        id: 8,
         question: 'How do you add a comment in JavaScript?',
         options: [
             "'This is a comment",
@@ -67,6 +75,7 @@ export const questions = [
         correctAnswer: 1,
     },
     {
+        id: 9,
         question: 'What is the correct way to write a JavaScript object?',
         options: [
             "var person = {firstName:'John', lastName:'Doe'}",
@@ -77,6 +86,7 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 10,
         question: 'How do you declare a JavaScript variable?',
         options: [
             'var carName;',
@@ -87,21 +97,25 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 11,
         question: 'Which operator is used to assign a value to a variable?',
         options: ['*', '-', '=', '+'],
         correctAnswer: 2,
     },
     {
+        id: 12,
         question: 'What will the following code return: Boolean(10 > 9)?',
         options: ['true', 'false', 'NaN', 'undefined'],
         correctAnswer: 0,
     },
     {
+        id: 13,
         question: 'What is the correct file extension for JavaScript files?',
         options: ['.js', '.java', '.javascript', '.jvs'],
         correctAnswer: 0,
     },
     {
+        id: 14,
         question: 'How do you create a Date object in JavaScript?',
         options: [
             'new Date()',
@@ -112,6 +126,7 @@ export const questions = [
         correctAnswer: 3,
     },
     {
+        id: 15,
         question: 'How do you round the number 7.25 to the nearest integer?',
         options: [
             'Math.round(7.25)',
@@ -122,6 +137,7 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 16,
         question: 'Which method converts JSON data to a JavaScript object?',
         options: [
             'JSON.parse()',
@@ -132,38 +148,45 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 17,
         question:
             'Which method is used to add an element at the end of an array?',
         options: ['push()', 'pop()', 'shift()', 'unshift()'],
         correctAnswer: 0,
     },
     {
+        id: 18,
         question:
             "How do you write a conditional statement for executing some code if 'i' is NOT equal to 5?",
         options: ['if (i <> 5)', 'if i <> 5', 'if (i != 5)', 'if i =! 5 then'],
         correctAnswer: 2,
     },
     {
+        id: 19,
         question: 'Which method removes the last element from an array?',
         options: ['pop()', 'remove()', 'slice()', 'shift()'],
         correctAnswer: 0,
     },
     {
+        id: 20,
         question: 'Which method can be used to join two or more arrays?',
         options: ['concat()', 'merge()', 'join()', 'combine()'],
         correctAnswer: 0,
     },
     {
+        id: 21,
         question: 'Which keyword is used to declare a constant in JavaScript?',
         options: ['const', 'let', 'var', 'constant'],
         correctAnswer: 0,
     },
     {
+        id: 22,
         question: "What is the output of 'typeof NaN'?",
         options: ["'number'", "'NaN'", "'undefined'", "'object'"],
         correctAnswer: 0,
     },
     {
+        id: 23,
         question: 'How do you write a JavaScript object literal?',
         options: [
             "{ name: 'John', age: 30 }",
@@ -174,11 +197,13 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 24,
         question: 'Which method can be used to find the length of a string?',
         options: ['length()', 'size()', 'len()', 'None of the above'],
         correctAnswer: 3,
     },
     {
+        id: 25,
         question: 'How do you define a class in JavaScript?',
         options: [
             'class MyClass {}',
@@ -189,12 +214,14 @@ export const questions = [
         correctAnswer: 0,
     },
     {
+        id: 26,
         question:
             'Which method returns the character at a specified index in a string?',
         options: ['charAt()', 'getChar()', 'characterAt()', 'getCharacter()'],
         correctAnswer: 0,
     },
     {
+        id: 27,
         question: 'How do you add an element to the beginning of an array?',
         options: ['push()', 'unshift()', 'shift()', 'pop()'],
         correctAnswer: 1,

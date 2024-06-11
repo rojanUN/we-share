@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react';
 // import WebCam from '../components/WebCam';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -7,12 +8,128 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import {
     setActiveQuesIndex,
     setSelectedQuestion,
+    setCheckedQuestions,
 } from '../feature/exam/examSlice';
 import { ClockIcon } from '../helper/icons';
+import { CheckedQuestionType } from '../types';
+import Modal from '../components/common/Modal';
+import CircularProgress from '../components/common/CircularProgress';
+import { formatCountDownTimer } from '../helper/helper';
+import { SessionStorage } from '../helper/sessionStorage';
+import RadioBtn from '../components/common/RadioBtn';
 
-function ExamPortal() {
+const examDuration = import.meta.env.VITE_EXAM_DURATION;
+
+const ExamPortal = function ExamPortal() {
+    const [coutdownTime, setCountDownTimer] = useState(() => {
+        const savedCountdownTime =
+            SessionStorage.getSessionItem('countdownTimer');
+        return savedCountdownTime !== null
+            ? JSON.parse(savedCountdownTime)
+            : examDuration || 30;
+    }); // 3600 sec for 1 hour
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const selectedQuestion = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
+
+    const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(display-mode: fullscreen)');
+
+        const handleMediaQueryChange = (event: any) => {
+            if (event.matches) {
+                // setfullscreenCount((prev) => prev + 1);
+            } else {
+                setfullscreenExitedCount((prevState) => prevState + 1);
+                alert('Exited fullscreen mode');
+            }
+        };
+
+        mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+        return () => {
+            mediaQuery.removeEventListener('change', handleMediaQueryChange);
+        };
+    }, [fullScreenExitedCount]);
+
+    const handleMCQSubmit = useCallback(() => {
+        setCountDownTimer(examDuration || 30);
+        SessionStorage.removeAllSession();
+        dispatch(setCheckedQuestions([]));
+
+        // if (selectedQuestion?.questions) {
+        //     setSelectedQuestion(selectedQuestion.questions[0]);
+        // }
+
+        setIsModalOpen(false);
+    }, [dispatch]);
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            SessionStorage.setSessionItem('countdownTimer', coutdownTime);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        const timerId = setInterval(() => {
+            setCountDownTimer((prevTime: number) => prevTime - 1);
+        }, 1000);
+
+        if (coutdownTime <= 0) {
+            clearInterval(timerId);
+            handleMCQSubmit();
+        }
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            clearInterval(timerId);
+        };
+    }, [coutdownTime, handleMCQSubmit]);
+
+    // Retrieve the saved state from sessionStorage when the component mounts
+    useEffect(() => {
+        const savedState = SessionStorage.getSessionItem('questionsState');
+        if (savedState) {
+            dispatch(setCheckedQuestions(JSON.parse(savedState)));
+        }
+    }, [dispatch]);
+
+    const handleOptionChange = ({
+        id,
+        selectedOption,
+        selectedOptionIndex,
+    }: CheckedQuestionType) => {
+        const existingQuestion = selectedQuestion?.checkedQuestions?.find(
+            (q) => q.id === id
+        );
+        let updatedState;
+
+        if (existingQuestion) {
+            // Update the existing question
+            updatedState = selectedQuestion?.checkedQuestions?.map((q) =>
+                q.id === id
+                    ? {
+                          ...q,
+                          selectedOption,
+                          selectedOptionIndex,
+                      }
+                    : q
+            );
+        } else {
+            // Add new question
+            updatedState = [
+                ...selectedQuestion.checkedQuestions!,
+                {
+                    id,
+                    selectedOption,
+                    selectedOptionIndex,
+                },
+            ];
+        }
+
+        dispatch(setCheckedQuestions(updatedState!));
+        SessionStorage.setSessionItem('questionsState', updatedState);
+    };
 
     const handlePrevBtnClick = () => {
         const newIndex = (selectedQuestion?.activeQuesIndex ?? 0) - 1;
@@ -37,6 +154,7 @@ function ExamPortal() {
                 {/* <WebCam /> */}
                 <QuestionNav />
             </div>
+
             <div className="flex-[6_6_0%] p-6 h-full bg-custom-gradient grid place-items-center">
                 <div className="flex flex-col h-max md:min-w-[70%] bg-white rounded-[20px] px-10 py-14">
                     <div className="h-20 mb-6 w-full flex justify-between items-center">
@@ -50,15 +168,63 @@ function ExamPortal() {
                                         Time Remaining
                                     </p>
                                     <p className="text-[18px] font-bold mt-[-4px] tracking-wider">
-                                        00 : 59 : 00
+                                        {formatCountDownTimer(coutdownTime)}
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <Button variant="primary" handleBtnClick={() => {}}>
+                        <Button
+                            variant="primary"
+                            handleBtnClick={() => setIsModalOpen(true)}
+                        >
                             Submit
                         </Button>
                     </div>
+                    <Modal
+                        isOpen={isModalOpen}
+                        title="Submission"
+                        onClose={() => setIsModalOpen(false)}
+                        handleSubmit={handleMCQSubmit}
+                    >
+                        <h2>Stats:</h2>
+                        <div className="h-max flex flex-col flex-wrap justify-between md:flex-row">
+                            <div className="flex-[1_1_0%] md:max-h-[10rem]">
+                                <CircularProgress
+                                    value={
+                                        selectedQuestion.checkedQuestions
+                                            ?.length!
+                                    }
+                                    max={selectedQuestion?.questions?.length!}
+                                />
+                            </div>
+                            <div className="flex-[1_1_0%] flex flex-col ml-auto justify-center font-bold text-[20px]">
+                                <p>
+                                    <span className="inline-block w-[100px] mr-4">
+                                        Attempted:
+                                    </span>
+                                    {selectedQuestion.checkedQuestions?.length}
+                                </p>
+                                <p>
+                                    <span className="inline-block w-[100px] mr-4">
+                                        Remaining:
+                                    </span>
+                                    {selectedQuestion.questions?.length! -
+                                        selectedQuestion.checkedQuestions
+                                            ?.length!}
+                                </p>
+                                <p>
+                                    <span className="inline-block w-[100px] mr-4">
+                                        Total:
+                                    </span>
+                                    {selectedQuestion.questions?.length}
+                                </p>
+                            </div>
+                        </div>
+                        <p className="text-center my-4">
+                            Note*: Once you submit you can&apos;t revert back.
+                            Thank you!
+                        </p>
+                    </Modal>
                     <p className="text-[20px] font-semibold">
                         Q.
                         {(selectedQuestion.activeQuesIndex ||
@@ -73,46 +239,31 @@ function ExamPortal() {
                                 key={i}
                                 className="inline-flex min-w-max px-4 py-3.5 rounded-[7px] my-2 items-center border-2 border-solid border-[#eee]"
                             >
-                                <label
-                                    className="relative flex items-center rounded-full cursor-pointer"
-                                    htmlFor={`option-${i}`}
-                                >
-                                    <input
-                                        name="color"
-                                        type="radio"
-                                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-[#1935CA] text-[#1935CA] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-[#1935CA] checked:before:bg-[#1935CA] hover:before:opacity-10"
-                                        id={`option-${i}`}
-                                    />
-                                    <span className="absolute text-[#1935CA] transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-3.5 w-3.5"
-                                            viewBox="0 0 16 16"
-                                            fill="currentColor"
-                                        >
-                                            <circle
-                                                data-name="ellipse"
-                                                cx="8"
-                                                cy="8"
-                                                r="8"
-                                            ></circle>
-                                        </svg>
-                                    </span>
-                                </label>
-                                <label
-                                    className="text-[18px] mt-px pl-3 font-normal cursor-pointer select-none"
-                                    htmlFor={`option-${i}`}
-                                >
-                                    {option}
-                                </label>
+                                <RadioBtn
+                                    name={`ques-${selectedQuestion.id}`}
+                                    qid={selectedQuestion.id!}
+                                    label={option}
+                                    index={i}
+                                    handleOptionChange={() =>
+                                        handleOptionChange({
+                                            id: selectedQuestion.id!,
+                                            selectedOption: option,
+                                            selectedOptionIndex: i,
+                                        })
+                                    }
+                                    checkedQuestions={
+                                        selectedQuestion?.checkedQuestions!
+                                    }
+                                />
                             </div>
                         ))}
                     </div>
                     <div className="flex justify-end gap-4 p-5">
                         <Button
-                            variant="secondary"
+                            variant="primary"
                             handleBtnClick={handlePrevBtnClick}
                             disabled={selectedQuestion.activeQuesIndex === 0}
+                            outline
                         >
                             Previous
                         </Button>
@@ -126,6 +277,7 @@ function ExamPortal() {
                     </div>
                 </div>
             </div>
+
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -140,6 +292,6 @@ function ExamPortal() {
             />
         </div>
     );
-}
+};
 
 export default ExamPortal;
