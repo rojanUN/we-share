@@ -99,10 +99,10 @@ const WebCam = () => {
                             Math.abs(averageEyeY - videoCenterY) < tolerance;
 
                         if (!isLookingAtScreen) {
-                            // Toast.Error(
-                            //     'Please look at your screen',
-                            //     CustomError.webCamError
-                            // );
+                            Toast.Error(
+                                'Please look at your screen',
+                                CustomError.webCamError
+                            );
                         }
                     }
                 } else {

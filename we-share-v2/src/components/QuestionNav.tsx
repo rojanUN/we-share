@@ -2,7 +2,11 @@ import QuestionIndicator from './common/QuestionIndicator';
 import { questions } from '../mock-data/questions';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setQuestions, setSelectedQuestion } from '../feature/exam/examSlice';
+import {
+    setActiveQuesIndex,
+    setQuestions,
+    setSelectedQuestion,
+} from '../feature/exam/examSlice';
 
 function QuestionNav() {
     const selectedQuestion = useAppSelector((state) => state.exam);
@@ -11,6 +15,7 @@ function QuestionNav() {
     useEffect(() => {
         dispatch(setQuestions(questions));
         dispatch(setSelectedQuestion(questions[0]));
+        dispatch(setActiveQuesIndex(0));
         // dispatch(setSelectedQuestion({ ...questions[0], questionNo: 0 }));
     }, [dispatch]);
 

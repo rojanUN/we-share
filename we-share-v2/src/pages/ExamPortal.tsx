@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 // import WebCam from '../components/WebCam';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
 import QuestionNav from '../components/QuestionNav';
 import Button from '../components/common/Button';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
@@ -14,13 +13,16 @@ import { ClockIcon } from '../helper/icons';
 import { CheckedQuestionType } from '../types';
 import Modal from '../components/common/Modal';
 import CircularProgress from '../components/common/CircularProgress';
-import { formatCountDownTimer } from '../helper/helper';
+import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
 import { SessionStorage } from '../helper/sessionStorage';
 import RadioBtn from '../components/common/RadioBtn';
+import { useNavigate } from 'react-router-dom';
+import Alert from '../components/common/Alert';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
 const ExamPortal = function ExamPortal() {
+    const navigate = useNavigate();
     const [coutdownTime, setCountDownTimer] = useState(() => {
         const savedCountdownTime =
             SessionStorage.getSessionItem('countdownTimer');
@@ -29,6 +31,7 @@ const ExamPortal = function ExamPortal() {
             : examDuration || 30;
     }); // 3600 sec for 1 hour
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
     const selectedQuestion = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
 
@@ -42,7 +45,7 @@ const ExamPortal = function ExamPortal() {
                 // setfullscreenCount((prev) => prev + 1);
             } else {
                 setfullscreenExitedCount((prevState) => prevState + 1);
-                alert('Exited fullscreen mode');
+                setIsAlertOpen(true);
             }
         };
 
@@ -62,8 +65,10 @@ const ExamPortal = function ExamPortal() {
         //     setSelectedQuestion(selectedQuestion.questions[0]);
         // }
 
+        exitFullscreen();
         setIsModalOpen(false);
-    }, [dispatch]);
+        navigate('/exam-completed');
+    }, [dispatch, navigate]);
 
     useEffect(() => {
         const handleBeforeUnload = () => {
@@ -150,6 +155,10 @@ const ExamPortal = function ExamPortal() {
 
     return (
         <div className="h-[100vh] w-full flex flex-col md:flex-row ">
+            <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)}>
+                You must be in full screen, otherwise you might be disqualified.
+                Press Ok to enable full screen mode
+            </Alert>
             <div className="flex-[1_1_0%] mx-auto justify-center items-center md:min-w-[300px] p-6">
                 {/* <WebCam /> */}
                 <QuestionNav />
@@ -277,19 +286,6 @@ const ExamPortal = function ExamPortal() {
                     </div>
                 </div>
             </div>
-
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </div>
     );
 };

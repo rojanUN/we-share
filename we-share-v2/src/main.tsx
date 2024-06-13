@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import ExamPortal from './pages/ExamPortal';
 import Home from './pages/Home';
+import ExamCompletion from './pages/ExamCompletion';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
     {
@@ -18,15 +20,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/exam-completed',
-        element: (
-            <div>
-                <p>
-                    your answers is submitted. we will revert back to you Thank
-                    you!
-                </p>
-                {/* <a href="/submit">Go To Home</a> */}
-            </div>
-        ),
+        element: <ExamCompletion />,
     },
 ]);
 
@@ -34,6 +28,18 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
             <RouterProvider router={router} />
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </Provider>
     </React.StrictMode>
 );
