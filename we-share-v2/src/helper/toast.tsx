@@ -14,9 +14,17 @@ function getToastErrorIcon(type: CustomError) {
 }
 
 export class Toast {
-    public static Error(title: string, type?: CustomError) {
+    public static Error(
+        title: string,
+        type?: CustomError,
+        // setShowToastOnce?: React.Dispatch<React.SetStateAction<boolean>>
+        closePreviousToast?: () => void
+    ) {
         toast.error(title, {
             icon: () => getToastErrorIcon(type!),
+            onClose: () => {
+                closePreviousToast && closePreviousToast();
+            },
             position: 'top-right',
             autoClose: 3000,
             hideProgressBar: false,

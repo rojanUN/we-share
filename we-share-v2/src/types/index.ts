@@ -4,10 +4,23 @@ export interface Question {
     options: string[];
     correctAnswer: number;
 }
+
+export type LandMark = [number, number];
+
+export interface FacePrediction {
+    topLeft: [number, number];
+    bottomRight: [number, number];
+    landmarks: LandMark[];
+}
+
 export interface CheckedQuestionType {
     id: number;
     selectedOption: string | null;
     selectedOptionIndex: number;
+}
+export interface IBlazeFaceModel {
+    estimateFaces(input: any, returnTensors: boolean): Promise<any>;
+    // Add any other methods or properties you need from BlazeFaceModel
 }
 export interface QuestionStateType {
     id: number | null;
@@ -18,6 +31,7 @@ export interface QuestionStateType {
     activeQuesIndex?: number | null;
     questions?: Question[] | null;
     checkedQuestions?: CheckedQuestionType[] | null;
+    showToast?: boolean | null;
 }
 enum CustomError {
     webCamError = 'webCamError',

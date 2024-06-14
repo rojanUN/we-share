@@ -22,6 +22,7 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
         'react/no-unescaped-entities': 'off',
+        'react-hooks/exhaustive-deps': 'off',
         // 'no-console': 'error', // for preventing console.log to commit
     },
 };
