@@ -1,7 +1,7 @@
 import React from 'react';
 interface ButtonType {
     children: React.ReactNode;
-    variant: 'primary' | 'danger';
+    variant: 'primary' | 'danger' | 'secondary';
     disabled?: boolean;
     outline?: boolean;
     handleBtnClick: () => void;
@@ -22,6 +22,7 @@ function Button({
     const variantClasses = {
         danger: `border-red-500 ${outline ? 'text-red-500' : 'bg-red-500 text-white'}`,
         primary: `border-[#1935CA] ${outline ? 'text-[#1935CA]' : 'bg-[#1935CA] text-white'}`,
+        secondary: `border-[#47a992] ${outline ? 'text-[#47a992]' : 'bg-[#47a992] text-white'}`,
     };
 
     const disabledClasses = `disabled:border-gray-400 ${!outline && 'disabled:bg-gray-400'} disabled:text-gray-300`;

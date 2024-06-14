@@ -7,12 +7,17 @@ import { store } from './app/store';
 import ExamPortal from './pages/ExamPortal';
 import Home from './pages/Home';
 import ExamCompletion from './pages/ExamCompletion';
+import ExamDeviceCheck from './pages/ExamDeviceCheck';
 import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Home />,
+    },
+    {
+        path: '/exam-playground',
+        element: <ExamDeviceCheck />,
     },
     {
         path: '/exam-portal',

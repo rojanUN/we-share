@@ -1,137 +1,145 @@
-import { useEffect, useRef, useState } from 'react';
-import * as faceapi from 'face-api.js';
+import { useEffect, useRef } from 'react';
 // import { detectNoise } from '../helper/helper';
 import { Toast } from '../helper/toast';
 import { CustomError } from '../types';
+import '@tensorflow/tfjs';
+import { FacePrediction } from '../types';
 
-const WebCam = () => {
+import { getModel } from '../helper/loadModelHelper';
+import { useAppSelector } from '../app/hooks';
+const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isModelsLoaded, setIsModelsLoaded] = useState(false);
-    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    // const [isNoise, setIsNoise] = useState(false);
-    // const [noiseLevel, setNoiseLevel] = useState(0);
+    const mediaStreamRef = useRef<MediaStream | null>(null);
+    const showToast = useAppSelector((state) => state.exam.showToast);
 
+    let showToastOnce = true;
+    const model = getModel();
     useEffect(() => {
-        // Load models and start detection
-        const loadModels = async () => {
-            await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-            await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-            setIsModelsLoaded(true);
-        };
-
-        loadModels();
-    }, []);
-
-    // useEffect(() => {
-    //     detectNoise(setNoiseLevel);
-    //     setIsNoise((prevState) => !prevState);
-    // }, [noiseLevel]);
-
-    useEffect(() => {
-        if (isModelsLoaded) {
-            // Start video feed
-            const startVideo = async () => {
-                if (
-                    navigator.mediaDevices &&
-                    navigator.mediaDevices.getUserMedia
-                ) {
-                    navigator.mediaDevices
-                        .getUserMedia({ video: {} })
-                        .then((stream) => {
-                            if (videoRef.current) {
-                                videoRef.current.srcObject = stream;
-                                videoRef.current.onloadedmetadata = () => {
-                                    videoRef.current?.play();
-                                    setIsVideoPlaying(true);
-                                    detectFace();
-                                };
-                            }
-                        })
-                        .catch((err) => {
-                            console.error('getUserMedia error:', err);
-                            Toast.Error(
-                                'Please look at your screen',
-                                CustomError.webCamError
-                            );
+        const startVideo = () => {
+            navigator.mediaDevices
+                .getUserMedia({
+                    video: { width: 640, height: 480 },
+                })
+                .then(async (stream) => {
+                    mediaStreamRef.current = stream;
+                    if (videoRef.current) {
+                        videoRef.current.srcObject = stream;
+                        videoRef.current.addEventListener('loadeddata', () => {
+                            videoRef.current?.play();
                         });
-                }
-            };
-
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error accessing webcam: ', err);
+                });
+        };
+        if (videoRef.current && isModelsLoaded) {
             startVideo();
         }
-    }, [isModelsLoaded]);
-
-    const detectFace = async () => {
-        const video = videoRef.current;
-
-        // The function that will be called in each frame
-        const detect = async () => {
-            try {
-                if (video) {
-                    const detections = await faceapi
-                        .detectAllFaces(
-                            video,
-                            new faceapi.TinyFaceDetectorOptions()
-                        )
-                        .withFaceLandmarks();
-
-                    if (detections.length > 0) {
-                        const landmarks = detections[0].landmarks;
-                        const leftEye = landmarks.getLeftEye();
-                        const rightEye = landmarks.getRightEye();
-
-                        const videoWidth = video.videoWidth;
-                        const videoHeight = video.videoHeight;
-                        const videoCenterX = videoWidth / 2;
-                        const videoCenterY = videoHeight / 2;
-
-                        const leftEyeX = leftEye[0].x;
-                        const leftEyeY = leftEye[0].y;
-                        const rightEyeX = rightEye[0].x;
-                        const rightEyeY = rightEye[0].y;
-
-                        const averageEyeX = (leftEyeX + rightEyeX) / 2;
-                        const averageEyeY = (leftEyeY + rightEyeY) / 2;
-
-                        const tolerance = 50; // Adjust this value based on your preference
-                        const isLookingAtScreen =
-                            Math.abs(averageEyeX - videoCenterX) < tolerance &&
-                            Math.abs(averageEyeY - videoCenterY) < tolerance;
-
-                        if (!isLookingAtScreen) {
-                            Toast.Error(
-                                'Please look at your screen',
-                                CustomError.webCamError
-                            );
-                        }
-                    }
-                } else {
-                    throw new Error('Please look at your screen');
-                }
-            } catch (error) {
-                console.log(error, 'error');
-
-                // Toast.Error(
-                //     'Please look at your screen',
-                //     CustomError.webCamError
-                // );
+        return () => {
+            // Cleanup function to stop the video stream when component unmounts
+            if (mediaStreamRef.current) {
+                const tracks = mediaStreamRef.current.getTracks();
+                tracks.forEach((track) => track.stop()); // Stop all tracks in the stream
             }
-
-            // Schedule the next frame
-            requestAnimationFrame(detect);
         };
+    }, [videoRef, isModelsLoaded]);
 
-        // Start the detection loop
-        requestAnimationFrame(detect);
+    const closePreviousToast = () => {
+        showToastOnce = true;
     };
 
+    useEffect(() => {
+        const detectFaces = async () => {
+            if (model && videoRef.current) {
+                const predictions = (await model.estimateFaces(
+                    videoRef.current,
+                    false
+                )) as FacePrediction[];
+
+                predictions.forEach((prediction) => {
+                    if (prediction.landmarks) {
+                        const [leftEye, rightEye, nose, leftMouth, rightMouth] =
+                            prediction.landmarks;
+
+                        const eyeDist = Math.abs(leftEye[0] - rightEye[0]);
+                        const noseToLeftEyeDist = Math.abs(
+                            nose[0] - leftEye[0]
+                        );
+                        const noseToRightEyeDist = Math.abs(
+                            nose[0] - rightEye[0]
+                        );
+
+                        const leftRatio = noseToLeftEyeDist / eyeDist;
+                        const rightRatio = noseToRightEyeDist / eyeDist;
+
+                        const horizontalThreshold = 0.4;
+                        const isHorizontallyCentered =
+                            Math.abs(leftRatio - rightRatio) <
+                            horizontalThreshold;
+
+                        const verticalCenter = (leftEye[1] + rightEye[1]) / 2;
+                        const mouthCenter = (leftMouth[1] + rightMouth[1]) / 2;
+                        const verticalDist = Math.abs(
+                            verticalCenter - mouthCenter
+                        );
+
+                        const verticalThreshold = eyeDist * 0.6;
+                        const isVerticallyCentered =
+                            verticalDist < verticalThreshold;
+
+                        const isLookingAtScreen =
+                            isHorizontallyCentered && isVerticallyCentered;
+                        if (!isLookingAtScreen && showToastOnce) {
+                            showToastOnce = false;
+                            showToast &&
+                                Toast.Error(
+                                    'Please look at your screen',
+                                    CustomError.webCamError,
+                                    closePreviousToast
+                                );
+                        }
+                    }
+                });
+            }
+            requestAnimationFrame(detectFaces);
+        };
+        const handleLoadedData = () => {
+            if (videoRef.current) {
+                videoRef.current.play().catch((error) => {
+                    console.error('Error playing video: ', error);
+                });
+            }
+        };
+
+        if (model) {
+            if (videoRef.current) {
+                videoRef.current.addEventListener(
+                    'loadedmetadata',
+                    detectFaces
+                );
+            }
+
+            return () => {
+                //clean up function
+                if (videoRef.current) {
+                    videoRef.current.removeEventListener(
+                        'loadedmetadata',
+                        detectFaces
+                    );
+                    videoRef.current.removeEventListener(
+                        'loadeddata',
+                        handleLoadedData
+                    );
+                }
+            };
+        }
+    }, [model]);
+
     return (
-        <div>
-            <h2>Web Cam</h2>
-            {((isModelsLoaded && !isVideoPlaying) || !isModelsLoaded) && (
-                <div>Please wait...</div>
-            )}
+        <div className="h-full w-full">
             <video
+                className="w-full h-full object-cover"
                 ref={videoRef}
                 // className={`rounded-xl  max-h-[340px] my-2.5 ${isNoise ? 'outline outline-4 outline-offset-0 outline-[#1935CA]' : ''}`}
             />

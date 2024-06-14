@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-// import WebCam from '../components/WebCam';
+import WebCam from '../components/WebCam';
 import 'react-toastify/dist/ReactToastify.css';
 import QuestionNav from '../components/QuestionNav';
 import Button from '../components/common/Button';
@@ -18,6 +18,7 @@ import { SessionStorage } from '../helper/sessionStorage';
 import RadioBtn from '../components/common/RadioBtn';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/common/Alert';
+import { getModel } from '../helper/loadModelHelper';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -36,8 +37,13 @@ const ExamPortal = function ExamPortal() {
     const dispatch = useAppDispatch();
 
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
+    const [isModelsLoaded, setIsModelsLoaded] = useState(false);
 
     useEffect(() => {
+        const model = getModel();
+        if (model) {
+            setIsModelsLoaded(true);
+        }
         const mediaQuery = window.matchMedia('(display-mode: fullscreen)');
 
         const handleMediaQueryChange = (event: any) => {
@@ -160,7 +166,12 @@ const ExamPortal = function ExamPortal() {
                 Press Ok to enable full screen mode
             </Alert>
             <div className="flex-[1_1_0%] mx-auto justify-center items-center md:min-w-[300px] p-6">
-                {/* <WebCam /> */}
+                <div>
+                    <h2>Web Cam</h2>
+                    {isModelsLoaded && (
+                        <WebCam isModelsLoaded={isModelsLoaded} />
+                    )}
+                </div>
                 <QuestionNav />
             </div>
 
