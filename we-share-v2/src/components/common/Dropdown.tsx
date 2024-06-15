@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MicIcon, VideoIcon } from '../../helper/icons';
 
 interface DropdownType {
     isWebCam?: boolean;
     isOpen: boolean;
     onToggle: () => void;
+    options: string[];
 }
 
-const Dropdown = ({ isWebCam, isOpen, onToggle }: DropdownType) => {
-    const [selectedOption, setSelectedOption] = useState('Default');
+const Dropdown = ({ isWebCam, isOpen, onToggle, options }: DropdownType) => {
+    const [selectedOption, setSelectedOption] = useState<string>("");
 
-    const options = ['Default', 'Option 1', 'Option 2', 'Option 3'];
+    useEffect(() => {
+        setSelectedOption(options[0]);
+    }, [options])
+
+
+    // const options = ['Default', 'Option 1', 'Option 2', 'Option 3'];
 
     return (
         <div className="relative inline-block text-left min-w-[250px]">
@@ -32,7 +38,7 @@ const Dropdown = ({ isWebCam, isOpen, onToggle }: DropdownType) => {
                                 style={{ fontSize: '25px' }}
                             />
                         )}
-                        {selectedOption.length > 20
+                        {selectedOption?.length > 20
                             ? selectedOption.substring(0, 20) + ' ...'
                             : selectedOption}
                     </div>

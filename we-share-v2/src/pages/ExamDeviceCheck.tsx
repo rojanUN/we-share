@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import { enterFullscreen } from '../helper/helper';
@@ -16,6 +16,8 @@ import {
     VideoIcon,
 } from '../helper/icons';
 import Dropdown from '../components/common/Dropdown';
+import { CustomError } from '../types';
+import { Toast } from '../helper/toast';
 
 function ExamDeviceCheck() {
     const navigate = useNavigate();
@@ -23,6 +25,14 @@ function ExamDeviceCheck() {
     const [isDeviceChecked, setIsDeviceChecked] = useState(false);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+    const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+    const [checkCameraPermission, setCheckCameraPermission] = useState<boolean>(true);
+    const [checkMicPermission, setCheckMicPermission] = useState<boolean>(true);
+    const [videoOptions, setVideoOptions] = useState<string[]>([]);
+    const [audioOptions, setAudioOptions] = useState<string[]>([]);
+
+    const micToastShownRef = useRef<boolean>(false);
+    const cameraToastShownRef = useRef<boolean>(false);
 
     const handleDropdownToggle = (dropdown: number | null) => {
         setOpenDropdown((prev: number | null) =>
@@ -40,6 +50,120 @@ function ExamDeviceCheck() {
         }
         initializeModel();
     }, [isModelsLoaded]);
+
+    const handlePermissionChange = async (permissionName: 'microphone' | 'camera') => {
+        try {
+            const permission = await navigator.permissions.query({ name: permissionName as PermissionName });
+            const newState = permission.state === 'granted';
+
+            if (permissionName === 'microphone') {
+                setCheckMicPermission(newState);
+                if (!newState && !micToastShownRef.current) {
+                    Toast.Error('Microphone permission denied', CustomError.audioError);
+                    micToastShownRef.current = true;
+                }
+            } else if (permissionName === 'camera') {
+                setCheckCameraPermission(newState);
+                if (!newState && !cameraToastShownRef.current) {
+                    Toast.Error('Camera permission denied', CustomError.webCamError);
+                    cameraToastShownRef.current = true;
+                }
+            }
+        } catch (error) {
+            console.error(`Error checking ${permissionName} permission:`, error);
+        }
+    };
+
+    useEffect(() => {
+        const checkPermissions = async () => {
+            try {
+                const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+                const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+
+                handlePermissionChange('microphone');
+                handlePermissionChange('camera');
+
+                micPermission.onchange = () => {
+                    micToastShownRef.current = false;
+                    handlePermissionChange('microphone');
+                };
+                cameraPermission.onchange = () => {
+                    cameraToastShownRef.current = false;
+                    handlePermissionChange('camera');
+                };
+            } catch (error) {
+                console.error('Error checking permissions:', error);
+            }
+        };
+
+        checkPermissions();
+
+        return () => {
+            navigator.permissions.query({ name: 'microphone' as PermissionName }).then(permission => {
+                permission.onchange = null;
+            });
+            navigator.permissions.query({ name: 'camera' as PermissionName }).then(permission => {
+                permission.onchange = null;
+            });
+        };
+    }, []);
+
+    useEffect(() => {
+        const getDevices = async () => {
+            try {
+                let audioStream = null;
+                let videoStream = null;
+
+                if (checkMicPermission) {
+                    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                }
+
+                if (checkCameraPermission) {
+                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                }
+
+                // Combine audio and video devices
+                const audioDevices = audioStream ? await navigator.mediaDevices.enumerateDevices() : [];
+                const videoDevices = videoStream ? await navigator.mediaDevices.enumerateDevices() : [];
+
+                const filteredDevices = [
+                    ...audioDevices.filter(device => device.kind === 'audioinput'),
+                    ...videoDevices.filter(device => device.kind === 'videoinput')
+                ] as MediaDeviceInfo[];
+
+                setDevices(filteredDevices);
+
+                // Cleanup streams
+                if (audioStream) {
+                    audioStream.getTracks().forEach(track => track.stop());
+                }
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
+
+            } catch (error) {
+                console.error('Error getting devices:', error);
+                setDevices([]);
+            }
+        };
+
+        getDevices();
+    }, [checkMicPermission, checkCameraPermission]);
+
+
+    useEffect(() => {
+        const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
+            setVideoOptions(deviceList.filter(device => device.kind === 'videoinput').map(device => device.label));
+        }
+        filterVideoOptions(devices);
+
+        const filterAudioOptions = (deviceList: MediaDeviceInfo[]) => {
+            setAudioOptions(deviceList.filter(device => device.kind === 'audioinput').map(device => device.label));
+        }
+
+        filterAudioOptions(devices);
+    }, [devices]);
+
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
@@ -104,11 +228,13 @@ function ExamDeviceCheck() {
                                 <Dropdown
                                     isOpen={openDropdown === 1}
                                     onToggle={() => handleDropdownToggle(1)}
+                                    options={audioOptions}
                                 />
                                 <Dropdown
                                     isWebCam
                                     isOpen={openDropdown === 2}
                                     onToggle={() => handleDropdownToggle(2)}
+                                    options={videoOptions}
                                 />
                             </div>
                         </div>
@@ -149,20 +275,30 @@ function ExamDeviceCheck() {
                                 <MicIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Microphone</p>
                                 <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
-                                    <CheckedIcon /> Ok
-                                </p>
+                                    {audioOptions.length > 0 && (
+                                        <>
+                                            <CheckedIcon />
+                                            Ok
+                                        </>
+                                    )}                                </p>
                                 <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
-                                    <CloseIcon /> Not found
+
+                                    {audioOptions.length === 0 && (<> <CloseIcon /> Not Found</>)}
                                 </p>
                             </div>
                             <div className="flex items-center">
                                 <VideoIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Camera</p>
                                 <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
-                                    <CheckedIcon /> Ok
+                                    {videoOptions.length > 0 && (
+                                        <>
+                                            <CheckedIcon />
+                                            Ok
+                                        </>
+                                    )}
                                 </p>
                                 <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
-                                    <CloseIcon /> Not found
+                                    {videoOptions.length === 0 && (< > <CloseIcon /> Not Found</>)}
                                 </p>
                             </div>
                         </div>

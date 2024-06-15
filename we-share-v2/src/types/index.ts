@@ -38,4 +38,12 @@ enum CustomError {
     audioError = 'audioError',
 }
 
+export interface MediaDeviceInfo {
+    deviceId: string;
+    kind: string;
+    label: string;
+    groupId: string;
+}
+
+
 export { CustomError };
