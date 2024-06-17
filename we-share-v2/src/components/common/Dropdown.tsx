@@ -9,13 +9,19 @@ interface DropdownType {
 }
 
 const Dropdown = ({ isWebCam, isOpen, onToggle, options }: DropdownType) => {
-    const [selectedOption, setSelectedOption] = useState<string>("");
+    const [selectedOption, setSelectedOption] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setSelectedOption(options[0]);
-    }, [options])
-
-
+        if (options.length > 0) {
+            setSelectedOption(options[0]);
+            setIsLoading(false);
+        } else if (isLoading) {
+            setSelectedOption('Searching...');
+        } else {
+            setSelectedOption('Device not found');
+        }
+    }, [options]);
     // const options = ['Default', 'Option 1', 'Option 2', 'Option 3'];
 
     return (

@@ -45,5 +45,4 @@ export interface MediaDeviceInfo {
     groupId: string;
 }
 
-
 export { CustomError };

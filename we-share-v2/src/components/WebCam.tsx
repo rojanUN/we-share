@@ -7,13 +7,35 @@ import { FacePrediction } from '../types';
 
 import { getModel } from '../helper/loadModelHelper';
 import { useAppSelector } from '../app/hooks';
-const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
+
+const WebCam = ({
+    isModelsLoaded,
+    LookAtScreen,
+    isDeviceChecked,
+}: {
+    isModelsLoaded: boolean;
+    LookAtScreen?: (data: boolean) => void;
+    isDeviceChecked?: boolean;
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const showToast = useAppSelector((state) => state.exam.showToast);
+    const isDeviceCheckedRef = useRef<boolean>(isDeviceChecked ?? false);
+
+    // Update the ref when the prop changes
+    useEffect(() => {
+        isDeviceCheckedRef.current = isDeviceChecked ?? false;
+    }, [isDeviceChecked]);
 
     let showToastOnce = true;
     const model = getModel();
+
+    const handleLookedAtScreen = (data: boolean) => {
+        if (isDeviceCheckedRef.current && LookAtScreen) {
+            LookAtScreen(data);
+        }
+    };
+
     useEffect(() => {
         const startVideo = () => {
             navigator.mediaDevices
@@ -98,6 +120,8 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
                                     CustomError.webCamError,
                                     closePreviousToast
                                 );
+                        } else {
+                            handleLookedAtScreen(true);
                         }
                     }
                 });
@@ -121,7 +145,7 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
             }
 
             return () => {
-                //clean up function
+                // Clean up function
                 if (videoRef.current) {
                     videoRef.current.removeEventListener(
                         'loadedmetadata',
@@ -134,15 +158,11 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
                 }
             };
         }
-    }, [model]);
+    }, [model, isDeviceChecked]);
 
     return (
         <div className="h-full w-full">
-            <video
-                className="w-full h-full object-cover"
-                ref={videoRef}
-                // className={`rounded-xl  max-h-[340px] my-2.5 ${isNoise ? 'outline outline-4 outline-offset-0 outline-[#1935CA]' : ''}`}
-            />
+            <video className="w-full h-full object-cover" ref={videoRef} />
         </div>
     );
 };

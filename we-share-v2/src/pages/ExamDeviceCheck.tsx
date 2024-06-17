@@ -18,6 +18,8 @@ import {
 import Dropdown from '../components/common/Dropdown';
 import { CustomError } from '../types';
 import { Toast } from '../helper/toast';
+import DetectNoise from '../components/DetectNoise';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 function ExamDeviceCheck() {
     const navigate = useNavigate();
@@ -26,10 +28,13 @@ function ExamDeviceCheck() {
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
     const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
-    const [checkCameraPermission, setCheckCameraPermission] = useState<boolean>(true);
+    const [checkCameraPermission, setCheckCameraPermission] =
+        useState<boolean>(true);
     const [checkMicPermission, setCheckMicPermission] = useState<boolean>(true);
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
+
+    const [isFaceDetected, setIsFaceDetected] = useState<boolean>(false);
 
     const micToastShownRef = useRef<boolean>(false);
     const cameraToastShownRef = useRef<boolean>(false);
@@ -38,6 +43,14 @@ function ExamDeviceCheck() {
         setOpenDropdown((prev: number | null) =>
             prev === dropdown ? null : dropdown
         );
+    };
+    const [soundLevel, setSoundLevel] = useState(0);
+
+    const handleLookedAtScreen = (data: boolean) => {
+        // console.log(isFaceDetected, 'isface detected', data);
+        if (data) {
+            setIsFaceDetected(true);
+        }
     };
 
     useEffect(() => {
@@ -51,34 +64,53 @@ function ExamDeviceCheck() {
         initializeModel();
     }, [isModelsLoaded]);
 
-    const handlePermissionChange = async (permissionName: 'microphone' | 'camera') => {
+    // console.log('this is looked at screen', LookedAtScreen);
+
+    const handlePermissionChange = async (
+        permissionName: 'microphone' | 'camera'
+    ) => {
         try {
-            const permission = await navigator.permissions.query({ name: permissionName as PermissionName });
+            const permission = await navigator.permissions.query({
+                name: permissionName as PermissionName,
+            });
             const newState = permission.state === 'granted';
 
             if (permissionName === 'microphone') {
                 setCheckMicPermission(newState);
                 if (!newState && !micToastShownRef.current) {
-                    Toast.Error('Microphone permission denied', CustomError.audioError);
+                    Toast.Error(
+                        'Microphone permission denied',
+                        CustomError.audioError
+                    );
                     micToastShownRef.current = true;
                 }
             } else if (permissionName === 'camera') {
                 setCheckCameraPermission(newState);
                 if (!newState && !cameraToastShownRef.current) {
-                    Toast.Error('Camera permission denied', CustomError.webCamError);
+                    Toast.Error(
+                        'Camera permission denied',
+                        CustomError.webCamError
+                    );
                     cameraToastShownRef.current = true;
                 }
             }
         } catch (error) {
-            console.error(`Error checking ${permissionName} permission:`, error);
+            console.error(
+                `Error checking ${permissionName} permission:`,
+                error
+            );
         }
     };
 
     useEffect(() => {
         const checkPermissions = async () => {
             try {
-                const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
-                const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+                const micPermission = await navigator.permissions.query({
+                    name: 'microphone' as PermissionName,
+                });
+                const cameraPermission = await navigator.permissions.query({
+                    name: 'camera' as PermissionName,
+                });
 
                 handlePermissionChange('microphone');
                 handlePermissionChange('camera');
@@ -99,12 +131,16 @@ function ExamDeviceCheck() {
         checkPermissions();
 
         return () => {
-            navigator.permissions.query({ name: 'microphone' as PermissionName }).then(permission => {
-                permission.onchange = null;
-            });
-            navigator.permissions.query({ name: 'camera' as PermissionName }).then(permission => {
-                permission.onchange = null;
-            });
+            navigator.permissions
+                .query({ name: 'microphone' as PermissionName })
+                .then((permission) => {
+                    permission.onchange = null;
+                });
+            navigator.permissions
+                .query({ name: 'camera' as PermissionName })
+                .then((permission) => {
+                    permission.onchange = null;
+                });
         };
     }, []);
 
@@ -115,32 +151,43 @@ function ExamDeviceCheck() {
                 let videoStream = null;
 
                 if (checkMicPermission) {
-                    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    audioStream = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                    });
                 }
 
                 if (checkCameraPermission) {
-                    videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    videoStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                    });
                 }
 
                 // Combine audio and video devices
-                const audioDevices = audioStream ? await navigator.mediaDevices.enumerateDevices() : [];
-                const videoDevices = videoStream ? await navigator.mediaDevices.enumerateDevices() : [];
+                const audioDevices = audioStream
+                    ? await navigator.mediaDevices.enumerateDevices()
+                    : [];
+                const videoDevices = videoStream
+                    ? await navigator.mediaDevices.enumerateDevices()
+                    : [];
 
                 const filteredDevices = [
-                    ...audioDevices.filter(device => device.kind === 'audioinput'),
-                    ...videoDevices.filter(device => device.kind === 'videoinput')
+                    ...audioDevices.filter(
+                        (device) => device.kind === 'audioinput'
+                    ),
+                    ...videoDevices.filter(
+                        (device) => device.kind === 'videoinput'
+                    ),
                 ] as MediaDeviceInfo[];
 
                 setDevices(filteredDevices);
 
                 // Cleanup streams
                 if (audioStream) {
-                    audioStream.getTracks().forEach(track => track.stop());
+                    audioStream.getTracks().forEach((track) => track.stop());
                 }
                 if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
+                    videoStream.getTracks().forEach((track) => track.stop());
                 }
-
             } catch (error) {
                 console.error('Error getting devices:', error);
                 setDevices([]);
@@ -150,35 +197,51 @@ function ExamDeviceCheck() {
         getDevices();
     }, [checkMicPermission, checkCameraPermission]);
 
-
     useEffect(() => {
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
-            setVideoOptions(deviceList.filter(device => device.kind === 'videoinput').map(device => device.label));
-        }
+            setVideoOptions(
+                deviceList
+                    .filter((device) => device.kind === 'videoinput')
+                    .map((device) => device.label)
+            );
+        };
         filterVideoOptions(devices);
 
         const filterAudioOptions = (deviceList: MediaDeviceInfo[]) => {
-            setAudioOptions(deviceList.filter(device => device.kind === 'audioinput').map(device => device.label));
-        }
+            setAudioOptions(
+                deviceList
+                    .filter((device) => device.kind === 'audioinput')
+                    .map((device) => device.label)
+            );
+        };
 
         filterAudioOptions(devices);
     }, [devices]);
-
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
                 <div className="h-full flex-1">
                     <div className="h-full w-full relative">
                         {isModelsLoaded ? (
-                            <WebCam isModelsLoaded={isModelsLoaded} />
+                            <WebCam
+                                isModelsLoaded={isModelsLoaded}
+                                LookAtScreen={handleLookedAtScreen}
+                                isDeviceChecked={isDeviceChecked}
+                            />
                         ) : (
                             <div className="h-full w-full text-[#fff] bg-[#000] grid place-items-center">
                                 <p>Please Wait...</p>
                             </div>
                         )}
-                        <div className="w-2 h-[60%] max-h-[60%] absolute bottom-12 left-6 flex flex-col items-center gap-2">
+                        <div className="w-2 h-[60%] max-h-[50%] absolute bottom-12 left-6 flex flex-col items-center gap-2">
                             <div className="h-full overflow-clip rotate-180 rounded-md bg-[#fff] w-full relative">
-                                <div className="absolute top-0 left-0 rounded-md bg-[#E38800] h-[40%] w-full"></div>
+                                <div
+                                    className={`absolute top-0 left-0 rounded-md bg-[#E38800] w-full`}
+                                    style={{
+                                        transition: 'all 0.5s linear',
+                                        height: `${soundLevel ? Math.floor((soundLevel / 100) * 100) : 0}%`,
+                                    }}
+                                ></div>
                             </div>
                             <div className="bg-[#EFEFEF] rounded-[50%] h-[40px] w-[35px] grid place-items-center">
                                 <SpeakerIcon
@@ -189,6 +252,9 @@ function ExamDeviceCheck() {
                             </div>
                         </div>
                     </div>
+                    <ErrorBoundary>
+                        <DetectNoise setSoundLevel={setSoundLevel} />
+                    </ErrorBoundary>
                     <p className="mt-5 text-[17px] flex items-center ">
                         <span className="text-[#47a992] font-bold inline-flex">
                             <TipsIcon
@@ -211,6 +277,7 @@ function ExamDeviceCheck() {
                             Stay in a well lit area for better experience
                         </span>
                     </p>
+                    {/* <NoiseDetect setNoiseLevel={setNoiseLevel} /> */}
                 </div>
                 {!isDeviceChecked ? (
                     <div className="h-full flex-1 flex flex-col justify-between">
@@ -244,6 +311,11 @@ function ExamDeviceCheck() {
                                 handleBtnClick={() => {
                                     setIsDeviceChecked(true);
                                 }}
+                                disabled={
+                                    !checkCameraPermission ||
+                                    !checkMicPermission ||
+                                    !isModelsLoaded
+                                }
                             >
                                 Check Device
                             </Button>
@@ -274,33 +346,42 @@ function ExamDeviceCheck() {
                             <div className="flex items-center">
                                 <MicIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Microphone</p>
-                                <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
-                                    {audioOptions.length > 0 && (
-                                        <>
-                                            <CheckedIcon />
-                                            Ok
-                                        </>
-                                    )}                                </p>
-                                <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
 
-                                    {audioOptions.length === 0 && (<> <CloseIcon /> Not Found</>)}
-                                </p>
+                                {audioOptions.length === 0 ? (
+                                    <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
+                                        <CloseIcon /> Not Found
+                                    </p>
+                                ) : (
+                                    <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
+                                        <CheckedIcon />
+                                        Ok
+                                    </p>
+                                )}
                             </div>
                             <div className="flex items-center">
                                 <VideoIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Camera</p>
-                                <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
-                                    {videoOptions.length > 0 && (
-                                        <>
-                                            <CheckedIcon />
-                                            Ok
-                                        </>
-                                    )}
-                                </p>
-                                <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
-                                    {videoOptions.length === 0 && (< > <CloseIcon /> Not Found</>)}
-                                </p>
+
+                                {videoOptions.length === 0 ? (
+                                    <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
+                                        <CloseIcon /> Not Found
+                                    </p>
+                                ) : (
+                                    <p className="text-[#47a992] flex items-center ml-6 gap-2 font-semibold">
+                                        <CheckedIcon />
+                                        Ok
+                                    </p>
+                                )}
                             </div>
+                        </div>
+                        <div className="mt-6">
+                            {isFaceDetected ? (
+                                <p className="text-[#47a992]">
+                                    Face Detected Successfully.
+                                </p>
+                            ) : (
+                                <p>Detecting your face...</p>
+                            )}
                         </div>
                         <div className="mt-auto">
                             <Button

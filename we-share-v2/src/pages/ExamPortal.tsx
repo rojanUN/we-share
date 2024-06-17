@@ -10,7 +10,7 @@ import {
     setCheckedQuestions,
 } from '../feature/exam/examSlice';
 import { ClockIcon } from '../helper/icons';
-import { CheckedQuestionType } from '../types';
+import { CheckedQuestionType, CustomError } from '../types';
 import Modal from '../components/common/Modal';
 import CircularProgress from '../components/common/CircularProgress';
 import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
@@ -19,6 +19,9 @@ import RadioBtn from '../components/common/RadioBtn';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/common/Alert';
 import { getModel } from '../helper/loadModelHelper';
+import DetectNoise from '../components/DetectNoise';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { Toast } from '../helper/toast';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -38,6 +41,7 @@ const ExamPortal = function ExamPortal() {
 
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
+    const [soundLevel, setSoundLevel] = useState(0);
 
     useEffect(() => {
         const model = getModel();
@@ -159,6 +163,22 @@ const ExamPortal = function ExamPortal() {
         }
     };
 
+    console.log(soundLevel, 'exam portal');
+    const [showToastOnce, setShowToastOnce] = useState(false);
+    const closePreviousToast = () => {
+        setShowToastOnce(false);
+    };
+    useEffect(() => {
+        if (soundLevel > 25 && !showToastOnce) {
+            Toast.Error(
+                'High noise detected',
+                CustomError.audioError,
+                closePreviousToast
+            );
+            setShowToastOnce(true);
+        }
+    }, [soundLevel, showToastOnce]);
+
     return (
         <div className="h-[100vh] w-full flex flex-col md:flex-row ">
             <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)}>
@@ -174,7 +194,9 @@ const ExamPortal = function ExamPortal() {
                 </div>
                 <QuestionNav />
             </div>
-
+            <ErrorBoundary>
+                <DetectNoise setSoundLevel={setSoundLevel} />
+            </ErrorBoundary>
             <div className="flex-[6_6_0%] p-6 h-full bg-custom-gradient grid place-items-center">
                 <div className="flex flex-col h-max md:min-w-[70%] bg-white rounded-[20px] px-10 py-14">
                     <div className="h-20 mb-6 w-full flex justify-between items-center">
