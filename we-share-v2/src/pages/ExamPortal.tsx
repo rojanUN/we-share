@@ -163,13 +163,12 @@ const ExamPortal = function ExamPortal() {
         }
     };
 
-    console.log(soundLevel, 'exam portal');
     const [showToastOnce, setShowToastOnce] = useState(false);
     const closePreviousToast = () => {
         setShowToastOnce(false);
     };
     useEffect(() => {
-        if (soundLevel > 25 && !showToastOnce) {
+        if (soundLevel > 50 && !showToastOnce) {
             Toast.Error(
                 'High noise detected',
                 CustomError.audioError,

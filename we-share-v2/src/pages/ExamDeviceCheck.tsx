@@ -33,8 +33,13 @@ function ExamDeviceCheck() {
     const [checkMicPermission, setCheckMicPermission] = useState<boolean>(true);
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
+    const [count, setCount] = useState<number>(0);
+
+    // const [mediaPermissionError, setMediaPermissionError] =
+    //     useState<boolean>(false);
 
     const [isFaceDetected, setIsFaceDetected] = useState<boolean>(false);
+    const [soundLevel, setSoundLevel] = useState(0);
 
     const micToastShownRef = useRef<boolean>(false);
     const cameraToastShownRef = useRef<boolean>(false);
@@ -44,13 +49,9 @@ function ExamDeviceCheck() {
             prev === dropdown ? null : dropdown
         );
     };
-    const [soundLevel, setSoundLevel] = useState(0);
 
-    const handleLookedAtScreen = (data: boolean) => {
-        // console.log(isFaceDetected, 'isface detected', data);
-        if (data) {
-            setIsFaceDetected(true);
-        }
+    const handleRefresh = () => {
+        window.location.reload();
     };
 
     useEffect(() => {
@@ -149,17 +150,18 @@ function ExamDeviceCheck() {
             try {
                 let audioStream = null;
                 let videoStream = null;
-
                 if (checkMicPermission) {
                     audioStream = await navigator.mediaDevices.getUserMedia({
                         audio: true,
                     });
                 }
-
                 if (checkCameraPermission) {
+                    console.log('count', count);
+                    setCount((n) => n + 1);
                     videoStream = await navigator.mediaDevices.getUserMedia({
                         video: true,
                     });
+                    console.log('video stream', videoStream);
                 }
 
                 // Combine audio and video devices
@@ -195,7 +197,7 @@ function ExamDeviceCheck() {
         };
 
         getDevices();
-    }, [checkMicPermission, checkCameraPermission]);
+    }, [devices]);
 
     useEffect(() => {
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
@@ -216,7 +218,8 @@ function ExamDeviceCheck() {
         };
 
         filterAudioOptions(devices);
-    }, [devices]);
+    }, [devices, checkMicPermission, checkCameraPermission]);
+    console.log(checkMicPermission, audioOptions, 'audio option  permission');
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
@@ -225,8 +228,8 @@ function ExamDeviceCheck() {
                         {isModelsLoaded ? (
                             <WebCam
                                 isModelsLoaded={isModelsLoaded}
-                                LookAtScreen={handleLookedAtScreen}
                                 isDeviceChecked={isDeviceChecked}
+                                setIsFaceDetected={setIsFaceDetected}
                             />
                         ) : (
                             <div className="h-full w-full text-[#fff] bg-[#000] grid place-items-center">
@@ -295,13 +298,21 @@ function ExamDeviceCheck() {
                                 <Dropdown
                                     isOpen={openDropdown === 1}
                                     onToggle={() => handleDropdownToggle(1)}
-                                    options={audioOptions}
+                                    options={
+                                        checkMicPermission
+                                            ? audioOptions
+                                            : ['Permission denied']
+                                    }
                                 />
                                 <Dropdown
                                     isWebCam
                                     isOpen={openDropdown === 2}
                                     onToggle={() => handleDropdownToggle(2)}
-                                    options={videoOptions}
+                                    options={
+                                        checkCameraPermission
+                                            ? videoOptions
+                                            : ['Permission denied']
+                                    }
                                 />
                             </div>
                         </div>
@@ -380,21 +391,42 @@ function ExamDeviceCheck() {
                                     Face Detected Successfully.
                                 </p>
                             ) : (
-                                <p>Detecting your face...</p>
+                                <p>
+                                    Your face is being detected, please wait...
+                                </p>
+                            )}
+                            {soundLevel > 10 ? (
+                                <p className="text-[#47a992]">
+                                    Sound detected successfully.
+                                </p>
+                            ) : (
+                                <p>Initializing sound check, please wait...</p>
                             )}
                         </div>
-                        <div className="mt-auto">
-                            <Button
-                                variant="secondary"
-                                handleBtnClick={() => {
-                                    dispatch(setShowToast(true));
-                                    navigate('/exam-portal');
-                                    enterFullscreen();
-                                }}
-                            >
-                                Start Exam
-                            </Button>
-                        </div>
+                        {count > 2 ? (
+                            <div className="mt-auto">
+                                <Button
+                                    variant="secondary"
+                                    handleBtnClick={handleRefresh}
+                                >
+                                    Refresh Page
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="mt-auto">
+                                <Button
+                                    variant="secondary"
+                                    disabled={!isFaceDetected}
+                                    handleBtnClick={() => {
+                                        dispatch(setShowToast(true));
+                                        navigate('/exam-portal');
+                                        enterFullscreen();
+                                    }}
+                                >
+                                    Start Exam
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

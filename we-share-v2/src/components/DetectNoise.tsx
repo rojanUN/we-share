@@ -18,6 +18,7 @@ function DetectNoise({
     const analyserRef = useRef<AnalyserNode | null>(null); // Use useRef to store the AnalyserNode instance
     const audioContextRef = useRef<AudioContext | null>(null); // Use useRef to store the AudioContext instance
     const intervalRef = useRef<number | null>(null); // Use useRef to store the interval ID
+    const mediaStreamRef = useRef<MediaStream | null>(null);
 
     useEffect(() => {
         const initVAD = async () => {
@@ -38,6 +39,7 @@ function DetectNoise({
                     navigator.mediaDevices
                         .getUserMedia({ audio: true })
                         .then((stream) => {
+                            mediaStreamRef.current = stream;
                             const source =
                                 audioContext.createMediaStreamSource(stream);
                             source.connect(analyser);
@@ -86,6 +88,7 @@ function DetectNoise({
         // Cleanup function to stop the VAD and audio context
         return () => {
             if (vadRef.current) {
+                console.log(vadRef.current, 'vad red >>>>>>>>>>>');
                 if (vadRef.current.pause) {
                     console.log('vad paused');
                     vadRef.current.pause(); // Call pause to stop VAD
@@ -98,6 +101,11 @@ function DetectNoise({
                 audioContextRef.current.close().catch((error) => {
                     console.error('Error closing AudioContext:', error);
                 });
+            }
+            console.log('this is medistream ref', mediaStreamRef.current);
+            if (mediaStreamRef.current) {
+                const tracks = mediaStreamRef.current.getTracks();
+                tracks.forEach((track) => track.stop());
             }
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
