@@ -7,7 +7,6 @@ class NoiseLevelProcessor extends AudioWorkletProcessor {
 
     process(inputs, outputs, parameters) {
         const input = inputs[0];
-        console.log("this is input", input);
         if (input.length > 0) {
             const samples = input[0];
             let sum = 0;

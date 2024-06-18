@@ -7,13 +7,29 @@ import { FacePrediction } from '../types';
 
 import { getModel } from '../helper/loadModelHelper';
 import { useAppSelector } from '../app/hooks';
-const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
+
+const WebCam = ({
+    isModelsLoaded,
+    isDeviceChecked,
+    setIsFaceDetected,
+}: {
+    isModelsLoaded: boolean;
+    isDeviceChecked?: boolean;
+    setIsFaceDetected?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const showToast = useAppSelector((state) => state.exam.showToast);
+    const isDeviceCheckedRef = useRef<boolean>(isDeviceChecked ?? false);
+
+    // Update the ref when the prop changes
+    useEffect(() => {
+        isDeviceCheckedRef.current = isDeviceChecked ?? false;
+    }, [isDeviceChecked]);
 
     let showToastOnce = true;
     const model = getModel();
+
     useEffect(() => {
         const startVideo = () => {
             navigator.mediaDevices
@@ -57,50 +73,75 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
                     false
                 )) as FacePrediction[];
 
-                predictions.forEach((prediction) => {
-                    if (prediction.landmarks) {
-                        const [leftEye, rightEye, nose, leftMouth, rightMouth] =
-                            prediction.landmarks;
-
-                        const eyeDist = Math.abs(leftEye[0] - rightEye[0]);
-                        const noseToLeftEyeDist = Math.abs(
-                            nose[0] - leftEye[0]
-                        );
-                        const noseToRightEyeDist = Math.abs(
-                            nose[0] - rightEye[0]
-                        );
-
-                        const leftRatio = noseToLeftEyeDist / eyeDist;
-                        const rightRatio = noseToRightEyeDist / eyeDist;
-
-                        const horizontalThreshold = 0.4;
-                        const isHorizontallyCentered =
-                            Math.abs(leftRatio - rightRatio) <
-                            horizontalThreshold;
-
-                        const verticalCenter = (leftEye[1] + rightEye[1]) / 2;
-                        const mouthCenter = (leftMouth[1] + rightMouth[1]) / 2;
-                        const verticalDist = Math.abs(
-                            verticalCenter - mouthCenter
-                        );
-
-                        const verticalThreshold = eyeDist * 0.6;
-                        const isVerticallyCentered =
-                            verticalDist < verticalThreshold;
-
-                        const isLookingAtScreen =
-                            isHorizontallyCentered && isVerticallyCentered;
-                        if (!isLookingAtScreen && showToastOnce) {
-                            showToastOnce = false;
-                            showToast &&
-                                Toast.Error(
-                                    'Please look at your screen',
-                                    CustomError.webCamError,
-                                    closePreviousToast
-                                );
-                        }
+                if (
+                    predictions.length === 0 ||
+                    !predictions.some((prediction) => prediction.landmarks)
+                ) {
+                    setIsFaceDetected && setIsFaceDetected(false);
+                    if (showToastOnce) {
+                        showToastOnce = false;
+                        showToast &&
+                            Toast.Error(
+                                'Please look at your screen',
+                                CustomError.webCamError,
+                                closePreviousToast
+                            );
                     }
-                });
+                } else {
+                    setIsFaceDetected && setIsFaceDetected(true);
+
+                    predictions.forEach((prediction) => {
+                        if (prediction.landmarks) {
+                            const [
+                                leftEye,
+                                rightEye,
+                                nose,
+                                leftMouth,
+                                rightMouth,
+                            ] = prediction.landmarks;
+
+                            const eyeDist = Math.abs(leftEye[0] - rightEye[0]);
+                            const noseToLeftEyeDist = Math.abs(
+                                nose[0] - leftEye[0]
+                            );
+                            const noseToRightEyeDist = Math.abs(
+                                nose[0] - rightEye[0]
+                            );
+
+                            const leftRatio = noseToLeftEyeDist / eyeDist;
+                            const rightRatio = noseToRightEyeDist / eyeDist;
+
+                            const horizontalThreshold = 0.4;
+                            const isHorizontallyCentered =
+                                Math.abs(leftRatio - rightRatio) <
+                                horizontalThreshold;
+
+                            const verticalCenter =
+                                (leftEye[1] + rightEye[1]) / 2;
+                            const mouthCenter =
+                                (leftMouth[1] + rightMouth[1]) / 2;
+                            const verticalDist = Math.abs(
+                                verticalCenter - mouthCenter
+                            );
+
+                            const verticalThreshold = eyeDist * 0.6;
+                            const isVerticallyCentered =
+                                verticalDist < verticalThreshold;
+
+                            const isLookingAtScreen =
+                                isHorizontallyCentered && isVerticallyCentered;
+                            if (!isLookingAtScreen && showToastOnce) {
+                                showToastOnce = false;
+                                showToast &&
+                                    Toast.Error(
+                                        'Please look at your screen',
+                                        CustomError.webCamError,
+                                        closePreviousToast
+                                    );
+                            }
+                        }
+                    });
+                }
             }
             requestAnimationFrame(detectFaces);
         };
@@ -121,7 +162,7 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
             }
 
             return () => {
-                //clean up function
+                // Clean up function
                 if (videoRef.current) {
                     videoRef.current.removeEventListener(
                         'loadedmetadata',
@@ -134,15 +175,11 @@ const WebCam = ({ isModelsLoaded }: { isModelsLoaded: boolean }) => {
                 }
             };
         }
-    }, [model]);
+    }, [model, isDeviceChecked]);
 
     return (
         <div className="h-full w-full">
-            <video
-                className="w-full h-full object-cover"
-                ref={videoRef}
-                // className={`rounded-xl  max-h-[340px] my-2.5 ${isNoise ? 'outline outline-4 outline-offset-0 outline-[#1935CA]' : ''}`}
-            />
+            <video className="w-full h-full object-cover" ref={videoRef} />
         </div>
     );
 };
