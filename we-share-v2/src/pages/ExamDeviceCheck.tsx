@@ -40,6 +40,7 @@ function ExamDeviceCheck() {
 
     const [isFaceDetected, setIsFaceDetected] = useState<boolean>(false);
     const [soundLevel, setSoundLevel] = useState(0);
+    const detectSoundOnceRef = useRef(false);
 
     const micToastShownRef = useRef<boolean>(false);
     const cameraToastShownRef = useRef<boolean>(false);
@@ -53,6 +54,12 @@ function ExamDeviceCheck() {
     const handleRefresh = () => {
         window.location.reload();
     };
+
+    useEffect(() => {
+        if (soundLevel > 10 && detectSoundOnceRef.current === false) {
+            detectSoundOnceRef.current = true;
+        }
+    }, [soundLevel]);
 
     useEffect(() => {
         async function initializeModel() {
@@ -219,7 +226,6 @@ function ExamDeviceCheck() {
 
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
-    console.log(checkMicPermission, audioOptions, 'audio option  permission');
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
@@ -395,9 +401,9 @@ function ExamDeviceCheck() {
                                     Your face is being detected, please wait...
                                 </p>
                             )}
-                            {soundLevel > 10 ? (
+                            {detectSoundOnceRef.current ? (
                                 <p className="text-[#47a992]">
-                                    Sound detected successfully.
+                                    Sound Detected Successfully.
                                 </p>
                             ) : (
                                 <p>Initializing sound check, please wait...</p>
