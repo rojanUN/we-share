@@ -34,6 +34,10 @@ function ExamDeviceCheck() {
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
     const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
+    const [selectedVideoOption, setSelectedVideoOption] = useState<string>('');
+    const [selectedAudioOption, setSelectedAudioOption] = useState<string>('');
+    let audioStream: any = null;
+    let videoStream: any = null;
 
     // const [mediaPermissionError, setMediaPermissionError] =
     //     useState<boolean>(false);
@@ -162,8 +166,7 @@ function ExamDeviceCheck() {
     useEffect(() => {
         const getDevices = async () => {
             try {
-                let audioStream = null;
-                let videoStream = null;
+
                 if (checkMicPermission) {
                     audioStream = await navigator.mediaDevices.getUserMedia({
                         audio: true,
@@ -198,10 +201,10 @@ function ExamDeviceCheck() {
 
                 // Cleanup streams
                 if (audioStream) {
-                    audioStream.getTracks().forEach((track) => track.stop());
+                    audioStream.getTracks().forEach((track: any) => track.stop());
                 }
                 if (videoStream) {
-                    videoStream.getTracks().forEach((track) => track.stop());
+                    videoStream.getTracks().forEach((track: any) => track.stop());
                 }
             } catch (error) {
                 console.error('Error getting devices:', error);
@@ -217,21 +220,52 @@ function ExamDeviceCheck() {
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
             setVideoOptions(
                 deviceList
-                    .filter((device) => device.kind === 'videoinput')
-                    .map((device) => device.label)
-            );
+                    .filter((device) => device.kind === 'videoinput').map((device) => device.label));
         };
         filterVideoOptions(devices);
 
         const filterAudioOptions = (deviceList: MediaDeviceInfo[]) => {
             setAudioOptions(
                 deviceList
-                    .filter((device) => device.kind === 'audioinput')
-                    .map((device) => device.label)
-            );
+                    .filter((device) => device.kind === 'audioinput').map((device) => device.label));
         };
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
+
+    useEffect(() => {
+        const getMediaStream = async () => {
+            try {
+                const audioConstraints = selectedAudioOption
+                    ? { label: { exact: selectedAudioOption } }
+                    : false;
+
+                const videoConstraints = selectedVideoOption
+                    ? { label: { exact: selectedVideoOption } }
+                    : false;
+
+                const VideoConstraints: MediaStreamConstraints = {
+                    audio: audioConstraints as MediaTrackConstraints | boolean | undefined,
+                };
+                const AudioConstraints: MediaStreamConstraints = {
+                    video: videoConstraints as MediaTrackConstraints | boolean | undefined,
+                };
+                audioStream = await navigator.mediaDevices.getUserMedia(AudioConstraints);
+                videoStream = await navigator.mediaDevices.getUserMedia(VideoConstraints);
+            } catch (error) {
+                console.error('Error accessing selected devices:', error);
+                // Handle errors
+            }
+        };
+
+        if (selectedAudioOption || selectedVideoOption) {
+            getMediaStream();
+        }
+
+        return () => {
+        };
+    }, [selectedAudioOption, selectedVideoOption]);
+
+
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
@@ -315,6 +349,8 @@ function ExamDeviceCheck() {
                                             ? audioOptions
                                             : ['Permission denied']
                                     }
+                                    setSelectedOption={setSelectedAudioOption}
+                                    selectedOption={selectedAudioOption}
                                 />
                                 <Dropdown
                                     isWebCam
@@ -325,6 +361,8 @@ function ExamDeviceCheck() {
                                             ? videoOptions
                                             : ['Permission denied']
                                     }
+                                    setSelectedOption={setSelectedVideoOption}
+                                    selectedOption={selectedVideoOption}
                                 />
                             </div>
                         </div>

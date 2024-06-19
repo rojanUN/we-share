@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MicIcon, VideoIcon } from '../../helper/icons';
 
 interface DropdownType {
@@ -6,10 +6,12 @@ interface DropdownType {
     isOpen: boolean;
     onToggle: () => void;
     options: string[];
+    setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
+    selectedOption: string;
+
 }
 
-const Dropdown = ({ isWebCam, isOpen, onToggle, options }: DropdownType) => {
-    const [selectedOption, setSelectedOption] = useState<string>('');
+const Dropdown = ({ isWebCam, isOpen, onToggle, options, setSelectedOption, selectedOption }: DropdownType) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
