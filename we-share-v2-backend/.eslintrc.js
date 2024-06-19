@@ -33,6 +33,7 @@ module.exports = {
     //   },
     // ],
     "no-async-promise-executor": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     // "no-console": "error",
   },
 };
