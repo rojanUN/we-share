@@ -1,0 +1,40 @@
+import express from "express";
+import { Database, port } from "./config";
+import { methodNotAllowed, notFound } from "./middlewares/index";
+
+class Server {
+  app: express.Application;
+
+  constructor() {
+    this.app = express();
+    this.configuration();
+  }
+
+  private configuration() {
+    this.app.set("port", port);
+
+    this.app.use(express.urlencoded({ extended: true }));
+
+    this.app.use(express.json());
+
+    this.app.get("/", (req, res) => res.send(`Server running at port ${this.app.get("port")}`));
+
+    //Error Handler
+    this.app.use(methodNotAllowed);
+    this.app.use(notFound);
+  }
+
+  private async connectDB() {
+    await Database.connection();
+  }
+
+  public start() {
+    this.connectDB();
+    this.app.listen(this.app.get("port"), () => {
+      console.log(`Server running on PORT ${this.app.get("port")}`);
+    });
+  }
+}
+
+const server = new Server();
+server.start();
