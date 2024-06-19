@@ -33,7 +33,7 @@ function ExamDeviceCheck() {
     const [checkMicPermission, setCheckMicPermission] = useState<boolean>(true);
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
-    const [count, setCount] = useState<number>(0);
+    const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
 
     // const [mediaPermissionError, setMediaPermissionError] =
     //     useState<boolean>(false);
@@ -85,6 +85,7 @@ function ExamDeviceCheck() {
 
             if (permissionName === 'microphone') {
                 setCheckMicPermission(newState);
+
                 if (!newState && !micToastShownRef.current) {
                     Toast.Error(
                         'Microphone permission denied',
@@ -126,10 +127,16 @@ function ExamDeviceCheck() {
                 micPermission.onchange = () => {
                     micToastShownRef.current = false;
                     handlePermissionChange('microphone');
+                    if (micPermission.state === 'granted') {
+                        setshowRefreshButton(true);
+                    }
                 };
                 cameraPermission.onchange = () => {
                     cameraToastShownRef.current = false;
                     handlePermissionChange('camera');
+                    if (cameraPermission.state === 'granted') {
+                        setshowRefreshButton(true);
+                    }
                 };
             } catch (error) {
                 console.error('Error checking permissions:', error);
@@ -163,8 +170,7 @@ function ExamDeviceCheck() {
                     });
                 }
                 if (checkCameraPermission) {
-                    console.log('count', count);
-                    setCount((n) => n + 1);
+
                     videoStream = await navigator.mediaDevices.getUserMedia({
                         video: true,
                     });
@@ -204,9 +210,10 @@ function ExamDeviceCheck() {
         };
 
         getDevices();
-    }, [devices]);
+    }, []);
 
     useEffect(() => {
+        console.log('devices', devices);
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
             setVideoOptions(
                 deviceList
@@ -223,7 +230,6 @@ function ExamDeviceCheck() {
                     .map((device) => device.label)
             );
         };
-
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
     return (
@@ -409,7 +415,7 @@ function ExamDeviceCheck() {
                                 <p>Initializing sound check, please wait...</p>
                             )}
                         </div>
-                        {count > 2 ? (
+                        {showRefreshButton ? (
                             <div className="mt-auto">
                                 <Button
                                     variant="secondary"
