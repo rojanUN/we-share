@@ -1,10 +1,11 @@
 import * as Sequelize from "sequelize";
 
 import { Database } from "@src/config";
+import { UserModelInterface } from "@src/interfaces";
 
 const sequelize = Database.sequelize;
 
-const User = sequelize.define(
+const User = sequelize.define<UserModelInterface>(
   "authenticator_users",
   {
     id: {
@@ -16,6 +17,9 @@ const User = sequelize.define(
     sub: {
       type: Sequelize.STRING,
     },
+    name: {
+      type: Sequelize.STRING
+    }
   },
   {
     timestamps: true,
