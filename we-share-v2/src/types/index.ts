@@ -1,8 +1,9 @@
 export interface Question {
     id: number;
     question: string;
-    options: string[];
-    correctAnswer: number;
+    options?: string[];
+    correctAnswer?: number;
+    category: string;
 }
 
 export type LandMark = [number, number];
@@ -23,11 +24,13 @@ export interface IBlazeFaceModel {
     // Add any other methods or properties you need from BlazeFaceModel
 }
 export interface QuestionStateType {
-    id: number | null;
-    question: string | null;
-    options: string[] | null;
-    correctAnswer: number | null;
+    // id: number | null;
+    // question: string | null;
+    // options?: string[] | null;
+    // correctAnswer?: number | null;
+    // category: string | null;
     // questionNo: number | null;
+    selectedQuestion: Question | null;
     activeQuesIndex?: number | null;
     questions?: Question[] | null;
     checkedQuestions?: CheckedQuestionType[] | null;

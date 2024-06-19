@@ -170,7 +170,6 @@ function ExamDeviceCheck() {
                     });
                 }
                 if (checkCameraPermission) {
-
                     videoStream = await navigator.mediaDevices.getUserMedia({
                         video: true,
                     });
