@@ -8,7 +8,8 @@ export class MediaRouter extends RouterClass {
   }
 
   define(): void {
-    this.router.route("/single");
+    this.router.route("/fetch/problem");
+    this.router.route("fetch/problems");
   }
 }
 //to use the guard middleware
