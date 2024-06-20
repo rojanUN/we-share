@@ -1,7 +1,7 @@
 import User from "./userModel";
 
 const Model = {
-    User
+  User,
 };
 
 export default Model;
