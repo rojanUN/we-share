@@ -18,8 +18,8 @@ const User = sequelize.define<UserModelInterface>(
       type: Sequelize.STRING,
     },
     name: {
-      type: Sequelize.STRING
-    }
+      type: Sequelize.STRING,
+    },
   },
   {
     timestamps: true,
