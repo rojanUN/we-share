@@ -34,10 +34,12 @@ function ExamDeviceCheck() {
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
     const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
-    const [selectedVideoOption, setSelectedVideoOption] = useState<string>('');
-    const [selectedAudioOption, setSelectedAudioOption] = useState<string>('');
+
     let audioStream: any = null;
     let videoStream: any = null;
+
+    const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>('');
+    const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>('');
 
     // const [mediaPermissionError, setMediaPermissionError] =
     //     useState<boolean>(false);
@@ -75,8 +77,6 @@ function ExamDeviceCheck() {
         }
         initializeModel();
     }, [isModelsLoaded]);
-
-    // console.log('this is looked at screen', LookedAtScreen);
 
     const handlePermissionChange = async (
         permissionName: 'microphone' | 'camera'
@@ -173,7 +173,6 @@ function ExamDeviceCheck() {
                     });
                 }
                 if (checkCameraPermission) {
-
                     videoStream = await navigator.mediaDevices.getUserMedia({
                         video: true,
                     });
@@ -235,12 +234,12 @@ function ExamDeviceCheck() {
     useEffect(() => {
         const getMediaStream = async () => {
             try {
-                const audioConstraints = selectedAudioOption
-                    ? { label: { exact: selectedAudioOption } }
+                const audioConstraints = selectedAudioDevice
+                    ? { label: { exact: selectedAudioDevice } }
                     : false;
 
-                const videoConstraints = selectedVideoOption
-                    ? { label: { exact: selectedVideoOption } }
+                const videoConstraints = selectedVideoDevice
+                    ? { label: { exact: selectedVideoDevice } }
                     : false;
 
                 const VideoConstraints: MediaStreamConstraints = {
@@ -257,13 +256,13 @@ function ExamDeviceCheck() {
             }
         };
 
-        if (selectedAudioOption || selectedVideoOption) {
+        if (selectedAudioDevice || selectedVideoDevice) {
             getMediaStream();
         }
 
         return () => {
         };
-    }, [selectedAudioOption, selectedVideoOption]);
+    }, [selectedAudioDevice, selectedVideoDevice]);
 
 
     return (
@@ -342,6 +341,7 @@ function ExamDeviceCheck() {
                             <h4>Set Preferences</h4>
                             <div className="flex flex-col w-max gap-4 mt-4">
                                 <Dropdown
+                                    isMic
                                     isOpen={openDropdown === 1}
                                     onToggle={() => handleDropdownToggle(1)}
                                     options={
@@ -349,8 +349,8 @@ function ExamDeviceCheck() {
                                             ? audioOptions
                                             : ['Permission denied']
                                     }
-                                    setSelectedOption={setSelectedAudioOption}
-                                    selectedOption={selectedAudioOption}
+                                    selectedOption={selectedAudioDevice}
+                                    setSelectedOption={setSelectedAudioDevice}
                                 />
                                 <Dropdown
                                     isWebCam
@@ -361,8 +361,8 @@ function ExamDeviceCheck() {
                                             ? videoOptions
                                             : ['Permission denied']
                                     }
-                                    setSelectedOption={setSelectedVideoOption}
-                                    selectedOption={selectedVideoOption}
+                                    selectedOption={selectedVideoDevice}
+                                    setSelectedOption={setSelectedVideoDevice}
                                 />
                             </div>
                         </div>
@@ -468,6 +468,7 @@ function ExamDeviceCheck() {
                                     variant="secondary"
                                     disabled={!isFaceDetected}
                                     handleBtnClick={() => {
+                                        setIsDeviceChecked(false);
                                         dispatch(setShowToast(true));
                                         navigate('/exam-portal');
                                         enterFullscreen();

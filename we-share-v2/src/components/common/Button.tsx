@@ -15,7 +15,7 @@ function Button({
     handleBtnClick,
 }: ButtonType) {
     const baseClasses =
-        'border-2 border-solid h-fit rounded-[7px] py-[5px] px-[20px] text-[18px] tracking-wide font-bold';
+        'border-2 border-solid h-fit rounded-[7px] py-[5px] px-[20px] text-[18px] tracking-wide font-bold flex items-center gap-2';
     const cursorClasses = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
     const outlineClasses = outline ? 'bg-transparent' : 'text-white';
 
