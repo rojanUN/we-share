@@ -9,7 +9,6 @@ interface DropdownType {
     options: string[];
     setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
     selectedOption: string;
-
 }
 
 const Dropdown = ({

@@ -166,7 +166,6 @@ function ExamDeviceCheck() {
     useEffect(() => {
         const getDevices = async () => {
             try {
-
                 if (checkMicPermission) {
                     audioStream = await navigator.mediaDevices.getUserMedia({
                         audio: true,
@@ -200,10 +199,14 @@ function ExamDeviceCheck() {
 
                 // Cleanup streams
                 if (audioStream) {
-                    audioStream.getTracks().forEach((track: any) => track.stop());
+                    audioStream
+                        .getTracks()
+                        .forEach((track: any) => track.stop());
                 }
                 if (videoStream) {
-                    videoStream.getTracks().forEach((track: any) => track.stop());
+                    videoStream
+                        .getTracks()
+                        .forEach((track: any) => track.stop());
                 }
             } catch (error) {
                 console.error('Error getting devices:', error);
@@ -219,14 +222,18 @@ function ExamDeviceCheck() {
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
             setVideoOptions(
                 deviceList
-                    .filter((device) => device.kind === 'videoinput').map((device) => device.label));
+                    .filter((device) => device.kind === 'videoinput')
+                    .map((device) => device.label)
+            );
         };
         filterVideoOptions(devices);
 
         const filterAudioOptions = (deviceList: MediaDeviceInfo[]) => {
             setAudioOptions(
                 deviceList
-                    .filter((device) => device.kind === 'audioinput').map((device) => device.label));
+                    .filter((device) => device.kind === 'audioinput')
+                    .map((device) => device.label)
+            );
         };
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
@@ -243,13 +250,21 @@ function ExamDeviceCheck() {
                     : false;
 
                 const VideoConstraints: MediaStreamConstraints = {
-                    audio: audioConstraints as MediaTrackConstraints | boolean | undefined,
+                    audio: audioConstraints as
+                        | MediaTrackConstraints
+                        | boolean
+                        | undefined,
                 };
                 const AudioConstraints: MediaStreamConstraints = {
-                    video: videoConstraints as MediaTrackConstraints | boolean | undefined,
+                    video: videoConstraints as
+                        | MediaTrackConstraints
+                        | boolean
+                        | undefined,
                 };
-                audioStream = await navigator.mediaDevices.getUserMedia(AudioConstraints);
-                videoStream = await navigator.mediaDevices.getUserMedia(VideoConstraints);
+                audioStream =
+                    await navigator.mediaDevices.getUserMedia(AudioConstraints);
+                videoStream =
+                    await navigator.mediaDevices.getUserMedia(VideoConstraints);
             } catch (error) {
                 console.error('Error accessing selected devices:', error);
                 // Handle errors
@@ -260,10 +275,8 @@ function ExamDeviceCheck() {
             getMediaStream();
         }
 
-        return () => {
-        };
+        return () => {};
     }, [selectedAudioDevice, selectedVideoDevice]);
-
 
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
