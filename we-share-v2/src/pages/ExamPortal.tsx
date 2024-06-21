@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import QuestionNav from '../components/QuestionNav';
 import Button from '../components/common/Button';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setCheckedQuestions } from '../feature/exam/examSlice';
+import { setCheckedQuestions, setShowToast } from '../feature/exam/examSlice';
 import { ClockIcon } from '../helper/icons';
 import { CustomError } from '../types';
 import Modal from '../components/common/Modal';
@@ -13,11 +13,12 @@ import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
 import { SessionStorage } from '../helper/sessionStorage';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/common/Alert';
-import { getModel } from '../helper/loadModelHelper';
+import { getModel, loadModel } from '../helper/loadModelHelper';
 import DetectNoise from '../components/DetectNoise';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { Toast } from '../helper/toast';
 import MCQQuestionView from '../components/MCQQuestionView';
+import CodeMirrorView from '../components/CodeMirrorView';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -38,6 +39,10 @@ const ExamPortal = function ExamPortal() {
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [soundLevel, setSoundLevel] = useState(0);
+
+    useEffect(() => {
+        dispatch(setShowToast(true));
+    }, []);
 
     useEffect(() => {
         const model = getModel();
@@ -120,6 +125,19 @@ const ExamPortal = function ExamPortal() {
         }
     }, [soundLevel, showToastOnce]);
 
+    useEffect(() => {
+        async function initializeModel() {
+            await loadModel();
+            const model = getModel();
+            if (model) {
+                setIsModelsLoaded(true);
+            }
+        }
+        if (!isModelsLoaded) {
+            initializeModel();
+        }
+    }, [isModelsLoaded]);
+
     return (
         <div className="h-[100vh] w-full flex flex-col md:flex-row ">
             <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)}>
@@ -129,8 +147,10 @@ const ExamPortal = function ExamPortal() {
             <div className="flex-[1_1_0%] mx-auto justify-center items-center md:min-w-[300px] p-6">
                 <div>
                     <h2>Web Cam</h2>
-                    {isModelsLoaded && (
+                    {isModelsLoaded ? (
                         <WebCam isModelsLoaded={isModelsLoaded} />
+                    ) : (
+                        <p>Please wait...</p>
                     )}
                 </div>
                 <QuestionNav />
@@ -138,8 +158,8 @@ const ExamPortal = function ExamPortal() {
             <ErrorBoundary>
                 <DetectNoise setSoundLevel={setSoundLevel} />
             </ErrorBoundary>
-            <div className="flex-[6_6_0%] p-6 h-full bg-custom-gradient grid place-items-center">
-                <div className="flex flex-col h-max md:min-w-[70%] bg-white rounded-[20px] px-10 py-14">
+            <div className="flex-[6_6_0%] px-6 h-full bg-custom-gradient grid place-items-center">
+                <div className="flex flex-col h-max w-full md:min-w-[70%] bg-white rounded-[20px] px-10 py-10">
                     <div className="h-20 mb-6 w-full flex justify-between items-center">
                         <div>
                             <div className="flex">
@@ -209,7 +229,7 @@ const ExamPortal = function ExamPortal() {
                     {questionStore?.selectedQuestion?.category === 'mcq' ? (
                         <MCQQuestionView questionStore={questionStore} />
                     ) : (
-                        <div>code mirror UI</div>
+                        <CodeMirrorView />
                     )}
                 </div>
             </div>

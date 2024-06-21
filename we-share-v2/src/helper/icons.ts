@@ -8,6 +8,7 @@ import { BsCameraVideo as VideoIcon } from 'react-icons/bs';
 import { IoChevronBack as BackArrowIcon } from 'react-icons/io5';
 import { FaCheckCircle as CheckedIcon } from 'react-icons/fa';
 import { RiCloseCircleFill as CloseIcon } from 'react-icons/ri';
+import { FaPlay as PlayIcon } from 'react-icons/fa';
 
 export {
     CameraIcon,
@@ -20,4 +21,5 @@ export {
     BackArrowIcon,
     CheckedIcon,
     CloseIcon,
+    PlayIcon,
 };

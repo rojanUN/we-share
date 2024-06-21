@@ -35,6 +35,9 @@ function ExamDeviceCheck() {
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
     const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
 
+    const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>('');
+    const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>('');
+
     // const [mediaPermissionError, setMediaPermissionError] =
     //     useState<boolean>(false);
 
@@ -71,8 +74,6 @@ function ExamDeviceCheck() {
         }
         initializeModel();
     }, [isModelsLoaded]);
-
-    // console.log('this is looked at screen', LookedAtScreen);
 
     const handlePermissionChange = async (
         permissionName: 'microphone' | 'camera'
@@ -231,6 +232,7 @@ function ExamDeviceCheck() {
         };
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
+
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
             <div className="flex w-full flex-col min-h-[31.25rem] h-[31.25rem] box-border gap-16 items-center md:flex-row md:gap-10">
@@ -307,6 +309,7 @@ function ExamDeviceCheck() {
                             <h4>Set Preferences</h4>
                             <div className="flex flex-col w-max gap-4 mt-4">
                                 <Dropdown
+                                    isMic
                                     isOpen={openDropdown === 1}
                                     onToggle={() => handleDropdownToggle(1)}
                                     options={
@@ -314,6 +317,8 @@ function ExamDeviceCheck() {
                                             ? audioOptions
                                             : ['Permission denied']
                                     }
+                                    selectedOption={selectedAudioDevice}
+                                    setSelectedOption={setSelectedAudioDevice}
                                 />
                                 <Dropdown
                                     isWebCam
@@ -324,6 +329,8 @@ function ExamDeviceCheck() {
                                             ? videoOptions
                                             : ['Permission denied']
                                     }
+                                    selectedOption={selectedVideoDevice}
+                                    setSelectedOption={setSelectedVideoDevice}
                                 />
                             </div>
                         </div>
@@ -429,6 +436,7 @@ function ExamDeviceCheck() {
                                     variant="secondary"
                                     disabled={!isFaceDetected}
                                     handleBtnClick={() => {
+                                        setIsDeviceChecked(false);
                                         dispatch(setShowToast(true));
                                         navigate('/exam-portal');
                                         enterFullscreen();
