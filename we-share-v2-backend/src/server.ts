@@ -1,6 +1,7 @@
 import express from "express";
 import { Database, port } from "./config";
 import { methodNotAllowed, notFound } from "./middlewares/index";
+import { ProxyRouter } from "./routes";
 
 class Server {
   app: express.Application;
@@ -18,6 +19,9 @@ class Server {
     this.app.use(express.json());
 
     this.app.get("/", (req, res) => res.send(`Server running at port ${this.app.get("port")}`));
+
+    //API Routes
+    this.app.use("/api", ProxyRouter.map());
 
     //Error Handler
     this.app.use(methodNotAllowed);
