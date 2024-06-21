@@ -3,28 +3,46 @@ import { MicIcon, VideoIcon } from '../../helper/icons';
 
 interface DropdownType {
     isWebCam?: boolean;
+    isMic?: boolean;
     isOpen: boolean;
     onToggle: () => void;
     options: string[];
     setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
     selectedOption: string;
-
 }
 
-const Dropdown = ({ isWebCam, isOpen, onToggle, options, setSelectedOption, selectedOption }: DropdownType) => {
+const Dropdown = ({
+    isWebCam,
+    isMic,
+    isOpen,
+    onToggle,
+    options,
+    selectedOption,
+    setSelectedOption,
+}: DropdownType) => {
+    // const [selectedOption, setSelectedOption] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (options.length > 0) {
-            setSelectedOption(options[0]);
-            setIsLoading(false);
-        } else if (isLoading) {
-            setSelectedOption('Searching...');
-        } else {
-            setSelectedOption('Device not found');
+        if (isMic || isWebCam) {
+            if (options.length > 0) {
+                setSelectedOption(options[0]);
+                setIsLoading(false);
+            } else if (isLoading) {
+                setSelectedOption('Searching...');
+            } else {
+                setSelectedOption('Device not found');
+            }
         }
     }, [options]);
-    // const options = ['Default', 'Option 1', 'Option 2', 'Option 3'];
+
+    useEffect(() => {
+        if (!isMic || !isWebCam) {
+            if (options.length > 0) {
+                setSelectedOption(options[0]);
+            }
+        }
+    }, []);
 
     return (
         <div className="relative inline-block text-left min-w-[250px]">
@@ -40,12 +58,12 @@ const Dropdown = ({ isWebCam, isOpen, onToggle, options, setSelectedOption, sele
                                 className="mr-2"
                                 style={{ fontSize: '20px' }}
                             />
-                        ) : (
+                        ) : isMic ? (
                             <MicIcon
                                 className="mr-2"
                                 style={{ fontSize: '25px' }}
                             />
-                        )}
+                        ) : null}
                         {selectedOption?.length > 20
                             ? selectedOption.substring(0, 20) + ' ...'
                             : selectedOption}

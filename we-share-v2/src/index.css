@@ -22,3 +22,11 @@ h5 {
 h6 {
     @apply text-h6 font-h my-h;
 }
+
+.react-codemirror2 > .CodeMirror:first-child {
+    display: none;
+}
+
+.CodeMirror {
+    height: 65vh !important;
+}

@@ -4,24 +4,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import QuestionNav from '../components/QuestionNav';
 import Button from '../components/common/Button';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import {
-    setActiveQuesIndex,
-    setSelectedQuestion,
-    setCheckedQuestions,
-} from '../feature/exam/examSlice';
+import { setCheckedQuestions, setShowToast } from '../feature/exam/examSlice';
 import { ClockIcon } from '../helper/icons';
-import { CheckedQuestionType, CustomError } from '../types';
+import { CustomError } from '../types';
 import Modal from '../components/common/Modal';
 import CircularProgress from '../components/common/CircularProgress';
 import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
 import { SessionStorage } from '../helper/sessionStorage';
-import RadioBtn from '../components/common/RadioBtn';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/common/Alert';
-import { getModel } from '../helper/loadModelHelper';
+import { getModel, loadModel } from '../helper/loadModelHelper';
 import DetectNoise from '../components/DetectNoise';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { Toast } from '../helper/toast';
+import MCQQuestionView from '../components/MCQQuestionView';
+import CodeMirrorView from '../components/CodeMirrorView';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -36,12 +33,16 @@ const ExamPortal = function ExamPortal() {
     }); // 3600 sec for 1 hour
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const selectedQuestion = useAppSelector((state) => state.exam);
+    const questionStore = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
 
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [soundLevel, setSoundLevel] = useState(0);
+
+    useEffect(() => {
+        dispatch(setShowToast(true));
+    }, []);
 
     useEffect(() => {
         const model = getModel();
@@ -71,8 +72,8 @@ const ExamPortal = function ExamPortal() {
         SessionStorage.removeAllSession();
         dispatch(setCheckedQuestions([]));
 
-        // if (selectedQuestion?.questions) {
-        //     setSelectedQuestion(selectedQuestion.questions[0]);
+        // if (questionStore?.questions) {
+        //     setquestionStore(questionStore.questions[0]);
         // }
 
         exitFullscreen();
@@ -109,60 +110,6 @@ const ExamPortal = function ExamPortal() {
         }
     }, [dispatch]);
 
-    const handleOptionChange = ({
-        id,
-        selectedOption,
-        selectedOptionIndex,
-    }: CheckedQuestionType) => {
-        const existingQuestion = selectedQuestion?.checkedQuestions?.find(
-            (q) => q.id === id
-        );
-        let updatedState;
-
-        if (existingQuestion) {
-            // Update the existing question
-            updatedState = selectedQuestion?.checkedQuestions?.map((q) =>
-                q.id === id
-                    ? {
-                          ...q,
-                          selectedOption,
-                          selectedOptionIndex,
-                      }
-                    : q
-            );
-        } else {
-            // Add new question
-            updatedState = [
-                ...selectedQuestion.checkedQuestions!,
-                {
-                    id,
-                    selectedOption,
-                    selectedOptionIndex,
-                },
-            ];
-        }
-
-        dispatch(setCheckedQuestions(updatedState!));
-        SessionStorage.setSessionItem('questionsState', updatedState);
-    };
-
-    const handlePrevBtnClick = () => {
-        const newIndex = (selectedQuestion?.activeQuesIndex ?? 0) - 1;
-        const newQuestion = selectedQuestion?.questions?.[newIndex];
-        if (newQuestion) {
-            dispatch(setSelectedQuestion(newQuestion));
-            dispatch(setActiveQuesIndex(newIndex));
-        }
-    };
-    const handleNxtBtnClick = () => {
-        const newIndex = (selectedQuestion?.activeQuesIndex ?? 0) + 1;
-        const newQuestion = selectedQuestion?.questions?.[newIndex];
-        if (newQuestion) {
-            dispatch(setSelectedQuestion(newQuestion));
-            dispatch(setActiveQuesIndex(newIndex));
-        }
-    };
-
     const [showToastOnce, setShowToastOnce] = useState(false);
     const closePreviousToast = () => {
         setShowToastOnce(false);
@@ -178,6 +125,19 @@ const ExamPortal = function ExamPortal() {
         }
     }, [soundLevel, showToastOnce]);
 
+    useEffect(() => {
+        async function initializeModel() {
+            await loadModel();
+            const model = getModel();
+            if (model) {
+                setIsModelsLoaded(true);
+            }
+        }
+        if (!isModelsLoaded) {
+            initializeModel();
+        }
+    }, [isModelsLoaded]);
+
     return (
         <div className="h-[100vh] w-full flex flex-col md:flex-row ">
             <Alert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)}>
@@ -187,8 +147,10 @@ const ExamPortal = function ExamPortal() {
             <div className="flex-[1_1_0%] mx-auto justify-center items-center md:min-w-[300px] p-6">
                 <div>
                     <h2>Web Cam</h2>
-                    {isModelsLoaded && (
+                    {isModelsLoaded ? (
                         <WebCam isModelsLoaded={isModelsLoaded} />
+                    ) : (
+                        <p>Please wait...</p>
                     )}
                 </div>
                 <QuestionNav />
@@ -196,8 +158,8 @@ const ExamPortal = function ExamPortal() {
             <ErrorBoundary>
                 <DetectNoise setSoundLevel={setSoundLevel} />
             </ErrorBoundary>
-            <div className="flex-[6_6_0%] p-6 h-full bg-custom-gradient grid place-items-center">
-                <div className="flex flex-col h-max md:min-w-[70%] bg-white rounded-[20px] px-10 py-14">
+            <div className="flex-[6_6_0%] px-6 h-full bg-custom-gradient grid place-items-center">
+                <div className="flex flex-col h-max w-full md:min-w-[70%] bg-white rounded-[20px] px-10 py-10">
                     <div className="h-20 mb-6 w-full flex justify-between items-center">
                         <div>
                             <div className="flex">
@@ -232,10 +194,9 @@ const ExamPortal = function ExamPortal() {
                             <div className="flex-[1_1_0%] md:max-h-[10rem]">
                                 <CircularProgress
                                     value={
-                                        selectedQuestion.checkedQuestions
-                                            ?.length!
+                                        questionStore.checkedQuestions?.length!
                                     }
-                                    max={selectedQuestion?.questions?.length!}
+                                    max={questionStore?.questions?.length!}
                                 />
                             </div>
                             <div className="flex-[1_1_0%] flex flex-col ml-auto justify-center font-bold text-[20px]">
@@ -243,21 +204,20 @@ const ExamPortal = function ExamPortal() {
                                     <span className="inline-block w-[100px] mr-4">
                                         Attempted:
                                     </span>
-                                    {selectedQuestion.checkedQuestions?.length}
+                                    {questionStore.checkedQuestions?.length}
                                 </p>
                                 <p>
                                     <span className="inline-block w-[100px] mr-4">
                                         Remaining:
                                     </span>
-                                    {selectedQuestion.questions?.length! -
-                                        selectedQuestion.checkedQuestions
-                                            ?.length!}
+                                    {questionStore.questions?.length! -
+                                        questionStore.checkedQuestions?.length!}
                                 </p>
                                 <p>
                                     <span className="inline-block w-[100px] mr-4">
                                         Total:
                                     </span>
-                                    {selectedQuestion.questions?.length}
+                                    {questionStore.questions?.length}
                                 </p>
                             </div>
                         </div>
@@ -266,56 +226,11 @@ const ExamPortal = function ExamPortal() {
                             Thank you!
                         </p>
                     </Modal>
-                    <p className="text-[20px] font-semibold">
-                        Q.
-                        {(selectedQuestion.activeQuesIndex ||
-                            selectedQuestion.activeQuesIndex === 0) &&
-                            selectedQuestion.activeQuesIndex + 1}{' '}
-                        {selectedQuestion.question}
-                    </p>
-
-                    <div className="flex flex-col flex-wrap mt-3 ml-8 w-max">
-                        {selectedQuestion?.options?.map((option, i) => (
-                            <div
-                                key={i}
-                                className="inline-flex min-w-max px-4 py-3.5 rounded-[7px] my-2 items-center border-2 border-solid border-[#eee]"
-                            >
-                                <RadioBtn
-                                    name={`ques-${selectedQuestion.id}`}
-                                    qid={selectedQuestion.id!}
-                                    label={option}
-                                    index={i}
-                                    handleOptionChange={() =>
-                                        handleOptionChange({
-                                            id: selectedQuestion.id!,
-                                            selectedOption: option,
-                                            selectedOptionIndex: i,
-                                        })
-                                    }
-                                    checkedQuestions={
-                                        selectedQuestion?.checkedQuestions!
-                                    }
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-end gap-4 p-5">
-                        <Button
-                            variant="primary"
-                            handleBtnClick={handlePrevBtnClick}
-                            disabled={selectedQuestion.activeQuesIndex === 0}
-                            outline
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            variant="primary"
-                            handleBtnClick={handleNxtBtnClick}
-                            disabled={selectedQuestion.activeQuesIndex === 26}
-                        >
-                            Next
-                        </Button>
-                    </div>
+                    {questionStore?.selectedQuestion?.category === 'mcq' ? (
+                        <MCQQuestionView questionStore={questionStore} />
+                    ) : (
+                        <CodeMirrorView />
+                    )}
                 </div>
             </div>
         </div>

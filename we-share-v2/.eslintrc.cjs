@@ -23,6 +23,15 @@ module.exports = {
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
         'react/no-unescaped-entities': 'off',
         'react-hooks/exhaustive-deps': 'off',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'warn', // or "error"
+            {
+                argsIgnorePattern: '^_',
+                varsIgnorePattern: '^_',
+                caughtErrorsIgnorePattern: '^_',
+            },
+        ],
         // 'no-console': 'error', // for preventing console.log to commit
     },
 };

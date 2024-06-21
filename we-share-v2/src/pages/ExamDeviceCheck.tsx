@@ -34,10 +34,12 @@ function ExamDeviceCheck() {
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
     const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
-    const [selectedVideoOption, setSelectedVideoOption] = useState<string>('');
-    const [selectedAudioOption, setSelectedAudioOption] = useState<string>('');
+
     let audioStream: any = null;
     let videoStream: any = null;
+
+    const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>('');
+    const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>('');
 
     // const [mediaPermissionError, setMediaPermissionError] =
     //     useState<boolean>(false);
@@ -75,8 +77,6 @@ function ExamDeviceCheck() {
         }
         initializeModel();
     }, [isModelsLoaded]);
-
-    // console.log('this is looked at screen', LookedAtScreen);
 
     const handlePermissionChange = async (
         permissionName: 'microphone' | 'camera'
@@ -166,14 +166,12 @@ function ExamDeviceCheck() {
     useEffect(() => {
         const getDevices = async () => {
             try {
-
                 if (checkMicPermission) {
                     audioStream = await navigator.mediaDevices.getUserMedia({
                         audio: true,
                     });
                 }
                 if (checkCameraPermission) {
-
                     videoStream = await navigator.mediaDevices.getUserMedia({
                         video: true,
                     });
@@ -201,10 +199,14 @@ function ExamDeviceCheck() {
 
                 // Cleanup streams
                 if (audioStream) {
-                    audioStream.getTracks().forEach((track: any) => track.stop());
+                    audioStream
+                        .getTracks()
+                        .forEach((track: any) => track.stop());
                 }
                 if (videoStream) {
-                    videoStream.getTracks().forEach((track: any) => track.stop());
+                    videoStream
+                        .getTracks()
+                        .forEach((track: any) => track.stop());
                 }
             } catch (error) {
                 console.error('Error getting devices:', error);
@@ -220,14 +222,18 @@ function ExamDeviceCheck() {
         const filterVideoOptions = (deviceList: MediaDeviceInfo[]) => {
             setVideoOptions(
                 deviceList
-                    .filter((device) => device.kind === 'videoinput').map((device) => device.label));
+                    .filter((device) => device.kind === 'videoinput')
+                    .map((device) => device.label)
+            );
         };
         filterVideoOptions(devices);
 
         const filterAudioOptions = (deviceList: MediaDeviceInfo[]) => {
             setAudioOptions(
                 deviceList
-                    .filter((device) => device.kind === 'audioinput').map((device) => device.label));
+                    .filter((device) => device.kind === 'audioinput')
+                    .map((device) => device.label)
+            );
         };
         filterAudioOptions(devices);
     }, [devices, checkMicPermission, checkCameraPermission]);
@@ -235,36 +241,42 @@ function ExamDeviceCheck() {
     useEffect(() => {
         const getMediaStream = async () => {
             try {
-                const audioConstraints = selectedAudioOption
-                    ? { label: { exact: selectedAudioOption } }
+                const audioConstraints = selectedAudioDevice
+                    ? { label: { exact: selectedAudioDevice } }
                     : false;
 
-                const videoConstraints = selectedVideoOption
-                    ? { label: { exact: selectedVideoOption } }
+                const videoConstraints = selectedVideoDevice
+                    ? { label: { exact: selectedVideoDevice } }
                     : false;
 
                 const VideoConstraints: MediaStreamConstraints = {
-                    audio: audioConstraints as MediaTrackConstraints | boolean | undefined,
+                    audio: audioConstraints as
+                        | MediaTrackConstraints
+                        | boolean
+                        | undefined,
                 };
                 const AudioConstraints: MediaStreamConstraints = {
-                    video: videoConstraints as MediaTrackConstraints | boolean | undefined,
+                    video: videoConstraints as
+                        | MediaTrackConstraints
+                        | boolean
+                        | undefined,
                 };
-                audioStream = await navigator.mediaDevices.getUserMedia(AudioConstraints);
-                videoStream = await navigator.mediaDevices.getUserMedia(VideoConstraints);
+                audioStream =
+                    await navigator.mediaDevices.getUserMedia(AudioConstraints);
+                videoStream =
+                    await navigator.mediaDevices.getUserMedia(VideoConstraints);
             } catch (error) {
                 console.error('Error accessing selected devices:', error);
                 // Handle errors
             }
         };
 
-        if (selectedAudioOption || selectedVideoOption) {
+        if (selectedAudioDevice || selectedVideoDevice) {
             getMediaStream();
         }
 
-        return () => {
-        };
-    }, [selectedAudioOption, selectedVideoOption]);
-
+        return () => {};
+    }, [selectedAudioDevice, selectedVideoDevice]);
 
     return (
         <div className="h-[100dvh] px-5 md:px-20 bg-[#f4fbf9] grid place-items-center">
@@ -342,6 +354,7 @@ function ExamDeviceCheck() {
                             <h4>Set Preferences</h4>
                             <div className="flex flex-col w-max gap-4 mt-4">
                                 <Dropdown
+                                    isMic
                                     isOpen={openDropdown === 1}
                                     onToggle={() => handleDropdownToggle(1)}
                                     options={
@@ -349,8 +362,8 @@ function ExamDeviceCheck() {
                                             ? audioOptions
                                             : ['Permission denied']
                                     }
-                                    setSelectedOption={setSelectedAudioOption}
-                                    selectedOption={selectedAudioOption}
+                                    selectedOption={selectedAudioDevice}
+                                    setSelectedOption={setSelectedAudioDevice}
                                 />
                                 <Dropdown
                                     isWebCam
@@ -361,8 +374,8 @@ function ExamDeviceCheck() {
                                             ? videoOptions
                                             : ['Permission denied']
                                     }
-                                    setSelectedOption={setSelectedVideoOption}
-                                    selectedOption={selectedVideoOption}
+                                    selectedOption={selectedVideoDevice}
+                                    setSelectedOption={setSelectedVideoDevice}
                                 />
                             </div>
                         </div>
@@ -468,6 +481,7 @@ function ExamDeviceCheck() {
                                     variant="secondary"
                                     disabled={!isFaceDetected}
                                     handleBtnClick={() => {
+                                        setIsDeviceChecked(false);
                                         dispatch(setShowToast(true));
                                         navigate('/exam-portal');
                                         enterFullscreen();

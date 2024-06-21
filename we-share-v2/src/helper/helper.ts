@@ -1,46 +1,45 @@
 // import { Toast } from './toast';
-import React from 'react';
 import { CheckedQuestionType } from '../types';
 
-export const detectNoise = async (
-    setNoiseLevel: React.Dispatch<React.SetStateAction<number | undefined>>
-) => {
-    try {
-        const audioCtx = new window.AudioContext();
-        console.log('AudioContext state:', audioCtx.state);
-        if (audioCtx.state === 'suspended') {
-            await audioCtx.resume();
-            console.log('Resumed AudioContext');
-        }
+// export const detectNoise = async (
+//     setNoiseLevel: React.Dispatch<React.SetStateAction<number | undefined>>
+// ) => {
+//     try {
+//         const audioCtx = new window.AudioContext();
+//         console.log('AudioContext state:', audioCtx.state);
+//         if (audioCtx.state === 'suspended') {
+//             await audioCtx.resume();
+//             console.log('Resumed AudioContext');
+//         }
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-        });
-        // console.log('Microphone access granted');
+//         const stream = await navigator.mediaDevices.getUserMedia({
+//             audio: true,
+//         });
+//         // console.log('Microphone access granted');
 
-        const source = audioCtx.createMediaStreamSource(stream);
+//         const source = audioCtx.createMediaStreamSource(stream);
 
-        // console.log('Loading audio worklet module...');
-        await audioCtx.audioWorklet.addModule('worklet/worklet.js');
-        // console.log('Audio worklet module loaded');
-        const noiseLevelProcessor = new AudioWorkletNode(
-            audioCtx,
-            'noise-level-processor'
-        );
+//         // console.log('Loading audio worklet module...');
+//         await audioCtx.audioWorklet.addModule('worklet/worklet.js');
+//         // console.log('Audio worklet module loaded');
+//         const noiseLevelProcessor = new AudioWorkletNode(
+//             audioCtx,
+//             'noise-level-processor'
+//         );
 
-        noiseLevelProcessor.port.onmessage = (event: MessageEvent) => {
-            const noiseLevel = event.data as number;
-            setNoiseLevel(noiseLevel);
-        };
+//         noiseLevelProcessor.port.onmessage = (event: MessageEvent) => {
+//             const noiseLevel = event.data as number;
+//             setNoiseLevel(noiseLevel);
+//         };
 
-        // console.log('Connecting audio nodes...');
-        source.connect(noiseLevelProcessor);
-        noiseLevelProcessor.connect(audioCtx.destination);
-        // console.log('Audio nodes connected');
-    } catch (error) {
-        console.error('Error starting audio context:', error);
-    }
-};
+//         // console.log('Connecting audio nodes...');
+//         source.connect(noiseLevelProcessor);
+//         noiseLevelProcessor.connect(audioCtx.destination);
+//         // console.log('Audio nodes connected');
+//     } catch (error) {
+//         console.error('Error starting audio context:', error);
+//     }
+// };
 
 // export const detectNoise = (
 //     setNoiseLevel: React.Dispatch<React.SetStateAction<number>>
@@ -156,4 +155,16 @@ export const exitFullscreen = () => {
     } else if ((document as any).msExitFullscreen) {
         (document as any).msExitFullscreen();
     }
+};
+
+export const languageMimeTypeMap: Record<string, string> = {
+    javascript: 'text/javascript',
+    python: 'text/x-python',
+    java: 'text/x-java',
+    c: 'text/x-csrc',
+    'c++': 'text/x-c++src',
+    rust: 'text/x-rustsrc',
+    go: 'text/x-go',
+    php: 'text/x-php',
+    'c#': 'text/x-csharp',
 };

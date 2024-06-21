@@ -10,18 +10,21 @@ export const questions = [
             "log.console('Hello, World!')",
         ],
         correctAnswer: 2,
+        category: 'mcq',
     },
     {
         id: 2,
         question: 'Which of the following is a JavaScript data type?',
         options: ['Number', 'String', 'Boolean', 'All of the above'],
         correctAnswer: 3,
+        category: 'mcq',
     },
     {
         id: 3,
         question: 'Which company developed JavaScript?',
         options: ['Mozilla', 'Netscape', 'Microsoft', 'Sun Microsystems'],
         correctAnswer: 1,
+        category: 'mcq',
     },
     {
         id: 4,
@@ -33,6 +36,7 @@ export const questions = [
             'def myFunction() {}',
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 5,
@@ -45,12 +49,14 @@ export const questions = [
             'Call.myFunction()',
         ],
         correctAnswer: 2,
+        category: 'mcq',
     },
     {
         id: 6,
         question: 'Which event occurs when the user clicks on an HTML element?',
         options: ['onchange', 'onclick', 'onmouseover', 'onmouseclick'],
         correctAnswer: 1,
+        category: 'mcq',
     },
     {
         id: 7,
@@ -62,6 +68,7 @@ export const questions = [
             "var colors = 'red', 'green', 'blue'",
         ],
         correctAnswer: 2,
+        category: 'mcq',
     },
     {
         id: 8,
@@ -73,6 +80,7 @@ export const questions = [
             '/* This is a comment */',
         ],
         correctAnswer: 1,
+        category: 'mcq',
     },
     {
         id: 9,
@@ -84,6 +92,7 @@ export const questions = [
             "var person = 'firstName':'John', 'lastName':'Doe'",
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 10,
@@ -95,24 +104,28 @@ export const questions = [
             'declare carName;',
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 11,
         question: 'Which operator is used to assign a value to a variable?',
         options: ['*', '-', '=', '+'],
         correctAnswer: 2,
+        category: 'mcq',
     },
     {
         id: 12,
         question: 'What will the following code return: Boolean(10 > 9)?',
         options: ['true', 'false', 'NaN', 'undefined'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 13,
         question: 'What is the correct file extension for JavaScript files?',
         options: ['.js', '.java', '.javascript', '.jvs'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 14,
@@ -124,6 +137,7 @@ export const questions = [
             'Both A and C',
         ],
         correctAnswer: 3,
+        category: 'mcq',
     },
     {
         id: 15,
@@ -135,6 +149,7 @@ export const questions = [
             'rnd(7.25)',
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 16,
@@ -146,6 +161,7 @@ export const questions = [
             'JSON.objectify()',
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 17,
@@ -153,6 +169,7 @@ export const questions = [
             'Which method is used to add an element at the end of an array?',
         options: ['push()', 'pop()', 'shift()', 'unshift()'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 18,
@@ -160,30 +177,35 @@ export const questions = [
             "How do you write a conditional statement for executing some code if 'i' is NOT equal to 5?",
         options: ['if (i <> 5)', 'if i <> 5', 'if (i != 5)', 'if i =! 5 then'],
         correctAnswer: 2,
+        category: 'mcq',
     },
     {
         id: 19,
         question: 'Which method removes the last element from an array?',
         options: ['pop()', 'remove()', 'slice()', 'shift()'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 20,
         question: 'Which method can be used to join two or more arrays?',
         options: ['concat()', 'merge()', 'join()', 'combine()'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 21,
         question: 'Which keyword is used to declare a constant in JavaScript?',
         options: ['const', 'let', 'var', 'constant'],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 22,
         question: "What is the output of 'typeof NaN'?",
         options: ["'number'", "'NaN'", "'undefined'", "'object'"],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 23,
@@ -195,12 +217,14 @@ export const questions = [
             "( name: 'John', age: 30 )",
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 24,
         question: 'Which method can be used to find the length of a string?',
         options: ['length()', 'size()', 'len()', 'None of the above'],
         correctAnswer: 3,
+        category: 'mcq',
     },
     {
         id: 25,
@@ -212,18 +236,16 @@ export const questions = [
             'def MyClass() {}',
         ],
         correctAnswer: 0,
+        category: 'mcq',
     },
     {
         id: 26,
-        question:
-            'Which method returns the character at a specified index in a string?',
-        options: ['charAt()', 'getChar()', 'characterAt()', 'getCharacter()'],
-        correctAnswer: 0,
+        question: 'two-sum',
+        category: 'code',
     },
     {
         id: 27,
-        question: 'How do you add an element to the beginning of an array?',
-        options: ['push()', 'unshift()', 'shift()', 'pop()'],
-        correctAnswer: 1,
+        question: 'one-plus',
+        category: 'code',
     },
 ];
