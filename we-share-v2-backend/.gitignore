@@ -9,4 +9,3 @@ public/bundle/
 log
 *.rdb
 credentials.json
-config/
