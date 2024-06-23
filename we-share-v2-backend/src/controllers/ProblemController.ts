@@ -1,8 +1,9 @@
+
+
 import Boom from "@hapi/boom";
-import { singleProblemInterfaceOutput } from "@src/interfaces";
+import { AuthenticatedRequest, multipleProblemInterfaceOutput, singleProblemInterfaceOutput } from "@src/interfaces";
 import { Request, Response } from "express";
-import { Problem, ProblemStatus } from "leetcode-api-typescript";
-import Leetcode from "leetcode-api-typescript";
+import { Problem } from "leetcode-api-typescript";
 
 export class ProblemController {
   public constructor() { }
@@ -28,4 +29,27 @@ export class ProblemController {
     }
   }
 
+  public static async multipleProblem(req: Request, res: Response): Promise<void> {
+    try {
+      const leetCodeAuth = (req as unknown as AuthenticatedRequest).leetcode;
+
+      if (!leetCodeAuth) {
+        throw Boom.unauthorized("LeetCode authentication is required");
+      }
+
+      const problems = await leetCodeAuth.getAllProblems();
+
+      const response: multipleProblemInterfaceOutput[] = problems.map((problem: Problem) => ({
+        id: problem.id,
+        title: problem.title,
+        difficulty: problem.difficulty,
+      }));
+
+
+      res.json({ data: response, message: "Problems fetched successfully" });
+    } catch (error) {
+      console.error("Error fetching problems:", error);
+    }
+  }
 }
+
