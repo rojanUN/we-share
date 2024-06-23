@@ -20,6 +20,7 @@ import { CustomError } from '../types';
 import { Toast } from '../helper/toast';
 import DetectNoise from '../components/DetectNoise';
 import ErrorBoundary from '../components/ErrorBoundary';
+import Loader from '../components/common/Loader';
 
 function ExamDeviceCheck() {
     const navigate = useNavigate();
@@ -291,7 +292,9 @@ function ExamDeviceCheck() {
                             />
                         ) : (
                             <div className="h-full w-full text-[#fff] bg-[#000] grid place-items-center">
-                                <p>Please Wait...</p>
+                                <div className="flex items-center gap-3">
+                                    <Loader isWhite /> Please Wait...
+                                </div>
                             </div>
                         )}
                         <div className="w-2 h-[60%] max-h-[50%] absolute bottom-12 left-6 flex flex-col items-center gap-2">
