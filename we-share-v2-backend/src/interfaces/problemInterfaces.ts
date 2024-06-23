@@ -1,8 +1,14 @@
-import { CodeSnippet } from "leetcode-api-typescript";
+import { CodeSnippet, ProblemDifficulty } from "leetcode-api-typescript";
 
 export interface singleProblemInterfaceOutput {
-    id?: number;
-    content?: string;
-    testCase?: string;
-    codeSnippets?: CodeSnippet[],
+  id?: number;
+  content?: string;
+  testCase?: string;
+  codeSnippets?: CodeSnippet[],
+}
+
+export interface multipleProblemInterfaceOutput {
+  id?: number;
+  title?: string;
+  difficulty?: ProblemDifficulty;
 }
