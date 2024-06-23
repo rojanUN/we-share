@@ -14,6 +14,8 @@ import Button from './common/Button';
 import { PlayIcon } from '../helper/icons';
 import { languageMimeTypeMap } from '../helper/helper';
 import { Question } from '../types';
+import { handleSingleQuestionFetch } from '../services/examService';
+import Loader from './common/Loader';
 
 const languages = [
     'Javascript',
@@ -41,10 +43,12 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             return acc;
         }, {})
     );
-    // const [code2, setCode2] = useState<string>('');
     const [currentLanguage, setCurrentLanguage] =
         useState<string>('Javascript');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [algorithQuestion, setAlgorithmQuestion] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const [options, setOptions] = useState({
         lineWrapping: true,
         mode: currentLanguage.toLowerCase() ?? 'javascript',
@@ -70,24 +74,24 @@ function CodeMirrorView(props: CodeMirrorViewType) {
     const handleDropdownToggle = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
-    const [prob, setProb] = useState('');
     async function fetchProblem() {
-        const response = await fetch(
-            'http://localhost:8080/api/problems/get/single',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: JSON.stringify({ slug: question?.question }),
-            }
-        );
-        const data = await response.json();
-        setProb(data.data.content);
+        try {
+            const response = await handleSingleQuestionFetch(
+                question?.question!
+            );
+            const data = await response.data;
+            setAlgorithmQuestion(data.content);
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            throw error;
+        }
     }
     useEffect(() => {
-        fetchProblem();
+        setIsLoading(true);
+        if (question?.question) {
+            fetchProblem();
+        }
     }, [question?.question]);
 
     return (
@@ -98,10 +102,18 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                     {activeQuestionIndex && activeQuestionIndex + 1}{' '}
                     {question?.question}
                 </p>
-                <div
-                    className="custom-scrollbar mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden"
-                    dangerouslySetInnerHTML={{ __html: prob.replace('\n', '') }}
-                />
+                {isLoading ? (
+                    <div className="mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden grid place-items-center">
+                        <Loader />
+                    </div>
+                ) : (
+                    <div
+                        className="custom-scrollbar mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden"
+                        dangerouslySetInnerHTML={{
+                            __html: algorithQuestion.replace('\n', ''),
+                        }}
+                    />
+                )}
             </div>
             <div className="flex-[2_2_0%] h-max">
                 <div className="flex justify-between items-center my-2 mr-4">

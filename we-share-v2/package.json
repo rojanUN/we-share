@@ -16,6 +16,7 @@
         "@reduxjs/toolkit": "^2.2.5",
         "@tensorflow-models/blazeface": "^0.1.0",
         "@tensorflow/tfjs": "^4.20.0",
+        "axios": "^1.7.2",
         "codemirror": "^5.65.16",
         "react": "^18.2.0",
         "react-codemirror2": "^8.0.0",
