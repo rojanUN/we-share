@@ -1,8 +1,8 @@
 import express from "express";
-import { Database, port } from "./config";
-import { methodNotAllowed, notFound } from "./middlewares/index";
+import { Database, baseUrl, port } from "./config";
+import { genericErrorHandler, methodNotAllowed, notFound } from "./middlewares/index";
 import { ProxyRouter } from "./routes";
-
+import Cors from "cors";
 class Server {
   app: express.Application;
 
@@ -18,12 +18,15 @@ class Server {
 
     this.app.use(express.json());
 
+    this.app.use(Cors({ origin: baseUrl.Url }))
+
     this.app.get("/", (req, res) => res.send(`Server running at port ${this.app.get("port")}`));
 
     //API Routes
     this.app.use("/api", ProxyRouter.map());
 
     //Error Handler
+    this.app.use(genericErrorHandler);
     this.app.use(methodNotAllowed);
     this.app.use(notFound);
   }

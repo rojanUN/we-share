@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { HttpStatusEnum } from "../enums/index";
+import buildError from "./buildError";
 
 /**
  * Error response middleware for 404 not found.
@@ -21,4 +22,15 @@ export function methodNotAllowed(req: Request, res: Response) {
     code: HttpStatusEnum.METHOD_NOT_ALLOWED,
     message: "Method Not Allowed",
   });
+}
+
+export function genericErrorHandler(
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  console.log(err.stack);
+  const error = buildError(err);
+  res.status(error.code).json({ ...error });
 }
