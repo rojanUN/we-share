@@ -1,22 +1,22 @@
-import { NextFunction, Request, Response } from "express";
-import Leetcode, { EndPoint, Problem } from "leetcode-api-typescript";
+import Boom from "@hapi/boom";
+import { singleProblemInterfaceOutput } from "@src/interfaces";
+import { Request, Response } from "express";
+import { Problem, ProblemStatus } from "leetcode-api-typescript";
+import Leetcode from "leetcode-api-typescript";
 
 export class ProblemController {
-  public constructor() {}
+  public constructor() { }
 
-  public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public static async singleProblem(req: Request, res: Response): Promise<void> {
     try {
       const { slug } = req.body;
-      await Leetcode.build(EndPoint.US, {
-        cookie: process.env.LEETCODE_COOKIE,
-      }).catch((err) => console.log("this is error", err));
+
       const problems = new Problem(slug);
 
-      // Fetch problem details
       await problems.detail();
 
-      // Construct the response
-      const response = {
+      const response: singleProblemInterfaceOutput = {
+        id: problems.id,
         content: problems.content,
         testCase: problems.sampleTestCase,
         codeSnippets: problems.codeSnippets,
@@ -24,7 +24,8 @@ export class ProblemController {
 
       res.json({ data: response, message: "Problem fetched successfully" });
     } catch (error) {
-      next(error);
+      throw Boom.badRequest("Error fetching problems");
     }
   }
+
 }
