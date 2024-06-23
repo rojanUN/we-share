@@ -82,10 +82,19 @@ const ExamPortal = function ExamPortal() {
     }, [dispatch, navigate]);
 
     useEffect(() => {
-        const handleBeforeUnload = () => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             SessionStorage.setSessionItem('countdownTimer', coutdownTime);
+            event.preventDefault();
+        };
+
+        const handlePopState = (event: PopStateEvent) => {
+            event.preventDefault();
         };
         window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('popstate', handlePopState);
+
+        // Push the initial state to the history
+        window.history.pushState(null, '', window.location.pathname);
 
         const timerId = setInterval(() => {
             setCountDownTimer((prevTime: number) => prevTime - 1);
@@ -98,6 +107,7 @@ const ExamPortal = function ExamPortal() {
 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('popstate', handlePopState);
             clearInterval(timerId);
         };
     }, [coutdownTime, handleMCQSubmit]);
@@ -229,7 +239,17 @@ const ExamPortal = function ExamPortal() {
                     {questionStore?.selectedQuestion?.category === 'mcq' ? (
                         <MCQQuestionView questionStore={questionStore} />
                     ) : (
-                        <CodeMirrorView />
+                        <CodeMirrorView
+                            activeQuestionIndex={questionStore.activeQuesIndex}
+                            question={questionStore.selectedQuestion}
+                            questions={
+                                (questionStore.questions &&
+                                    questionStore.questions.filter(
+                                        (q) => q.category === 'code'
+                                    )) ??
+                                null
+                            }
+                        />
                     )}
                 </div>
             </div>

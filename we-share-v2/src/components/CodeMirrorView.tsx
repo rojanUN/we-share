@@ -7,12 +7,13 @@ import 'codemirror/mode/rust/rust';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/go/go';
 import 'codemirror/mode/clike/clike';
-import { Toast } from '../helper/toast';
+// import { Toast } from '../helper/toast';
 import Dropdown from './common/Dropdown';
 import { useEffect, useState } from 'react';
 import Button from './common/Button';
 import { PlayIcon } from '../helper/icons';
 import { languageMimeTypeMap } from '../helper/helper';
+import { Question } from '../types';
 
 const languages = [
     'Javascript',
@@ -26,8 +27,21 @@ const languages = [
     'C#',
 ];
 
-function CodeMirrorView() {
-    const [code, setCode] = useState<string>('');
+interface CodeMirrorViewType {
+    activeQuestionIndex?: number | null;
+    question: Question | null;
+    questions: Question[] | null;
+}
+
+function CodeMirrorView(props: CodeMirrorViewType) {
+    const { activeQuestionIndex, question, questions } = props;
+    const [code, setCode] = useState(
+        questions?.reduce((acc: any, question: any) => {
+            acc[question && question.id] = '';
+            return acc;
+        }, {})
+    );
+    // const [code2, setCode2] = useState<string>('');
     const [currentLanguage, setCurrentLanguage] =
         useState<string>('Javascript');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -56,11 +70,40 @@ function CodeMirrorView() {
     const handleDropdownToggle = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+    const [prob, setProb] = useState('');
+    async function fetchProblem() {
+        const response = await fetch(
+            'http://localhost:8080/api/problems/get/single',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify({ slug: question?.question }),
+            }
+        );
+        const data = await response.json();
+        setProb(data.data.content);
+    }
+    useEffect(() => {
+        fetchProblem();
+    }, [question?.question]);
 
     return (
-        <div className="h-full w-full flex flex-col md:flex-row">
-            <div className="flex-1">qustion tab</div>
-            <div className="flex-[2_2_0%] h-max overflow-x-hidden overflow-y-scroll">
+        <div className="h-full w-full flex flex-col gap-2 md:flex-row">
+            <div className="flex-1">
+                <p className="text-[20px] font-semibold">
+                    Q.
+                    {activeQuestionIndex && activeQuestionIndex + 1}{' '}
+                    {question?.question}
+                </p>
+                <div
+                    className="custom-scrollbar mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden"
+                    dangerouslySetInnerHTML={{ __html: prob.replace('\n', '') }}
+                />
+            </div>
+            <div className="flex-[2_2_0%] h-max">
                 <div className="flex justify-between items-center my-2 mr-4">
                     <p className="font-semibold">
                         <span className="inline-block font-bold mr-1 text-[#1935CA]">
@@ -77,12 +120,17 @@ function CodeMirrorView() {
                     />
                 </div>
                 <CodeMirror
-                    value={code}
+                    value={question && code[question.id]}
                     options={options}
-                    onBeforeChange={(_editor, _data, value) => setCode(value)}
-                    onPaste={(_editor, event) => {
-                        Toast.Error('Pasting is not allowed!');
-                        event.preventDefault();
+                    onBeforeChange={(_editor, _data, value) => {
+                        setCode((prevValues: any) => ({
+                            ...prevValues,
+                            [question!.id]: value,
+                        }));
+                    }}
+                    onPaste={(_editor, _event) => {
+                        // Toast.Error('Pasting is not allowed!');
+                        // event.preventDefault();
                     }}
                 />
                 <div className="flex flex-row justify-end my-2">
