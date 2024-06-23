@@ -338,7 +338,6 @@ function ExamDeviceCheck() {
                             Stay in a well lit area for better experience
                         </span>
                     </p>
-                    {/* <NoiseDetect setNoiseLevel={setNoiseLevel} /> */}
                 </div>
                 {!isDeviceChecked ? (
                     <div className="h-full flex-1 flex flex-col justify-between">

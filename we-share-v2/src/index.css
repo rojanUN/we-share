@@ -30,3 +30,27 @@ h6 {
 .CodeMirror {
     height: 65vh !important;
 }
+
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+    width: 7px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+    background: #bd93f9;
+}
+
+/* custom scrollbar css */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    outline: none;
+    /* background-color: #ccc; */
+    border-radius: 1.7rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(34, 34, 96, 1);
+    border-radius: 1.7rem;
+}

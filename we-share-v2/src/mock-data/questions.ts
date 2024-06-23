@@ -245,7 +245,7 @@ export const questions = [
     },
     {
         id: 27,
-        question: 'one-plus',
+        question: 'plus-one',
         category: 'code',
     },
 ];
