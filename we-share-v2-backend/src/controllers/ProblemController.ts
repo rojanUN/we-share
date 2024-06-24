@@ -1,3 +1,4 @@
+import Boom from "@hapi/boom";
 import { badRequest } from "@hapi/boom";
 import { fetchGraphQLData } from "../helpers";
 import {
@@ -32,6 +33,17 @@ export class ProblemController {
       res.json({ data: response, message: "Problem fetched successfully" });
     } catch (error) {
       next(error);
+    }
+  }
+
+  public static async handleProblemSubmit(req: Request, res: Response): Promise<void> {
+    try {
+      const { slug, code, language } = req.body;
+      console.log(slug, code, language, "slug, code, language >>>>");
+
+      res.json({ message: "Problem submitted successfully", slug: slug, language });
+    } catch (error) {
+      throw Boom.badRequest("Error submitting problem");
     }
   }
 

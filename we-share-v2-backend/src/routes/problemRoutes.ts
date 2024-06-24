@@ -13,6 +13,9 @@ export class ProblemRouter extends RouterClass {
       .route("/get/multiple")
       .post(exceptionHandler(leetCodeAuthCheck), exceptionHandler(ProblemController.multipleProblem));
     this.router
+      .route("/get/submission")
+      .post(exceptionHandler(leetCodeAuthCheck), exceptionHandler(ProblemController.handleProblemSubmit));
+    this.router
       .route("/get/single")
       .post(exceptionHandler(leetCodeAuthCheck), exceptionHandler(ProblemController.singleProblem));
   }
