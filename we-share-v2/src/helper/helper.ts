@@ -110,6 +110,22 @@ import { CheckedQuestionType } from '../types';
 //     }
 // };
 
+export const asyncHandler = <T extends (...args: any[]) => Promise<any>>(
+    fn: T,
+    finallyCallback?: () => void
+) => {
+    return async (...args: Parameters<T>): Promise<T | void> => {
+        try {
+            return await fn(...args);
+        } catch (error) {
+            console.log('Error in asyncHandler:', error);
+            throw error;
+        } finally {
+            finallyCallback && finallyCallback();
+        }
+    };
+};
+
 export const formatCountDownTimer = (seconds: number) => {
     const hours = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
     const minutes = Math.floor((seconds % (60 * 60)) / 60);

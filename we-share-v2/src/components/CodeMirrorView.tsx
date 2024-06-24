@@ -12,9 +12,12 @@ import Dropdown from './common/Dropdown';
 import { useEffect, useState } from 'react';
 import Button from './common/Button';
 import { PlayIcon } from '../helper/icons';
-import { languageMimeTypeMap } from '../helper/helper';
+import { asyncHandler, languageMimeTypeMap } from '../helper/helper';
 import { Question } from '../types';
-import { handleSingleQuestionFetch } from '../services/examService';
+import {
+    handleQuestonSubmission,
+    handleSingleQuestionFetch,
+} from '../services/examService';
 import Loader from './common/Loader';
 
 const languages = [
@@ -74,21 +77,26 @@ function CodeMirrorView(props: CodeMirrorViewType) {
     const handleDropdownToggle = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
-    async function fetchProblem() {
-        try {
-            const response = await handleSingleQuestionFetch(
-                question?.question!
-            );
-            const data = await response.data;
-            setAlgorithmQuestion(data.content);
-            setIsLoading(false);
-        } catch (error) {
-            setIsLoading(false);
-            throw error;
+
+    const handleRunCodeBtnClick = asyncHandler(
+        async (slug: string, code: string, lang: string) => {
+            const response = await handleQuestonSubmission(slug, code, lang);
+            console.log(response, 'response >>>>>');
         }
-    }
+    );
+
     useEffect(() => {
         setIsLoading(true);
+        const fetchProblem = asyncHandler(
+            async () => {
+                const response = await handleSingleQuestionFetch(
+                    question!.question
+                );
+                const data = await response.data;
+                setAlgorithmQuestion(data.content);
+            },
+            () => setIsLoading(false)
+        );
         if (question?.question) {
             fetchProblem();
         }
@@ -148,10 +156,13 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                 <div className="flex flex-row justify-end my-2">
                     <Button
                         variant="primary"
-                        handleBtnClick={() => {
-                            console.log('run code btn clicked.');
-                            console.log(eval(code));
-                        }}
+                        handleBtnClick={() =>
+                            handleRunCodeBtnClick(
+                                question!.question,
+                                code[question!.id],
+                                currentLanguage
+                            )
+                        }
                         outline
                     >
                         <span>
