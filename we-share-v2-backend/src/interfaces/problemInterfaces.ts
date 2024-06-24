@@ -4,7 +4,7 @@ export interface singleProblemInterfaceOutput {
   id?: number;
   content?: string;
   testCase?: string;
-  codeSnippets?: CodeSnippet[],
+  codeSnippets?: CodeSnippet[];
 }
 
 export interface multipleProblemInterfaceOutput {
