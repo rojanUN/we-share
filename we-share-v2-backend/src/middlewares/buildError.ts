@@ -20,6 +20,17 @@ function buildError(err: any) {
           };
         }),
     };
+  } else if (err instanceof Error && err.message.startsWith("Validation error")) {
+    return {
+      success: false,
+      code: HttpStatusEnum.BAD_REQUEST,
+      message: "BAD REQUEST",
+      details: [
+        {
+          message: err.message,
+        },
+      ],
+    };
   }
 
   // HTTP errors

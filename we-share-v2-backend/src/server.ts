@@ -26,9 +26,9 @@ class Server {
     this.app.use("/api", ProxyRouter.map());
 
     //Error Handler
-    this.app.use(genericErrorHandler);
     this.app.use(methodNotAllowed);
     this.app.use(notFound);
+    this.app.use(genericErrorHandler);
   }
 
   private async connectDB() {
