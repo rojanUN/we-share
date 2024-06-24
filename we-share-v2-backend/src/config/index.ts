@@ -41,13 +41,10 @@ export const port = mustExist(+process.env.PORT!, "PORT") as number,
   } as {
     baseUrl: string;
   },
-
   baseUrl = {
     Url: mustExist(process.env.CLIENT_BASE_URL!, "CLIENT_BASE_URL"),
   } as {
     Url: string;
-  }
-
-
+  };
 
 export * from "./instance";

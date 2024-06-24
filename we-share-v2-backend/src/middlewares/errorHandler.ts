@@ -24,12 +24,7 @@ export function methodNotAllowed(req: Request, res: Response) {
   });
 }
 
-export function genericErrorHandler(
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export function genericErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
   console.log(err.stack);
   const error = buildError(err);
   res.status(error.code).json({ ...error });
