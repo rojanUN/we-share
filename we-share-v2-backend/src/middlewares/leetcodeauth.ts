@@ -3,7 +3,6 @@ import Leetcode, { EndPoint } from "leetcode-api-typescript";
 import Boom from "@hapi/boom";
 import { AuthenticatedRequest } from "@src/interfaces";
 
-
 export async function leetCodeAuthCheck(req: Request, res: Response, next: NextFunction) {
   try {
     const response = await Leetcode.build(EndPoint.US, {
@@ -11,11 +10,9 @@ export async function leetCodeAuthCheck(req: Request, res: Response, next: NextF
     });
     (req as unknown as AuthenticatedRequest).leetcode = response;
     next();
-  }
-  catch (error) {
+  } catch (error) {
     throw Boom.unauthorized("Auth Failed Leetcode", "", {
-      message: "AUTH FAILED"
+      message: "AUTH FAILED",
     });
   }
 }
-

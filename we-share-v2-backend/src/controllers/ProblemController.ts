@@ -1,14 +1,20 @@
-
-
-import Boom from "@hapi/boom";
-import { AuthenticatedRequest, multipleProblemInterfaceOutput, singleProblemInterfaceOutput } from "@src/interfaces";
-import { Request, Response } from "express";
+import { badRequest } from "@hapi/boom";
+import { fetchGraphQLData } from "../helpers";
+import {
+  GraphQLRequestConfig,
+  ProblemSetKeys,
+  ProblemsetQuestionListResponse,
+  singleProblemInterfaceOutput,
+} from "../interfaces";
+import { Validator } from "../middlewares/validation";
+import { problemSetKeysSchema } from "../validators/problemValidation";
+import { Request, Response, NextFunction } from "express";
 import { Problem } from "leetcode-api-typescript";
 
 export class ProblemController {
-  public constructor() { }
+  public constructor() {}
 
-  public static async singleProblem(req: Request, res: Response): Promise<void> {
+  public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { slug } = req.body;
 
@@ -25,31 +31,31 @@ export class ProblemController {
 
       res.json({ data: response, message: "Problem fetched successfully" });
     } catch (error) {
-      throw Boom.badRequest("Error fetching problems");
+      next(error);
     }
   }
 
-  public static async multipleProblem(req: Request, res: Response): Promise<void> {
+  public static async multipleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const leetCodeAuth = (req as unknown as AuthenticatedRequest).leetcode;
+      const validatedData: ProblemSetKeys = Validator.check(problemSetKeysSchema, req.body);
 
-      if (!leetCodeAuth) {
-        throw Boom.unauthorized("LeetCode authentication is required");
+      const variables: GraphQLRequestConfig = {
+        variables: {
+          categorySlug: validatedData.categorySlug,
+          limit: validatedData.limit,
+          skip: validatedData.skip,
+          filters: validatedData.filters,
+        },
+      };
+
+      const data: ProblemsetQuestionListResponse = await fetchGraphQLData(variables);
+      if (data.total === 0) {
+        throw badRequest("No problems found");
       }
 
-      const problems = await leetCodeAuth.getAllProblems();
-
-      const response: multipleProblemInterfaceOutput[] = problems.map((problem: Problem) => ({
-        id: problem.id,
-        title: problem.title,
-        difficulty: problem.difficulty,
-      }));
-
-
-      res.json({ data: response, message: "Problems fetched successfully" });
+      res.json({ data, message: "Problems fetched successfully" });
     } catch (error) {
-      console.error("Error fetching problems:", error);
+      next(error);
     }
   }
 }
-
