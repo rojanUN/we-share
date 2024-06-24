@@ -7,3 +7,14 @@ export const handleSingleQuestionFetch = async (value: string) => {
     const response = await api.post(URL, data);
     return response;
 };
+
+export const handleQuestonSubmission = async (
+    slug: string,
+    code: string,
+    language: string
+) => {
+    const URL = examEndpoints.getQuestionSubmission;
+    const data = { slug, code, language };
+    const response = await api.post(URL, data);
+    return response;
+};
