@@ -18,3 +18,22 @@ export const problemQuery = `query problemsetQuestionList($categorySlug: String,
       }
     }
   }`;
+
+export const submissionQuery = `query mySubmissionDetails($submissionId: Int!) {
+    submissionDetails(submissionId: $submissionId) {      
+      code
+      statusCode
+      runtimeError
+      compileError
+      lastTestcase
+      codeOutput
+      expectedOutput
+      totalCorrect
+      totalTestcases
+      fullCodeOutput
+      testDescriptions
+      testBodies
+      testInfo
+      stdOutput
+    }
+  }`;

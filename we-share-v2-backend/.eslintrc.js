@@ -35,12 +35,12 @@ module.exports = {
     "no-async-promise-executor": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-var-requires": "off",
-    '@typescript-eslint/no-unused-vars': [
-      'warn', // or "error"
+    "@typescript-eslint/no-unused-vars": [
+      "warn", // or "error"
       {
-        argsIgnorePattern: '^',
-        varsIgnorePattern: '^',
-        caughtErrorsIgnorePattern: '^_',
+        argsIgnorePattern: "^",
+        varsIgnorePattern: "^",
+        caughtErrorsIgnorePattern: "^_",
       },
     ],
     // "no-console": "error",

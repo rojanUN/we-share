@@ -46,10 +46,12 @@ export const port = mustExist(+process.env.PORT!, "PORT") as number,
   } as {
     Url: string;
   },
-  LeetcodeGraphqlEndPoint = {
+  LeetCodeEndPoint = {
     url: mustExist(process.env.LEETCODE_GRAPHQL_URL!, "LEETCODE_GRAPHQL_URL"),
+    cookie: mustExist(process.env.LEETCODE_COOKIE!, "LEETCODE_COOKIE"),
   } as {
     url: string;
+    cookie: string;
   };
 
 export * from "./instance";
