@@ -1,4 +1,9 @@
-import { GraphQLRequestConfig, ProblemsetQuestionListResponse, getSubmissionDetailsResponse, getSubmissionRequestConfig } from "../interfaces";
+import {
+  GraphQLRequestConfig,
+  ProblemsetQuestionListResponse,
+  getSubmissionDetailsResponse,
+  getSubmissionRequestConfig,
+} from "../interfaces";
 import { LeetCodeEndPoint } from "../config";
 import { problemQuery, submissionQuery } from "../queries";
 import { badRequest } from "@hapi/boom";
@@ -28,15 +33,15 @@ async function fetchProblemDetails({ variables }: GraphQLRequestConfig): Promise
   }
 }
 
-
-
-async function fetchSubmissionDetails({ variables }: getSubmissionRequestConfig): Promise<getSubmissionDetailsResponse> {
+async function fetchSubmissionDetails({
+  variables,
+}: getSubmissionRequestConfig): Promise<getSubmissionDetailsResponse> {
   try {
     const response = await fetch(LeetCodeEndPoint.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "cookie": LeetCodeEndPoint.cookie,
+        cookie: LeetCodeEndPoint.cookie,
         "x-requested-with": "XMLHttpRequest",
       },
       body: JSON.stringify({
