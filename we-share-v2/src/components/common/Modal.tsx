@@ -4,13 +4,15 @@ import Button from './Button';
 interface ModalType {
     isOpen: boolean;
     title: string;
+    isSubmissionModal?: boolean;
     onClose: () => void;
-    handleSubmit: () => void;
+    handleSubmit?: () => void;
     children: React.ReactNode;
 }
 
 const Modal = ({
     isOpen,
+    isSubmissionModal,
     onClose,
     handleSubmit,
     title,
@@ -40,11 +42,13 @@ const Modal = ({
                 <div className="p-4">{children}</div>
                 <div className="flex justify-end gap-4 px-4 py-2">
                     <Button variant="danger" handleBtnClick={onClose} outline>
-                        Cancel
+                        {isSubmissionModal ? 'Cancel' : 'Close'}
                     </Button>
-                    <Button variant="primary" handleBtnClick={handleSubmit}>
-                        submit
-                    </Button>
+                    {isSubmissionModal && handleSubmit && (
+                        <Button variant="primary" handleBtnClick={handleSubmit}>
+                            submit
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

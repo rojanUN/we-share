@@ -195,6 +195,7 @@ const ExamPortal = function ExamPortal() {
                     </div>
                     <Modal
                         isOpen={isModalOpen}
+                        isSubmissionModal
                         title="Submission"
                         onClose={() => setIsModalOpen(false)}
                         handleSubmit={handleMCQSubmit}

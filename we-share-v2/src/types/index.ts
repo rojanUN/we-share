@@ -41,6 +41,36 @@ enum CustomError {
     audioError = 'audioError',
 }
 
+export interface SubmissionResponse {
+    code: string;
+    statusCode: string;
+    runtimeError: string;
+    compileError: string;
+    lastTestcase: string;
+    codeOutput: string;
+    expectedOutput: string;
+    totalCorrect: string;
+    totalTestcases: string;
+    fullCodeOutput: string;
+    testDescriptions: string;
+    testBodies: string;
+    testInfo: string;
+    stdOutput: string;
+}
+
+export interface CodeSnippet {
+    code: string;
+    lang: string;
+    langSlug: string;
+}
+
+export interface LeetCodeQuestion {
+    id: number;
+    content: string;
+    testCase: string;
+    codeSnippets: CodeSnippet[];
+}
+
 export interface MediaDeviceInfo {
     deviceId: string;
     kind: string;

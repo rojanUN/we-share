@@ -1,5 +1,6 @@
 // import { Toast } from './toast';
-import { CheckedQuestionType } from '../types';
+
+import { CheckedQuestionType, CodeSnippet } from '../types';
 
 // export const detectNoise = async (
 //     setNoiseLevel: React.Dispatch<React.SetStateAction<number | undefined>>
@@ -112,12 +113,14 @@ import { CheckedQuestionType } from '../types';
 
 export const asyncHandler = <T extends (...args: any[]) => Promise<any>>(
     fn: T,
-    finallyCallback?: () => void
+    finallyCallback?: () => void,
+    errorCallback?: (err: any) => void
 ) => {
     return async (...args: Parameters<T>): Promise<T | void> => {
         try {
             return await fn(...args);
         } catch (error) {
+            errorCallback && errorCallback(error);
             console.log('Error in asyncHandler:', error);
             throw error;
         } finally {
@@ -183,4 +186,14 @@ export const languageMimeTypeMap: Record<string, string> = {
     go: 'text/x-go',
     php: 'text/x-php',
     'c#': 'text/x-csharp',
+};
+
+export const findLanguageCode = (
+    codeSnippets: CodeSnippet[] = [],
+    lang: string = 'JavaScript'
+) => {
+    const language = codeSnippets.find(
+        (codeSnippet) => codeSnippet.lang === lang
+    );
+    return language ? language.code : '// Write your code here';
 };

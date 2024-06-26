@@ -1,4 +1,3 @@
-import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 // language modes
@@ -11,17 +10,22 @@ import 'codemirror/mode/clike/clike';
 import Dropdown from './common/Dropdown';
 import { useEffect, useState } from 'react';
 import Button from './common/Button';
-import { PlayIcon } from '../helper/icons';
-import { asyncHandler, languageMimeTypeMap } from '../helper/helper';
-import { Question } from '../types';
+import { PlayIcon, TipsIcon } from '../helper/icons';
+import { asyncHandler } from '../helper/helper';
+import { LeetCodeQuestion, Question, SubmissionResponse } from '../types';
 import {
     handleQuestonSubmission,
     handleSingleQuestionFetch,
+    pollSubmissionDetails,
 } from '../services/examService';
 import Loader from './common/Loader';
+import Modal from './common/Modal';
+import { Toast } from '../helper/toast';
+import CircularProgress from './common/CircularProgress';
+import CodeMirrorIDE from './common/CodeMirrorIDE';
 
 const languages = [
-    'Javascript',
+    'JavaScript',
     'Python',
     'Rust',
     'C++',
@@ -47,32 +51,15 @@ function CodeMirrorView(props: CodeMirrorViewType) {
         }, {})
     );
     const [currentLanguage, setCurrentLanguage] =
-        useState<string>('Javascript');
+        useState<string>('JavaScript');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [algorithQuestion, setAlgorithmQuestion] = useState('');
+    const [algorithmQuestion, setAlgorithmQuestion] =
+        useState<LeetCodeQuestion | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-
-    const [options, setOptions] = useState({
-        lineWrapping: true,
-        mode: currentLanguage.toLowerCase() ?? 'javascript',
-        lint: true,
-        theme: 'dracula',
-        lineNumbers: true,
-        smartIndent: true,
-        showCursorWhenSelecting: true,
-    });
-
-    const handleLanguageChange = (newLanguage: string) => {
-        setCurrentLanguage(newLanguage);
-        setOptions((prevOptions) => ({
-            ...prevOptions,
-            mode: languageMimeTypeMap[currentLanguage.toLowerCase()],
-        }));
-    };
-
-    useEffect(() => {
-        handleLanguageChange(currentLanguage);
-    }, [currentLanguage]);
+    const [showSubmissionModal, setShowSubmissionModal] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submissionDetails, setSubmissionDetails] =
+        useState<SubmissionResponse>();
 
     const handleDropdownToggle = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -80,8 +67,23 @@ function CodeMirrorView(props: CodeMirrorViewType) {
 
     const handleRunCodeBtnClick = asyncHandler(
         async (slug: string, code: string, lang: string) => {
-            const response = await handleQuestonSubmission(slug, code, lang);
-            console.log(response, 'response >>>>>');
+            setIsSubmitting(true);
+            const response = await handleQuestonSubmission(
+                slug,
+                code,
+                lang.toLowerCase()
+            );
+
+            const submissionDetails = await pollSubmissionDetails(
+                response?.data?.id
+            );
+            console.log(submissionDetails, 'submsisson details');
+            setSubmissionDetails(submissionDetails);
+            setShowSubmissionModal(true);
+        },
+        () => setIsSubmitting(false),
+        (error) => {
+            Toast.Error(error.response.data.message);
         }
     );
 
@@ -93,15 +95,15 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                     question!.question
                 );
                 const data = await response.data;
-                setAlgorithmQuestion(data.content);
+                setAlgorithmQuestion(data);
             },
-            () => setIsLoading(false)
+            () => setIsLoading(false),
+            (error) => Toast.Error(error.response.data.message)
         );
         if (question?.question) {
             fetchProblem();
         }
     }, [question?.question]);
-
     return (
         <div className="h-full w-full flex flex-col gap-2 md:flex-row">
             <div className="flex-1">
@@ -118,7 +120,9 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                     <div
                         className="custom-scrollbar mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden"
                         dangerouslySetInnerHTML={{
-                            __html: algorithQuestion.replace('\n', ''),
+                            __html: algorithmQuestion
+                                ? algorithmQuestion.content.replace('\n', '')
+                                : '',
                         }}
                     />
                 )}
@@ -139,19 +143,12 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                         setSelectedOption={setCurrentLanguage}
                     />
                 </div>
-                <CodeMirror
-                    value={question && code[question.id]}
-                    options={options}
-                    onBeforeChange={(_editor, _data, value) => {
-                        setCode((prevValues: any) => ({
-                            ...prevValues,
-                            [question!.id]: value,
-                        }));
-                    }}
-                    onPaste={(_editor, _event) => {
-                        // Toast.Error('Pasting is not allowed!');
-                        // event.preventDefault();
-                    }}
+                <CodeMirrorIDE
+                    question={question}
+                    code={code}
+                    currentLanguage={currentLanguage}
+                    algorithmQuestion={algorithmQuestion}
+                    setCode={setCode}
                 />
                 <div className="flex flex-row justify-end my-2">
                     <Button
@@ -165,12 +162,108 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                         }
                         outline
                     >
-                        <span>
-                            <PlayIcon />
-                        </span>
-                        Run Code
+                        {isSubmitting ? (
+                            <Loader />
+                        ) : (
+                            <p className="flex items-center gap-2">
+                                <span>
+                                    <PlayIcon />
+                                </span>
+                                Run Code
+                            </p>
+                        )}
                     </Button>
                 </div>
+                {showSubmissionModal && (
+                    <Modal
+                        isOpen={showSubmissionModal}
+                        title="Code Output"
+                        onClose={() => setShowSubmissionModal(false)}
+                    >
+                        <div className="mb-3 text-center text-[18px]">
+                            {submissionDetails!.totalCorrect ===
+                            submissionDetails!.totalTestcases ? (
+                                <p className="text-[#47a992]">
+                                    Congrats! You have passed all test cases.
+                                </p>
+                            ) : (
+                                <p className="text-red-500">
+                                    Sorry! You haven't passed all test cases.
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="h-max flex flex-col flex-wrap justify-between md:flex-row">
+                            <div className="flex-[1_1_0%] md:max-h-[10rem]">
+                                <CircularProgress
+                                    value={+submissionDetails!.totalCorrect}
+                                    max={+submissionDetails!.totalTestcases}
+                                />
+                            </div>
+                            <div className="flex-[1_1_0%] flex flex-col ml-auto justify-center font-bold text-[20px]">
+                                <p>
+                                    <span className="inline-block w-[160px] whitespace-nowrap mr-4">
+                                        Correct Cases:
+                                    </span>
+                                    {submissionDetails!.totalCorrect ?? 0}
+                                </p>
+                                <p>
+                                    <span className="inline-block w-[160px] whitespace-nowrap mr-4">
+                                        Remaining Cases:
+                                    </span>
+                                    {+submissionDetails!.totalTestcases -
+                                        +submissionDetails!.totalCorrect ?? 0}
+                                </p>
+                                <p>
+                                    <span className="inline-block w-[160px] whitespace-nowrap mr-4">
+                                        Total Cases:
+                                    </span>
+                                    {submissionDetails!.totalTestcases}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex justify-between mt-3">
+                            {submissionDetails?.lastTestcase && (
+                                <p className="text-[18px]">
+                                    Last Test Case:{' '}
+                                    {submissionDetails?.lastTestcase}
+                                </p>
+                            )}
+                            {submissionDetails?.expectedOutput && (
+                                <p className="text-[18px]">
+                                    Expected Output:{' '}
+                                    {submissionDetails?.expectedOutput}
+                                </p>
+                            )}
+                        </div>
+                        {+submissionDetails!.totalTestcases !==
+                            +submissionDetails!.totalCorrect && (
+                            <p className="mt-5 text-[17px] flex items-center justify-center">
+                                <span className="text-[#47a992] font-bold inline-flex">
+                                    <TipsIcon
+                                        style={{
+                                            fontSize: '34px',
+                                            marginTop: '-5px',
+                                            marginRight: '2px',
+                                        }}
+                                    />{' '}
+                                    <span
+                                        style={{
+                                            marginTop: '3px',
+                                            marginRight: '10px',
+                                        }}
+                                    >
+                                        Tips:{' '}
+                                    </span>
+                                </span>
+                                <span className="inline-block mt-[3px]">
+                                    Check the last test case to solve the
+                                    problem.
+                                </span>
+                            </p>
+                        )}
+                    </Modal>
+                )}
             </div>
         </div>
     );

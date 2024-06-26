@@ -423,7 +423,7 @@ function ExamDeviceCheck() {
                                 <MicIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Microphone</p>
 
-                                {audioOptions.length === 0 ? (
+                                {!checkMicPermission ? (
                                     <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
                                         <CloseIcon /> Not Found
                                     </p>
@@ -438,7 +438,7 @@ function ExamDeviceCheck() {
                                 <VideoIcon style={{ fontSize: '25px' }} />
                                 <p className="ml-3 w-[100px]">Camera</p>
 
-                                {videoOptions.length === 0 ? (
+                                {!checkCameraPermission ? (
                                     <p className="text-red-400 flex items-center ml-6 gap-2 font-semibold">
                                         <CloseIcon /> Not Found
                                     </p>
@@ -460,7 +460,8 @@ function ExamDeviceCheck() {
                                     Your face is being detected, please wait...
                                 </p>
                             )}
-                            {detectSoundOnceRef.current ? (
+                            {detectSoundOnceRef.current &&
+                            checkMicPermission ? (
                                 <p className="text-[#47a992]">
                                     Sound Detected Successfully.
                                 </p>
