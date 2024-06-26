@@ -21,6 +21,5 @@ export class ProblemRouter extends RouterClass {
     this.router
       .route("/get/submission")
       .post(exceptionHandler(leetCodeAuthCheck), exceptionHandler(ProblemController.getSubmissionDetails));
-
   }
 }

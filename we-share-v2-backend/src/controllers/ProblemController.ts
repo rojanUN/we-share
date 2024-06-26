@@ -17,7 +17,7 @@ import { Problem } from "leetcode-api-typescript";
 import { inputGetSubmissionDetailsSchema, inputSubmitProblemSchema } from "../validators/submissionValidation";
 
 export class ProblemController {
-  public constructor() { }
+  public constructor() {}
 
   public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -62,21 +62,20 @@ export class ProblemController {
 
   public static async getSubmissionDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-
       Validator.check(inputGetSubmissionDetailsSchema, req.body);
 
       const { submissionId } = req.body;
 
       const variables: getSubmissionRequestConfig = {
         variables: {
-          submissionId
+          submissionId,
         },
       };
 
       const data: getSubmissionDetailsResponse = await fetchSubmissionDetails(variables);
       if (!data)
         throw badRequest("No submission found", {
-          message: `No submission for for Id ${submissionId}`
+          message: `No submission for for Id ${submissionId}`,
         });
 
       res.json({ data, message: "Submission Details fetched successfully" });

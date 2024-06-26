@@ -10,10 +10,9 @@ class ProxyRouter {
       segment: "/problems",
       provider: ProblemRouter,
     },
-
   ];
 
-  private constructor() { }
+  private constructor() {}
 
   public static get(): ProxyRouter {
     if (!ProxyRouter.instance) ProxyRouter.instance = new ProxyRouter();
