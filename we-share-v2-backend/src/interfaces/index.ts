@@ -4,3 +4,4 @@ export * from "./IRouterInterface";
 export * from "./problemInterfaces";
 export * from "./leetCodeRequestInteface";
 export * from "./problemsInterfaceGraphql";
+export * from "./submissionInterface";

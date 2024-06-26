@@ -1,6 +1,6 @@
 import Boom from "@hapi/boom";
 import { badRequest } from "@hapi/boom";
-import { fetchGraphQLData } from "../helpers";
+import { fetchProblemDetails } from "../helpers";
 import {
   GraphQLRequestConfig,
   ProblemSetKeys,
@@ -60,7 +60,7 @@ export class ProblemController {
         },
       };
 
-      const data: ProblemsetQuestionListResponse = await fetchGraphQLData(variables);
+      const data: ProblemsetQuestionListResponse = await fetchProblemDetails(variables);
       if (data.total === 0) {
         throw badRequest("No problems found");
       }

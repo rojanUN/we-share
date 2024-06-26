@@ -3,7 +3,7 @@ import { LeetcodeGraphqlEndPoint } from "../config";
 import { problemQuery } from "../queries";
 import { badRequest } from "@hapi/boom";
 
-async function fetchGraphQLData({ variables }: GraphQLRequestConfig): Promise<ProblemsetQuestionListResponse> {
+async function fetchProblemDetails({ variables }: GraphQLRequestConfig): Promise<ProblemsetQuestionListResponse> {
   try {
     const response = await fetch(LeetcodeGraphqlEndPoint.url, {
       method: "POST",
@@ -28,4 +28,4 @@ async function fetchGraphQLData({ variables }: GraphQLRequestConfig): Promise<Pr
   }
 }
 
-export { fetchGraphQLData };
+export { fetchProblemDetails };
