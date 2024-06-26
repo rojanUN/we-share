@@ -35,7 +35,7 @@ export interface GraphQLRequestConfig {
 }
 
 export interface getSubmissionInput {
-  submissionId: string;
+  submissionId: number;
 }
 
 export interface getSubmissionRequestConfig {
