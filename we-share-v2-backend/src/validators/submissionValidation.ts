@@ -7,7 +7,7 @@ const inputSubmitProblemSchema = Joi.object({
 });
 
 const inputGetSubmissionDetailsSchema = Joi.object({
-  submissionId: Joi.string().required(),
+  submissionId: Joi.number().required(),
 });
 
 export { inputSubmitProblemSchema, inputGetSubmissionDetailsSchema };
