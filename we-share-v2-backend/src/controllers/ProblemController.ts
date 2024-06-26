@@ -1,19 +1,23 @@
 import Boom from "@hapi/boom";
 import { badRequest } from "@hapi/boom";
-import { fetchProblemDetails } from "../helpers";
+import { fetchProblemDetails, fetchSubmissionDetails } from "../helpers";
 import {
   GraphQLRequestConfig,
   ProblemSetKeys,
   ProblemsetQuestionListResponse,
+  SubmitProblemResponse,
+  getSubmissionDetailsResponse,
+  getSubmissionRequestConfig,
   singleProblemInterfaceOutput,
 } from "../interfaces";
 import { Validator } from "../middlewares/validation";
 import { problemSetKeysSchema } from "../validators/problemValidation";
 import { Request, Response, NextFunction } from "express";
 import { Problem } from "leetcode-api-typescript";
+import { inputGetSubmissionDetailsSchema, inputSubmitProblemSchema } from "../validators/submissionValidation";
 
 export class ProblemController {
-  public constructor() {}
+  public constructor() { }
 
   public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -36,14 +40,48 @@ export class ProblemController {
     }
   }
 
-  public static async handleProblemSubmit(req: Request, res: Response): Promise<void> {
+  public static async submitProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { slug, code, language } = req.body;
-      console.log(slug, code, language, "slug, code, language >>>>");
+      Validator.check(inputSubmitProblemSchema, req.body);
+      const { language, code, slug } = req.body;
+      const problem = new Problem(slug);
+      await problem.detail();
+      const submissionResult: SubmitProblemResponse = await problem.submit(language, code);
 
-      res.json({ message: "Problem submitted successfully", slug: slug, language });
+      if (!submissionResult.id) throw badRequest("Error submitting problem");
+
+      res.json({ data: submissionResult, message: "Problem submitted successfully" });
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw Boom.badRequest(error.message);
+      } else {
+        next(error);
+      }
+    }
+  }
+
+  public static async getSubmissionDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+
+      Validator.check(inputGetSubmissionDetailsSchema, req.body);
+
+      const { submissionId } = req.body;
+
+      const variables: getSubmissionRequestConfig = {
+        variables: {
+          submissionId
+        },
+      };
+
+      const data: getSubmissionDetailsResponse = await fetchSubmissionDetails(variables);
+      if (!data)
+        throw badRequest("No submission found", {
+          message: `No submission for for Id ${submissionId}`
+        });
+
+      res.json({ data, message: "Submission Details fetched successfully" });
     } catch (error) {
-      throw Boom.badRequest("Error submitting problem");
+      next(error);
     }
   }
 
