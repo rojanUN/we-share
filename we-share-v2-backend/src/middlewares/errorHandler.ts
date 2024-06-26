@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { HttpStatusEnum } from "../enums/index";
 import buildError from "./buildError";
 
@@ -24,8 +24,7 @@ export function methodNotAllowed(req: Request, res: Response) {
   });
 }
 
-export function genericErrorHandler(err: any, req: Request, res: Response) {
-  console.log(err.stack);
+export function genericErrorHandler(err: any, req: Request, res: Response, _: NextFunction) {
   const error = buildError(err);
   res.status(error.code).json({ ...error });
 }

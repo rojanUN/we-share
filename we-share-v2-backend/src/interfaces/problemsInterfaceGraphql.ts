@@ -33,3 +33,11 @@ export interface ProblemSetKeys {
 export interface GraphQLRequestConfig {
   variables?: ProblemSetKeys;
 }
+
+export interface getSubmissionInput {
+  submissionId: string;
+}
+
+export interface getSubmissionRequestConfig {
+  variables?: getSubmissionInput;
+}
