@@ -1,4 +1,3 @@
-import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 // language modes
@@ -78,6 +77,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             const submissionDetails = await pollSubmissionDetails(
                 response?.data?.id
             );
+            console.log(submissionDetails, 'submsisson details');
             setSubmissionDetails(submissionDetails);
             setShowSubmissionModal(true);
         },
@@ -205,14 +205,14 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                                     <span className="inline-block w-[160px] whitespace-nowrap mr-4">
                                         Correct Cases:
                                     </span>
-                                    {submissionDetails!.totalCorrect}
+                                    {submissionDetails!.totalCorrect ?? 0}
                                 </p>
                                 <p>
                                     <span className="inline-block w-[160px] whitespace-nowrap mr-4">
                                         Remaining Cases:
                                     </span>
                                     {+submissionDetails!.totalTestcases -
-                                        +submissionDetails!.totalCorrect}
+                                        +submissionDetails!.totalCorrect ?? 0}
                                 </p>
                                 <p>
                                     <span className="inline-block w-[160px] whitespace-nowrap mr-4">
@@ -236,8 +236,8 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                                 </p>
                             )}
                         </div>
-                        {submissionDetails!.totalTestcases !==
-                            submissionDetails!.totalCorrect && (
+                        {+submissionDetails!.totalTestcases !==
+                            +submissionDetails!.totalCorrect && (
                             <p className="mt-5 text-[17px] flex items-center justify-center">
                                 <span className="text-[#47a992] font-bold inline-flex">
                                     <TipsIcon
