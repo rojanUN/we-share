@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Question, QuestionStateType, CheckedQuestionType } from '../../types';
+import {
+    Question,
+    QuestionStateType,
+    CheckedQuestionType,
+} from '../../types/question';
 
 const initialState: QuestionStateType = {
     selectedQuestion: null,

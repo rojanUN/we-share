@@ -5,7 +5,7 @@ import {
     setCheckedQuestions,
 } from '../feature/exam/examSlice';
 import { SessionStorage } from '../helper/sessionStorage';
-import { CheckedQuestionType, QuestionStateType } from '../types';
+import { CheckedQuestionType, QuestionStateType } from '../types/question';
 import Button from './common/Button';
 import RadioBtn from './common/RadioBtn';
 

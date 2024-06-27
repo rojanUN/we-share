@@ -1,6 +1,6 @@
 // import { Toast } from './toast';
 
-import { CheckedQuestionType, CodeSnippet } from '../types';
+import { CheckedQuestionType, CodeSnippet } from '../types/question';
 
 // export const detectNoise = async (
 //     setNoiseLevel: React.Dispatch<React.SetStateAction<number | undefined>>
@@ -197,3 +197,12 @@ export const findLanguageCode = (
     );
     return language ? language.code : '// Write your code here';
 };
+
+// const formatOutput = (output: string) => {
+//     return output.split('\n').map((line, index) => (
+//       <span key={index}>
+//         {line}
+//         <br />
+//       </span>
+//     ));
+//   };

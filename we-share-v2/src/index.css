@@ -28,7 +28,7 @@ h6 {
 }
 
 .CodeMirror {
-    height: 65vh !important;
+    height: 48vh !important;
 }
 
 .CodeMirror-vscrollbar::-webkit-scrollbar {
