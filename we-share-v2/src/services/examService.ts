@@ -1,6 +1,6 @@
 import { api } from '../helper/axios';
 import { examEndpoints } from '../helper/endpont';
-import { SubmissionResponse } from '../types';
+import { SubmissionResponse } from '../types/question';
 
 export const handleSingleQuestionFetch = async (value: string) => {
     const URL = examEndpoints.getSingleQuestoin;

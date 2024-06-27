@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 // import { detectNoise } from '../helper/helper';
 import { Toast } from '../helper/toast';
-import { CustomError } from '../types';
+import { CustomError } from '../types/question';
 import '@tensorflow/tfjs';
-import { FacePrediction } from '../types';
+import { FacePrediction } from '../types/question';
 
 import { getModel } from '../helper/loadModelHelper';
 import { useAppSelector } from '../app/hooks';

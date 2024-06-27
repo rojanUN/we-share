@@ -4,7 +4,7 @@ import {
     setActiveQuesIndex,
     setSelectedQuestion,
 } from '../../feature/exam/examSlice';
-import { Question } from '../../types';
+import { Question } from '../../types/question';
 interface QuestionIndicatorType {
     children: React.ReactNode;
     index: number;

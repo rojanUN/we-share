@@ -10,9 +10,13 @@ import 'codemirror/mode/clike/clike';
 import Dropdown from './common/Dropdown';
 import { useEffect, useState } from 'react';
 import Button from './common/Button';
-import { PlayIcon, TipsIcon } from '../helper/icons';
+import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
 import { asyncHandler } from '../helper/helper';
-import { LeetCodeQuestion, Question, SubmissionResponse } from '../types';
+import {
+    LeetCodeQuestion,
+    Question,
+    SubmissionResponse,
+} from '../types/question';
 import {
     handleQuestonSubmission,
     handleSingleQuestionFetch,
@@ -104,6 +108,14 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             fetchProblem();
         }
     }, [question?.question]);
+    const formatOutput = (output: string) => {
+        return output.split('\n').map((line, index) => (
+            <span key={index}>
+                {line}
+                <br />
+            </span>
+        ));
+    };
     return (
         <div className="h-full w-full flex flex-col gap-2 md:flex-row">
             <div className="flex-1">
@@ -118,7 +130,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                     </div>
                 ) : (
                     <div
-                        className="custom-scrollbar mt-3 h-[70vh] overflow-y-scroll overflow-x-hidden"
+                        className="custom-scrollbar mt-3 h-full overflow-y-scroll overflow-x-hidden"
                         dangerouslySetInnerHTML={{
                             __html: algorithmQuestion
                                 ? algorithmQuestion.content.replace('\n', '')
@@ -173,6 +185,34 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                             </p>
                         )}
                     </Button>
+                </div>
+                <div>
+                    <div className="flex justify-start">
+                        <h3 className="flex items-center">
+                            <ConsoleIcon
+                                style={{
+                                    color: '#1935CA',
+                                    marginRight: '5px',
+                                    fontSize: '22px',
+                                    fontWeight: '700',
+                                }}
+                            />{' '}
+                            Console
+                        </h3>
+                    </div>
+                    <div className="h-[22vh] flex flex-col p-2  overflow-y-scroll overflow-x-hidden bg-[#282a36] mb-2 text-white">
+                        {submissionDetails?.stdOutput && (
+                            <p>{formatOutput(submissionDetails?.stdOutput)}</p>
+                        )}
+                        {submissionDetails?.compileError && (
+                            <p>
+                                {formatOutput(submissionDetails?.compileError)}
+                            </p>
+                        )}
+                        {submissionDetails?.runtimeError && (
+                            <p>{formatOutput(submissionDetails?.stdOutput)}</p>
+                        )}
+                    </div>
                 </div>
                 {showSubmissionModal && (
                     <Modal

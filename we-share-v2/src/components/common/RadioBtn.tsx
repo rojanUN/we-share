@@ -1,5 +1,5 @@
 import { isOptionSelected } from '../../helper/helper';
-import { CheckedQuestionType } from '../../types';
+import { CheckedQuestionType } from '../../types/question';
 interface RadioBtnType {
     name: string;
     label: string;

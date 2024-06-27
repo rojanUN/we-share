@@ -6,7 +6,7 @@ import Button from '../components/common/Button';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setCheckedQuestions, setShowToast } from '../feature/exam/examSlice';
 import { ClockIcon } from '../helper/icons';
-import { CustomError } from '../types';
+import { CustomError } from '../types/question';
 import Modal from '../components/common/Modal';
 import CircularProgress from '../components/common/CircularProgress';
 import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
@@ -169,8 +169,8 @@ const ExamPortal = function ExamPortal() {
                 <DetectNoise setSoundLevel={setSoundLevel} />
             </ErrorBoundary>
             <div className="flex-[6_6_0%] px-6 h-full bg-custom-gradient grid place-items-center">
-                <div className="flex flex-col h-max w-full md:min-w-[70%] bg-white rounded-[20px] px-10 py-10">
-                    <div className="h-20 mb-6 w-full flex justify-between items-center">
+                <div className="flex flex-col h-max w-full md:min-w-[70%] bg-white rounded-[20px] px-10 py-2">
+                    <div className="h-20 mb-3 w-full flex justify-between items-center">
                         <div>
                             <div className="flex">
                                 <div className="h-full my-auto mr-3">

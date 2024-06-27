@@ -9,6 +9,7 @@ import { IoChevronBack as BackArrowIcon } from 'react-icons/io5';
 import { FaCheckCircle as CheckedIcon } from 'react-icons/fa';
 import { RiCloseCircleFill as CloseIcon } from 'react-icons/ri';
 import { FaPlay as PlayIcon } from 'react-icons/fa';
+import { VscDebugConsole as ConsoleIcon } from 'react-icons/vsc';
 
 export {
     CameraIcon,
@@ -22,4 +23,5 @@ export {
     CheckedIcon,
     CloseIcon,
     PlayIcon,
+    ConsoleIcon,
 };

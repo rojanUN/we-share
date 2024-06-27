@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Toast } from '../helper/toast';
-import { CustomError } from '../types';
+import { CustomError } from '../types/question';
 
 declare global {
     interface Window {

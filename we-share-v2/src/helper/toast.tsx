@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { CameraIcon, ErrorIcon, MicIcon } from './icons';
-import { CustomError } from '../types';
+import { CustomError } from '../types/question';
 
 function getToastErrorIcon(type: CustomError) {
     switch (type) {

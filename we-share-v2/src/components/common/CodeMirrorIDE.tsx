@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LeetCodeQuestion, Question } from '../../types';
+import { LeetCodeQuestion, Question } from '../../types/question';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { findLanguageCode, languageMimeTypeMap } from '../../helper/helper';
 import { SessionStorage } from '../../helper/sessionStorage';

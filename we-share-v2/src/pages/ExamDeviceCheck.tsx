@@ -16,7 +16,7 @@ import {
     VideoIcon,
 } from '../helper/icons';
 import Dropdown from '../components/common/Dropdown';
-import { CustomError } from '../types';
+import { CustomError } from '../types/question';
 import { Toast } from '../helper/toast';
 import DetectNoise from '../components/DetectNoise';
 import ErrorBoundary from '../components/ErrorBoundary';
