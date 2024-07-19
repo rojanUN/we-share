@@ -42,7 +42,6 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                             setQuizDescription={setQuizDescription}
                             quizMarks={quizMarks}
                             setQuizMarks={setQuizMarks}
-
                             nextStep={nextStep}
                         />
                     )}

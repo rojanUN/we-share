@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
                     Sign out
                 </button>
                 <div className="bg-gray-700 p-2 rounded-full text-xs md:text-sm">
-                    Samik
+                    SS
                 </div>
             </div>
         </div>

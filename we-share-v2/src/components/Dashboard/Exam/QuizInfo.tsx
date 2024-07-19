@@ -19,7 +19,7 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
     quizMarks,
     setQuizMarks,
 
-    nextStep
+    nextStep,
 }) => {
     return (
         <div>
@@ -51,7 +51,9 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
                 />
             </div>
 
-            <Button variant='primary' handleBtnClick={nextStep} >Next</Button>
+            <Button variant="primary" handleBtnClick={nextStep}>
+                Next
+            </Button>
         </div>
     );
 };
