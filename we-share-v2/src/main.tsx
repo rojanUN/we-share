@@ -9,6 +9,9 @@ import Home from './pages/Home';
 import ExamCompletion from './pages/ExamCompletion';
 import ExamDeviceCheck from './pages/ExamDeviceCheck';
 import { ToastContainer } from 'react-toastify';
+import Layout from './components/Dashboard/Layout';
+import Dashboard from './components/Dashboard/Dashboard';
+import ExamManage from './components/Dashboard/Exam/ExamManage';
 
 const router = createBrowserRouter([
     {
@@ -26,6 +29,21 @@ const router = createBrowserRouter([
     {
         path: '/exam-completed',
         element: <ExamCompletion />,
+    },
+    {
+        path: "/",
+        element: <Layout />,
+        children: [
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
+            },
+            {
+                path: "/exam-manage",
+                element: <ExamManage />
+            }
+
+        ],
     },
 ]);
 
