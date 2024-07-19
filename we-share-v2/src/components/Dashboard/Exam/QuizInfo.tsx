@@ -26,7 +26,7 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
     setQuizClass,
     quizCourse,
     setQuizCourse,
-    nextStep
+    nextStep,
 }) => {
     return (
         <div>
@@ -79,7 +79,9 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
                     </select>
                 </div>
             </div>
-            <Button variant='primary' handleBtnClick={nextStep} >Next</Button>
+            <Button variant="primary" handleBtnClick={nextStep}>
+                Next
+            </Button>
         </div>
     );
 };

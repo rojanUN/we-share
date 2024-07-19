@@ -28,7 +28,10 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
             <div className="relative bg-white p-6 w-full max-w-2xl h-full max-h-full overflow-y-auto">
-                <button onClick={onClose} className="text-[1.5rem] absolute top-4 right-4 text-gray-700 hover:text-gray-900">
+                <button
+                    onClick={onClose}
+                    className="text-[1.5rem] absolute top-4 right-4 text-gray-700 hover:text-gray-900"
+                >
                     &times;
                 </button>
                 <form onSubmit={handleSubmit}>

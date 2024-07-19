@@ -4,8 +4,8 @@ interface ButtonType {
     variant: 'primary' | 'danger' | 'secondary';
     disabled?: boolean;
     outline?: boolean;
-    className?: String
-    handleBtnClick: (e?: any) => void;
+    className?: string;
+    handleBtnClick: (e: React.FormEvent) => void;
 }
 
 function Button({
