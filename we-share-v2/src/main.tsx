@@ -31,18 +31,17 @@ const router = createBrowserRouter([
         element: <ExamCompletion />,
     },
     {
-        path: "/",
+        path: '/',
         element: <Layout />,
         children: [
             {
-                path: "/dashboard",
+                path: '/dashboard',
                 element: <Dashboard />,
             },
             {
-                path: "/exam-manage",
-                element: <ExamManage />
-            }
-
+                path: '/quiz-manage',
+                element: <ExamManage />,
+            },
         ],
     },
 ]);

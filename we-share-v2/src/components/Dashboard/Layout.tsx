@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../common/SideBar';
 import Navbar from '../common/Navbar';
 
-
 const Layout: React.FC = () => {
     return (
         <div className="flex">

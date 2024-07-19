@@ -1,6 +1,17 @@
+import { useState } from "react";
+import AddMCQModal from "./AddMCQModal";
+import Button from "../../common/Button";
+
 const ExamManage = () => {
-    return (
-        <div>This is exam manage section</div>
-    )
-}
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+    return (<div className="p-4">
+        <Button handleBtnClick={openModal} variant="primary"  >Add Quiz</Button>
+        <AddMCQModal isOpen={isModalOpen} onClose={closeModal} />
+
+    </div>
+    );
+};
 export default ExamManage;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '../common/Card';
 
-
 const Dashboard: React.FC = () => {
     return (
         <div className="p-4 space-y-4">
@@ -11,7 +10,6 @@ const Dashboard: React.FC = () => {
                 <Card title="Pending Students" count={0} />
                 <Card title="No. Of Incidents" count={0} />
             </div>
-
         </div>
     );
 };
