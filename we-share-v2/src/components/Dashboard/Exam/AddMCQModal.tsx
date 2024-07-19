@@ -11,8 +11,7 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
     const [quizTitle, setQuizTitle] = useState('');
     const [quizDescription, setQuizDescription] = useState('');
     const [quizMarks, setQuizMarks] = useState('');
-    const [quizClass, setQuizClass] = useState('');
-    const [quizCourse, setQuizCourse] = useState('');
+
     const [step, setStep] = useState(1);
 
     const nextStep = () => setStep(step + 1);
@@ -43,10 +42,7 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                             setQuizDescription={setQuizDescription}
                             quizMarks={quizMarks}
                             setQuizMarks={setQuizMarks}
-                            quizClass={quizClass}
-                            setQuizClass={setQuizClass}
-                            quizCourse={quizCourse}
-                            setQuizCourse={setQuizCourse}
+
                             nextStep={nextStep}
                         />
                     )}

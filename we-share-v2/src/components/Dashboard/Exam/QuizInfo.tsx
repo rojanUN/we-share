@@ -8,10 +8,6 @@ interface QuizInfoProps {
     setQuizDescription: (value: string) => void;
     quizMarks: string;
     setQuizMarks: (value: string) => void;
-    quizClass: string;
-    setQuizClass: (value: string) => void;
-    quizCourse: string;
-    setQuizCourse: (value: string) => void;
     nextStep: () => void;
 }
 
@@ -22,11 +18,8 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
     setQuizDescription,
     quizMarks,
     setQuizMarks,
-    quizClass,
-    setQuizClass,
-    quizCourse,
-    setQuizCourse,
-    nextStep,
+
+    nextStep
 }) => {
     return (
         <div>
@@ -57,31 +50,8 @@ const QuizInfo: React.FC<QuizInfoProps> = ({
                     className="w-full p-2 border"
                 />
             </div>
-            <div className="mb-4 flex">
-                <div className="w-1/2 mr-2">
-                    <label className="block mb-2">Quiz Class</label>
-                    <select
-                        value={quizClass}
-                        onChange={(e) => setQuizClass(e.target.value)}
-                        className="w-full p-2 border"
-                    >
-                        <option value="">Choose Class</option>
-                    </select>
-                </div>
-                <div className="w-1/2 ml-2">
-                    <label className="block mb-2">Quiz Course</label>
-                    <select
-                        value={quizCourse}
-                        onChange={(e) => setQuizCourse(e.target.value)}
-                        className="w-full p-2 border"
-                    >
-                        <option value="">Choose Course</option>
-                    </select>
-                </div>
-            </div>
-            <Button variant="primary" handleBtnClick={nextStep}>
-                Next
-            </Button>
+
+            <Button variant='primary' handleBtnClick={nextStep} >Next</Button>
         </div>
     );
 };

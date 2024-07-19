@@ -1,3 +1,3 @@
-const AppName = "We-Share-V2"
+const AppName = 'We-Share-V2';
 
 export { AppName };
