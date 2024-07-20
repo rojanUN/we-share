@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ProblemRouter } from "./problemRoutes";
 import { IRouteInterface } from "../interfaces";
+import { QuestionRouter } from "./questionRoutes";
 
 class ProxyRouter {
   private static instance: ProxyRouter;
@@ -9,6 +10,10 @@ class ProxyRouter {
     {
       segment: "/problems",
       provider: ProblemRouter,
+    },
+    {
+      segment: "/questions",
+      provider: QuestionRouter,
     },
   ];
 
