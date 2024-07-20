@@ -17,11 +17,6 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
     const nextStep = () => setStep(step + 1);
     const prevStep = () => setStep(step - 1);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onClose();
-    };
-
     if (!isOpen) return null;
 
     return (
@@ -33,7 +28,7 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                 >
                     &times;
                 </button>
-                <form onSubmit={handleSubmit}>
+                <div>
                     {step === 1 && (
                         <QuizInfo
                             quizTitle={quizTitle}
@@ -48,10 +43,11 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                     {step === 2 && (
                         <MCQQuestionsAdd
                             prevStep={prevStep}
-                            onSubmit={handleSubmit}
+                            onSubmit={onClose}
                         />
                     )}
-                </form>
+                </div>
+
             </div>
         </div>
     );

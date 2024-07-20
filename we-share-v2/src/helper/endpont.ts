@@ -5,3 +5,8 @@ export const examEndpoints = {
     getSubmissionId: `${baseUrl}/api/problems/submit`,
     getSubmissionDetails: `${baseUrl}/api/problems/get/submission`,
 };
+
+
+export const questionEndPoints = {
+    addMCQQuestion: `${baseUrl}/api/questions/add/mcqquestions`,
+}

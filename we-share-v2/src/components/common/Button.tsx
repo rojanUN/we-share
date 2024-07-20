@@ -4,6 +4,7 @@ interface ButtonType {
     variant: 'primary' | 'danger' | 'secondary';
     disabled?: boolean;
     outline?: boolean;
+    type?: 'button' | 'submit' | 'reset';
     className?: string;
     handleBtnClick: (e: React.FormEvent) => void;
 }
@@ -13,6 +14,7 @@ function Button({
     variant,
     disabled,
     outline,
+    type,
     className,
     handleBtnClick,
 }: ButtonType) {
@@ -31,7 +33,7 @@ function Button({
 
     return (
         <button
-            type="button"
+            type={type || 'button'}
             onClick={handleBtnClick}
             disabled={disabled}
             className={`${className && className} ${baseClasses} ${cursorClasses} ${outlineClasses} ${variantClasses[variant]} ${disabledClasses}`}
