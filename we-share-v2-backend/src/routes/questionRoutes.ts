@@ -8,7 +8,7 @@ export class QuestionRouter extends RouterClass {
   }
 
   public define(): void {
-    this.router.route("/add/mcqquestions").post(exceptionHandler(QuestionController.addMcqQuestion));
+    this.router.route("/add/mcqquestions").post(exceptionHandler(QuestionController.addMcqQuestions));
     this.router.route("/add/codequestions").post(exceptionHandler(QuestionController.addCodeQuestion));
   }
 }

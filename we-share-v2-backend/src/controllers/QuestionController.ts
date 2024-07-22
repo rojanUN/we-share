@@ -4,20 +4,18 @@ import { CodeQuestionResponse, MCQQuestionResponse } from "../interfaces/questio
 import CodeQuestion from "../models/codeQuestionsModel";
 
 export class QuestionController {
-  public constructor() {}
+  public constructor() { }
 
-  public static async addMcqQuestion(req: Request, res: Response, next: NextFunction) {
+  public static async addMcqQuestions(req: Request, res: Response, next: NextFunction) {
     try {
-      const { question, options, correctAnswer, category } = req.body;
+      const { questions } = req.body;
+      console.log(questions);
 
-      const { dataValues } = await MCQQuestion.create({
-        question,
-        options,
-        correctAnswer,
-        category,
-      });
-      const data: MCQQuestionResponse = dataValues;
-      res.json({ data, message: "MCQ question added successfully" });
+      const createdQuestions = await MCQQuestion.bulkCreate(questions);
+      console.log(createdQuestions);
+      const data = createdQuestions.map(question => question.get());
+      console.log(data);
+      res.json({ data, message: "MCQ questions added successfully" });
     } catch (error) {
       next(error);
     }
