@@ -17,7 +17,7 @@ class ProxyRouter {
     },
   ];
 
-  private constructor() {}
+  private constructor() { }
 
   public static get(): ProxyRouter {
     if (!ProxyRouter.instance) ProxyRouter.instance = new ProxyRouter();
@@ -35,3 +35,4 @@ class ProxyRouter {
 
 const proxyRouter = ProxyRouter.get();
 export { proxyRouter as ProxyRouter };
+

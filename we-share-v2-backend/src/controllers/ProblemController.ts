@@ -17,7 +17,7 @@ import { Problem } from "leetcode-api-typescript";
 import { inputGetSubmissionDetailsSchema, inputSubmitProblemSchema } from "../validators/submissionValidation";
 
 export class ProblemController {
-  public constructor() {}
+  public constructor() { }
 
   public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -98,6 +98,7 @@ export class ProblemController {
       };
 
       const data: ProblemsetQuestionListResponse = await fetchProblemDetails(variables);
+
       if (data.total === 0) {
         throw badRequest("No problems found");
       }
