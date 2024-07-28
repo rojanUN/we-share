@@ -8,6 +8,24 @@ export const handleSingleQuestionFetch = async (value: string) => {
     const response = await api.post(URL, data);
     return response;
 };
+interface filterInterface {
+    difficulty?: string;
+    searchKeywords?: string;
+}
+
+export const handleMultipleQuestionFetch = async (
+    limit: number,
+    skip: number,
+    categorySlug: string,
+    filters: filterInterface
+) => {
+    const URL = examEndpoints.getMultipleQuestions;
+    const data = { limit, skip, categorySlug, filters: { "searchKeywords": filters?.searchKeywords, "difficulty": filters?.difficulty } };
+    const response = await api.post(URL, data);
+    return response;
+};
+
+
 
 export const handleQuestonSubmission = async (
     slug: string,
