@@ -17,7 +17,7 @@ import { Problem } from "leetcode-api-typescript";
 import { inputGetSubmissionDetailsSchema, inputSubmitProblemSchema } from "../validators/submissionValidation";
 
 export class ProblemController {
-  public constructor() { }
+  public constructor() {}
 
   public static async singleProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
