@@ -64,7 +64,7 @@ const MCQQuestionsAdd: React.FC<{
                     .min(0, 'Select a valid option'),
             })
 
-        ),
+        ).min(1, 'At least one question is required').required('Questions are required'),
     });
 
     const handleSubmit = async (
@@ -215,6 +215,14 @@ const MCQQuestionsAdd: React.FC<{
                                                 component="div"
                                                 className="text-red-500 mt-2"
                                             />
+
+                                            <ErrorMessage
+                                                name="questions"
+                                                component="div"
+                                                className="text-red-500 my-2"
+                                            />
+
+
                                         </div>
                                     ))}
                                     <div className="flex justify-start gap-5">
