@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import QuizInfo from './QuizInfo';
 import MCQQuestionsAdd from './QuizQuestionAdd';
+import LeetCodeProblemsTable from './LeetCodeProblemsTable';
 
 interface AddMCQModalProps {
     isOpen: boolean;
@@ -42,12 +43,19 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                     )}
                     {step === 2 && (
                         <MCQQuestionsAdd
+                            nextStep={nextStep}
                             prevStep={prevStep}
-                            onSubmit={onClose}
                         />
                     )}
-                </div>
 
+                    {step === 3 && (
+                        <LeetCodeProblemsTable
+                            prevStep={prevStep}
+                            onClose={onClose}
+                            limit={10}
+                        />)}
+
+                </div>
             </div>
         </div>
     );

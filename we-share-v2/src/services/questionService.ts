@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { questionEndPoints } from '../helper/endpont';
-import { Toast } from '../helper/toast';
-
 
 interface Option {
     text: string;
@@ -13,18 +11,36 @@ interface Question {
     correctOptionIndex: number | null;
 }
 
+interface CodeQuestion {
+    question: string;
+    difficulty: string;
+    category: string;
+}
+
 export const submitMCQQuestions = async (questions: Question[]) => {
-    const formattedQuestions = questions.map(({ question, options, correctOptionIndex }) => ({
-        question,
-        options: options.map(option => option.text),
-        correctAnswer: correctOptionIndex! + 1,
-        category: 'mcq',
-    }));
-    try {
-        const response = await axios.post(questionEndPoints.addMCQQuestion, { questions: formattedQuestions });
-        Toast.Success(response.data.message);
-    } catch (error) {
-        Toast.Error("Error adding MCQ questions");
-        throw error;
-    }
+    const formattedQuestions = questions.map(
+        ({ question, options, correctOptionIndex }) => ({
+            question,
+            options: options.map((option) => option.text),
+            correctAnswer: correctOptionIndex! + 1,
+            category: 'mcq',
+        })
+    );
+
+    const response = await axios.post(questionEndPoints.addMCQQuestion, {
+        questions: formattedQuestions,
+    });
+    if (response.data.message === 'MCQ questions added successfully')
+        return true;
+
+};
+
+export const submitCodeQuestions = async (questions: CodeQuestion[]) => {
+
+    const response = await axios.post(questionEndPoints.addCodeQuestion, {
+        questions,
+    });
+    if (response.data.message === "Code questions added successfully")
+        return true;
+
 };

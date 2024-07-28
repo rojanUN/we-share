@@ -14,10 +14,7 @@ function getToastErrorIcon(type: CustomError) {
 }
 
 export class Toast {
-    public static Success(
-        title: string,
-        closePreviousToast?: () => void
-    ) {
+    public static Success(title: string, closePreviousToast?: () => void) {
         toast.success(title, {
             onClose: () => {
                 closePreviousToast && closePreviousToast();
