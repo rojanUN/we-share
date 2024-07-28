@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import MCQQuestion from "../models/mcqQuestionsModel";
 import { CodeQuestionResponse, MCQQuestionResponse } from "../interfaces/questionInterface";
 import CodeQuestion from "../models/codeQuestionsModel";
-import { Sequelize } from "sequelize";
+import { Sequelize, Op } from "sequelize";
 
 export class QuestionController {
   public constructor() { }
@@ -37,22 +37,40 @@ export class QuestionController {
     }
   }
 
-
   public static async getRandomMCQQuestion() {
     const mcqQuestions = await MCQQuestion.findAll({ order: [Sequelize.fn("RANDOM")], limit: 25 });
     return mcqQuestions;
   }
 
-  public static async getRandomCodeQuestion() {
-    const codeQuestions = await CodeQuestion.findAll({ order: [Sequelize.fn("RANDOM")], limit: 2 });
+  public static async getRandomEasyCodeQuestion() {
+    const codeQuestions = await CodeQuestion.findAll({
+      where: { difficulty: "EASY" },
+      order: [Sequelize.fn("RANDOM")],
+      limit: 1,
+    });
     return codeQuestions;
   }
 
+
+  public static async getRandomMediumOrHardCodeQuestion() {
+    const codeQuestions = await CodeQuestion.findAll({
+      where: {
+        [Op.or]: [
+          { difficulty: "MEDIUM" },
+          { difficulty: "HARD" },
+        ],
+      },
+      order: [Sequelize.fn("RANDOM")],
+      limit: 1,
+    });
+    return codeQuestions;
+  }
   public static async getRandomQuestion(req: Request, res: Response, next: NextFunction) {
     try {
       const randomMCQQuestions = await QuestionController.getRandomMCQQuestion();
-      const randomCodeQuestions = await QuestionController.getRandomCodeQuestion();
-      const questionCollection = [...randomMCQQuestions, ...randomCodeQuestions];
+      const randomEasyCodeQuestions = await QuestionController.getRandomEasyCodeQuestion();
+      const randomMediumHardCodeQuestions = await QuestionController.getRandomMediumOrHardCodeQuestion();
+      const questionCollection = [...randomMCQQuestions, ...randomEasyCodeQuestions, ...randomMediumHardCodeQuestions];
       res.json({ questionCollection, message: "Questions fetched successfully" });
     } catch (error) {
       next(error);
