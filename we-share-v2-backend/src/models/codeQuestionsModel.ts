@@ -17,6 +17,11 @@ const CodeQuestion = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    difficulty: {
+      type: Sequelize.ENUM("EASY", "MEDIUM", "HARD"),
+      defaultValue: "EASY",
+      allowNull: false,
+    },
     category: {
       type: Sequelize.STRING,
       defaultValue: "code",

@@ -98,6 +98,7 @@ export class ProblemController {
       };
 
       const data: ProblemsetQuestionListResponse = await fetchProblemDetails(variables);
+
       if (data.total === 0) {
         throw badRequest("No problems found");
       }

@@ -1,7 +1,8 @@
 import Joi from "joi";
 
 const filterDataSchema = Joi.object({
-  difficulty: Joi.string().optional(),
+  searchKeywords: Joi.string().allow("").optional(),
+  difficulty: Joi.string().allow("").optional(),
   tags: Joi.array().items(Joi.string()).optional(),
 });
 
