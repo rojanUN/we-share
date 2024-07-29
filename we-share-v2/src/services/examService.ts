@@ -1,5 +1,5 @@
 import { api } from '../helper/axios';
-import { examEndpoints } from '../helper/endpont';
+import { examEndpoints } from '../helper/endpoint';
 import { SubmissionResponse } from '../types/question';
 
 export const handleSingleQuestionFetch = async (value: string) => {
@@ -20,12 +20,18 @@ export const handleMultipleQuestionFetch = async (
     filters: filterInterface
 ) => {
     const URL = examEndpoints.getMultipleQuestions;
-    const data = { limit, skip, categorySlug, filters: { "searchKeywords": filters?.searchKeywords, "difficulty": filters?.difficulty } };
+    const data = {
+        limit,
+        skip,
+        categorySlug,
+        filters: {
+            searchKeywords: filters?.searchKeywords,
+            difficulty: filters?.difficulty,
+        },
+    };
     const response = await api.post(URL, data);
     return response;
 };
-
-
 
 export const handleQuestonSubmission = async (
     slug: string,

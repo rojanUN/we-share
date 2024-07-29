@@ -9,7 +9,7 @@ const initialState: QuestionStateType = {
     selectedQuestion: null,
     // questionNo: 0,
     activeQuesIndex: 0,
-    questions: null,
+    questions: [],
     checkedQuestions: [],
     showToast: false,
 };

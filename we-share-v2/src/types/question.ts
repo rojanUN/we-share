@@ -4,6 +4,14 @@ export interface Question {
     options?: string[];
     correctAnswer?: number;
     category: string;
+    createdAt?: string | Date;
+    updatedAt?: string | Date;
+    deletedAt?: null | string | Date;
+}
+
+export interface RandomQuestionResponse {
+    message: string;
+    questionCollection: Question[];
 }
 
 export type LandMark = [number, number];
