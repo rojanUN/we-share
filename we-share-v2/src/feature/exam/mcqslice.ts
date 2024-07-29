@@ -37,12 +37,16 @@ const mcqQuestionsSlice = createSlice({
         removeQuestion: (state, action: PayloadAction<number>) => {
             state.questions.splice(action.payload, 1);
         },
-        updateQuestion: (state, action: PayloadAction<UpdateQuestionPayload>) => {
+        updateQuestion: (
+            state,
+            action: PayloadAction<UpdateQuestionPayload>
+        ) => {
             const { index, question } = action.payload;
             state.questions[index] = question;
         },
     },
 });
 
-export const { setQuestions, addQuestion, removeQuestion, updateQuestion } = mcqQuestionsSlice.actions;
+export const { setQuestions, addQuestion, removeQuestion, updateQuestion } =
+    mcqQuestionsSlice.actions;
 export default mcqQuestionsSlice.reducer;

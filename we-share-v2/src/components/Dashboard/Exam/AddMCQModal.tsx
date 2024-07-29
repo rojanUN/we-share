@@ -53,8 +53,8 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose }) => {
                             prevStep={prevStep}
                             onClose={onClose}
                             limit={10}
-                        />)}
-
+                        />
+                    )}
                 </div>
             </div>
         </div>

@@ -25,7 +25,9 @@ const MCQQuestionsAdd: React.FC<{
     nextStep: () => void;
 }> = ({ prevStep, nextStep }) => {
     const dispatch = useAppDispatch();
-    const savedFormValues = useAppSelector((state) => state.questions.formValues);
+    const savedFormValues = useAppSelector(
+        (state) => state.questions.formValues
+    );
 
     const initialQuestionOptionsLength = 4;
     const initialQuestions: Question[] = [
@@ -39,32 +41,36 @@ const MCQQuestionsAdd: React.FC<{
         },
     ];
 
-    const initialValues: FormValues = savedFormValues.questions.length ? savedFormValues : { questions: initialQuestions };
+    const initialValues: FormValues = savedFormValues.questions.length
+        ? savedFormValues
+        : { questions: initialQuestions };
 
     const validationSchema = Yup.object().shape({
-        questions: Yup.array().of(
-            Yup.object().shape({
-                question: Yup.string().required('Question is required'),
-                options: Yup.array()
-                    .of(
-                        Yup.object().shape({
-                            text: Yup.string().required(
-                                'Option text is required'
-                            ),
-                        })
-                    )
-                    .min(
-                        initialQuestionOptionsLength,
-                        `At least ${initialQuestionOptionsLength} options are required`
-                    )
-                    .required('Options are required'),
-                correctOptionIndex: Yup.number()
-                    .nullable()
-                    .required('Correct option is required')
-                    .min(0, 'Select a valid option'),
-            })
-
-        ).min(1, 'At least one question is required').required('Questions are required'),
+        questions: Yup.array()
+            .of(
+                Yup.object().shape({
+                    question: Yup.string().required('Question is required'),
+                    options: Yup.array()
+                        .of(
+                            Yup.object().shape({
+                                text: Yup.string().required(
+                                    'Option text is required'
+                                ),
+                            })
+                        )
+                        .min(
+                            initialQuestionOptionsLength,
+                            `At least ${initialQuestionOptionsLength} options are required`
+                        )
+                        .required('Options are required'),
+                    correctOptionIndex: Yup.number()
+                        .nullable()
+                        .required('Correct option is required')
+                        .min(0, 'Select a valid option'),
+                })
+            )
+            .min(1, 'At least one question is required')
+            .required('Questions are required'),
     });
 
     const handleSubmit = async (
@@ -74,7 +80,6 @@ const MCQQuestionsAdd: React.FC<{
         try {
             dispatch(setMCQFormValues(values));
             nextStep();
-
         } catch (error) {
             console.error('Error adding MCQ questions:', error);
         } finally {
@@ -113,15 +118,17 @@ const MCQQuestionsAdd: React.FC<{
                                                 component="div"
                                                 className="text-red-500 my-2"
                                             />
-                                            {values.questions.length > 1 && (<Button
-                                                variant="danger"
-                                                handleBtnClick={() =>
-                                                    remove(index)
-                                                }
-                                                className="absolute top-[-12px] right-0"
-                                            >
-                                                X
-                                            </Button>)}
+                                            {values.questions.length > 1 && (
+                                                <Button
+                                                    variant="danger"
+                                                    handleBtnClick={() =>
+                                                        remove(index)
+                                                    }
+                                                    className="absolute top-[-12px] right-0"
+                                                >
+                                                    X
+                                                </Button>
+                                            )}
 
                                             <FieldArray
                                                 name={`questions.${index}.options`}
@@ -162,7 +169,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                         <Button
                                                                             variant={
                                                                                 item.correctOptionIndex ===
-                                                                                    optionIndex
+                                                                                optionIndex
                                                                                     ? 'primary'
                                                                                     : 'secondary'
                                                                             }
@@ -175,7 +182,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                             className="w-[16rem]"
                                                                         >
                                                                             {item.correctOptionIndex ===
-                                                                                optionIndex
+                                                                            optionIndex
                                                                                 ? 'Correct'
                                                                                 : 'Set as Correct'}
                                                                         </Button>
@@ -190,12 +197,12 @@ const MCQQuestionsAdd: React.FC<{
                                                         )}
                                                         {item.options.length <
                                                             4 && (
-                                                                <div className="text-red-500 mt-2">
-                                                                    At least four
-                                                                    options are
-                                                                    required
-                                                                </div>
-                                                            )}
+                                                            <div className="text-red-500 mt-2">
+                                                                At least four
+                                                                options are
+                                                                required
+                                                            </div>
+                                                        )}
                                                         <Button
                                                             variant="primary"
                                                             handleBtnClick={() =>
@@ -221,8 +228,6 @@ const MCQQuestionsAdd: React.FC<{
                                                 component="div"
                                                 className="text-red-500 my-2"
                                             />
-
-
                                         </div>
                                     ))}
                                     <div className="flex justify-start gap-5">
@@ -244,7 +249,6 @@ const MCQQuestionsAdd: React.FC<{
                                         >
                                             Add a New MCQ Question
                                         </Button>
-
                                     </div>
                                 </div>
                             )}
@@ -252,7 +256,7 @@ const MCQQuestionsAdd: React.FC<{
                         <div className="mt-4 flex justify-between">
                             <Button
                                 variant="secondary"
-                                className='bg-gray-500'
+                                className="bg-gray-500"
                                 handleBtnClick={() => {
                                     dispatch(setMCQFormValues(values));
                                     prevStep();

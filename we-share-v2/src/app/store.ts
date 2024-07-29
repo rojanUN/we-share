@@ -8,7 +8,6 @@ export const store = configureStore({
         exam: examReducer,
         selectedLeetCodeQuestions: selectedLeetCodeQuestionsReducer,
         questions: questionsReducer, // Add the new reducer
-
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false }),

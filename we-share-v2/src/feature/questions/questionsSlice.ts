@@ -49,5 +49,6 @@ const formAndProblemsSlice = createSlice({
     },
 });
 
-export const { setMCQFormValues, setSelectedProblems, clearAllQuestions } = formAndProblemsSlice.actions;
+export const { setMCQFormValues, setSelectedProblems, clearAllQuestions } =
+    formAndProblemsSlice.actions;
 export default formAndProblemsSlice.reducer;

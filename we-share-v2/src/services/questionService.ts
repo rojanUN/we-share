@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { questionEndPoints } from '../helper/endpont';
+import { questionEndPoints } from '../helper/endpoint';
+import { api } from '../helper/axios';
+import { RandomQuestionResponse } from '../types/question';
 
 interface Option {
     text: string;
@@ -27,20 +28,23 @@ export const submitMCQQuestions = async (questions: Question[]) => {
         })
     );
 
-    const response = await axios.post(questionEndPoints.addMCQQuestion, {
+    const response = await api.post(questionEndPoints.addMCQQuestion, {
         questions: formattedQuestions,
     });
     if (response.data.message === 'MCQ questions added successfully')
         return true;
-
 };
 
 export const submitCodeQuestions = async (questions: CodeQuestion[]) => {
-
-    const response = await axios.post(questionEndPoints.addCodeQuestion, {
+    const response = await api.post(questionEndPoints.addCodeQuestion, {
         questions,
     });
-    if (response.data.message === "Code questions added successfully")
+    if (response.data.message === 'Code questions added successfully')
         return true;
+};
 
+export const getRandomQuestions = async () => {
+    const URL = questionEndPoints.getRandomQuestions;
+    const response: RandomQuestionResponse = await api.get(URL);
+    return response;
 };
