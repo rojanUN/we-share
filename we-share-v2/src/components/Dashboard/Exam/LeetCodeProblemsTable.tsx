@@ -5,9 +5,15 @@ import Button from '../../common/Button';
 import Checkbox from '../../common/Checkbox';
 import { handleMultipleQuestionFetch } from '../../../services/examService';
 import useDebounce from '../../hooks/useDebounce';
-import { submitCodeQuestions, submitMCQQuestions } from '../../../services/questionService';
+import {
+    submitCodeQuestions,
+    submitMCQQuestions,
+} from '../../../services/questionService';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks'; // Updated import
-import { clearAllQuestions, setSelectedProblems } from '../../../feature/questions/questionsSlice';
+import {
+    clearAllQuestions,
+    setSelectedProblems,
+} from '../../../feature/questions/questionsSlice';
 import { Toast } from '../../../helper/toast';
 
 interface TopicTag {
@@ -31,73 +37,99 @@ interface LeetCodeProblemsTableProps {
 const difficulties = ['Easy', 'Medium', 'Hard'];
 const filterOptions = ['All', 'Selected', 'Unselected'];
 
-const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep, onClose, limit }) => {
+const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({
+    prevStep,
+    onClose,
+    limit,
+}) => {
     const dispatch = useAppDispatch();
-    const savedSelectedQuestions = useAppSelector((state) => state.questions.selectedProblems);
+    const savedSelectedQuestions = useAppSelector(
+        (state) => state.questions.selectedProblems
+    );
 
     const [problems, setProblems] = useState<Problem[]>([]);
-    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set(savedSelectedQuestions));
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(
+        new Set(savedSelectedQuestions)
+    );
     const [search, setSearch] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>(''); // Filter by difficulty
     const [selectionFilter, setSelectionFilter] = useState<string>('All'); // Filter by selection status
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<string>('');
 
     const debouncedSearch = useDebounce(search, 300); // Use the custom hook
     const debouncedDifficulty = useDebounce(selectedDifficulty, 300); // Use the custom hook
 
     useEffect(() => {
-        fetchLeetCodeProblems(currentPage, debouncedSearch, debouncedDifficulty);
+        fetchLeetCodeProblems(
+            currentPage,
+            debouncedSearch,
+            debouncedDifficulty
+        );
     }, [currentPage, debouncedSearch, debouncedDifficulty]);
 
     useEffect(() => {
         setSelectedIds(new Set(savedSelectedQuestions));
     }, [savedSelectedQuestions]);
 
-    const mcqQuestionSaved = useAppSelector((state) => state.questions.formValues);
+    const mcqQuestionSaved = useAppSelector(
+        (state) => state.questions.formValues
+    );
     const handleSubmissionAll = async () => {
-        const mcqQuestionsSubmit = await submitMCQQuestions(mcqQuestionSaved.questions);
+        const mcqQuestionsSubmit = await submitMCQQuestions(
+            mcqQuestionSaved.questions
+        );
         const codeQuestions = problems
-            ?.filter(problem => selectedIds.has(problem.uniqueId))
+            ?.filter((problem) => selectedIds.has(problem.uniqueId))
             .map(({ titleSlug, difficulty }) => ({
                 question: titleSlug,
                 category: 'code',
-                difficulty: difficulty.toUpperCase()
+                difficulty: difficulty.toUpperCase(),
             }));
         const codeQuestionSubmit = await submitCodeQuestions(codeQuestions);
         if (mcqQuestionsSubmit && codeQuestionSubmit) {
-            Toast.Success("All questions submitted successfully");
+            Toast.Success('All questions submitted successfully');
             dispatch(clearAllQuestions());
             onClose();
-
+        } else {
+            Toast.Error('Error submitting questions');
         }
-        else {
-            Toast.Error("Error submitting questions");
+    };
 
-        }
-    }
-
-    const fetchLeetCodeProblems = async (page: number, search: string, difficulty: string) => {
+    const fetchLeetCodeProblems = async (
+        page: number,
+        search: string,
+        difficulty: string
+    ) => {
         setLoading(true);
         try {
             const skip = page * limit;
             const filters = {
                 searchKeywords: search || undefined,
-                difficulty: difficulty.toUpperCase() || undefined
+                difficulty: difficulty.toUpperCase() || undefined,
             };
 
-            const data = await handleMultipleQuestionFetch(limit, skip, "", filters);
-            const fetchedProblems = data.data.problemsetQuestionList.questions.map((q: any, index: number) => ({
-                ...q,
-                uniqueId: `${q.title}-${index}` // Generate unique ID
-            }));
+            const data = await handleMultipleQuestionFetch(
+                limit,
+                skip,
+                '',
+                filters
+            );
+            const fetchedProblems =
+                data.data.problemsetQuestionList.questions.map(
+                    (q: any, index: number) => ({
+                        ...q,
+                        uniqueId: `${q.title}-${index}`, // Generate unique ID
+                    })
+                );
             setProblems(fetchedProblems);
-            setTotalPages(Math.ceil(data.data.problemsetQuestionList.total / limit));
+            setTotalPages(
+                Math.ceil(data.data.problemsetQuestionList.total / limit)
+            );
         } catch (error) {
-
-            setError("Error Fetching leetCode problems from server");
+            setError('Error Fetching leetCode problems from server');
             console.error('Error fetching LeetCode problems:', error);
         } finally {
             setLoading(false);
@@ -110,7 +142,7 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
     };
 
     const handleCheckboxChange = (id: string) => {
-        setSelectedIds(prevIds => {
+        setSelectedIds((prevIds) => {
             const newIds = new Set(prevIds);
             if (newIds.has(id)) {
                 newIds.delete(id); // Deselect if already selected
@@ -127,7 +159,9 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
         setCurrentPage(0); // Reset to the first page when difficulty changes
     };
 
-    const handleSelectionFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectionFilterChange = (
+        event: ChangeEvent<HTMLSelectElement>
+    ) => {
         setSelectionFilter(event.target.value);
     };
 
@@ -135,34 +169,41 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
         setCurrentPage(data.selected);
     };
 
-
-
     const getAllFilteredProblems = () => {
-        if (selectionFilter === "Selected") {
-            const selectedProblems = problems?.filter(problem => selectedIds.has(problem.uniqueId));
+        if (selectionFilter === 'Selected') {
+            const selectedProblems = problems?.filter((problem) =>
+                selectedIds.has(problem.uniqueId)
+            );
 
             return selectedProblems;
         }
-        if (selectionFilter === "Unselected") {
-            const unselectedProblems = problems.filter(problem => !selectedIds.has(problem.uniqueId));
+        if (selectionFilter === 'Unselected') {
+            const unselectedProblems = problems.filter(
+                (problem) => !selectedIds.has(problem.uniqueId)
+            );
 
             return unselectedProblems;
         }
-    }
-
+    };
 
     const getFilteredProblems = () => {
         let result: Problem[] = problems;
 
         if (selectionFilter === 'Selected') {
-            result = problems.filter(problem => selectedIds.has(problem.uniqueId));
+            result = problems.filter((problem) =>
+                selectedIds.has(problem.uniqueId)
+            );
         } else if (selectionFilter === 'Unselected') {
-            result = problems.filter(problem => !selectedIds.has(problem.uniqueId));
+            result = problems.filter(
+                (problem) => !selectedIds.has(problem.uniqueId)
+            );
         }
 
         result = result.sort((a, b) => {
-            if (selectedIds.has(a.uniqueId) && !selectedIds.has(b.uniqueId)) return -1;
-            if (!selectedIds.has(a.uniqueId) && selectedIds.has(b.uniqueId)) return 1;
+            if (selectedIds.has(a.uniqueId) && !selectedIds.has(b.uniqueId))
+                return -1;
+            if (!selectedIds.has(a.uniqueId) && selectedIds.has(b.uniqueId))
+                return 1;
             return 0;
         });
 
@@ -185,7 +226,9 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
             />
             <div className="flex justify-between">
                 <div className="mb-4">
-                    <label htmlFor="difficulty" className="block mb-2">Filter by Difficulty:</label>
+                    <label htmlFor="difficulty" className="block mb-2">
+                        Filter by Difficulty:
+                    </label>
                     <select
                         id="difficulty"
                         value={selectedDifficulty}
@@ -193,7 +236,7 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
                         className="p-2 border"
                     >
                         <option value="">All</option>
-                        {difficulties.map(difficulty => (
+                        {difficulties.map((difficulty) => (
                             <option key={difficulty} value={difficulty}>
                                 {difficulty}
                             </option>
@@ -201,14 +244,16 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
                     </select>
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="selectionFilter" className="block mb-2">Filter by Selection:</label>
+                    <label htmlFor="selectionFilter" className="block mb-2">
+                        Filter by Selection:
+                    </label>
                     <select
                         id="selectionFilter"
                         value={selectionFilter}
                         onChange={handleSelectionFilterChange}
                         className="p-2 border"
                     >
-                        {filterOptions.map(option => (
+                        {filterOptions.map((option) => (
                             <option key={option} value={option}>
                                 {option}
                             </option>
@@ -226,38 +271,66 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {(selectionFilter === "Selected" || selectionFilter === "Unselected") ? allFilteredProblems?.map((item, index) => {
-                            return (<>
-                                <tr key={index}>
+                        {selectionFilter === 'Selected' ||
+                        selectionFilter === 'Unselected' ? (
+                            allFilteredProblems?.map((item, index) => {
+                                return (
+                                    <>
+                                        <tr key={index}>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <Checkbox
+                                                    isChecked={selectedIds.has(
+                                                        item.uniqueId
+                                                    )}
+                                                    onChange={() =>
+                                                        handleCheckboxChange(
+                                                            item.uniqueId
+                                                        )
+                                                    }
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {item.title}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                {item.difficulty}
+                                            </td>
+                                        </tr>
+                                    </>
+                                );
+                            })
+                        ) : !loading && error ? (
+                            <tr>
+                                <td colSpan={3}>{error}</td>
+                            </tr>
+                        ) : (
+                            filteredProblems.map((problem) => (
+                                <tr key={problem.uniqueId}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <Checkbox
-                                            isChecked={selectedIds.has(item.uniqueId)}
-                                            onChange={() => handleCheckboxChange(item.uniqueId)}
+                                            isChecked={selectedIds.has(
+                                                problem.uniqueId
+                                            )}
+                                            onChange={() =>
+                                                handleCheckboxChange(
+                                                    problem.uniqueId
+                                                )
+                                            }
                                         />
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{item.title}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{item.difficulty}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {problem.title}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {problem.difficulty}
+                                    </td>
                                 </tr>
-                            </>)
-                        }) :
-                            !loading && error ? <tr><td colSpan={3}>{error}</td></tr> :
-                                filteredProblems.map((problem) => (
-                                    <tr key={problem.uniqueId}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <Checkbox
-                                                isChecked={selectedIds.has(problem.uniqueId)}
-                                                onChange={() => handleCheckboxChange(problem.uniqueId)}
-                                            />
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{problem.title}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{problem.difficulty}</td>
-                                    </tr>
-                                ))}
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
             <div className="flex justify-between items-center mt-4">
-
                 <ReactPaginate
                     previousLabel={<FaAngleLeft />}
                     nextLabel={<FaAngleRight />}
@@ -272,14 +345,14 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
                     forcePage={currentPage}
                 />
                 <Button
-                    variant='primary'
+                    variant="primary"
                     className="px-4 py-2 bg-gray-500 text-white rounded absolute bottom-4 left-4"
                     handleBtnClick={prevStep}
                 >
                     Previous
                 </Button>
                 <Button
-                    variant='primary'
+                    variant="primary"
                     className="px-4 py-2 text-white rounded absolute bottom-4 right-4"
                     handleBtnClick={handleSubmissionAll}
                 >
@@ -291,4 +364,3 @@ const LeetCodeProblemsTable: React.FC<LeetCodeProblemsTableProps> = ({ prevStep,
 };
 
 export default LeetCodeProblemsTable;
-
