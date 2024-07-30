@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import MCQQuestion from "../models/mcqQuestionsModel";
-import { CodeQuestionResponse, MCQQuestionResponse } from "../interfaces/questionInterface";
 import CodeQuestion from "../models/codeQuestionsModel";
 import { Sequelize, Op } from "sequelize";
 
 export class QuestionController {
-  public constructor() { }
+  public constructor() {}
 
   public static async addMcqQuestions(req: Request, res: Response, next: NextFunction) {
     try {
