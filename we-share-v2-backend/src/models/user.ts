@@ -25,6 +25,10 @@ const User = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    examId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,

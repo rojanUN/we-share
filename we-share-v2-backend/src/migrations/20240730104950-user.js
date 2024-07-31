@@ -23,6 +23,10 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      exam_id: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       created_at: {
