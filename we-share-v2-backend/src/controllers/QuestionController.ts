@@ -4,7 +4,7 @@ import CodeQuestion from "../models/codeQuestionsModel";
 import { Sequelize, Op } from "sequelize";
 
 export class QuestionController {
-  public constructor() {}
+  public constructor() { }
 
   public static async addMcqQuestions(req: Request, res: Response, next: NextFunction) {
     try {
@@ -15,7 +15,7 @@ export class QuestionController {
       console.log(createdQuestions);
       const data = createdQuestions.map((question) => question.get());
       console.log(data);
-      res.json({ data, message: "MCQ questions added successfully" });
+      res.status(200).json({ data, message: "MCQ questions added successfully" });
     } catch (error) {
       next(error);
     }
@@ -30,7 +30,7 @@ export class QuestionController {
       console.log(createdQuestions);
       const data = createdQuestions.map((question) => question.get());
       console.log(data);
-      res.json({ data, message: "Code questions added successfully" });
+      res.status(200).json({ data, message: "Code questions added successfully" });
     } catch (error) {
       next(error);
     }
