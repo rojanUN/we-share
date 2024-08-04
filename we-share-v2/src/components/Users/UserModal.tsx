@@ -24,15 +24,22 @@ const UserModal = ({ user, onClose, onSave }: UserModalProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await addUsers({ id: user?.id, fullName, email }).then((_) => {
-            onSave({ id: user?.id, fullName, email }); Toast.Success("User Added Successfully");
-        }).catch((_) => { Toast.Error("Add User Error") });
+        await addUsers({ id: user?.id, fullName, email })
+            .then((_) => {
+                onSave({ id: user?.id, fullName, email });
+                Toast.Success('User Added Successfully');
+            })
+            .catch((_) => {
+                Toast.Error('Add User Error');
+            });
     };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30 ">
             <div className="bg-white p-10 rounded-lg">
-                <h2 className="text-2xl mb-4">{user ? 'Edit User' : 'Add User'}</h2>
+                <h2 className="text-2xl mb-4">
+                    {user ? 'Edit User' : 'Add User'}
+                </h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block mb-1">fullName</label>

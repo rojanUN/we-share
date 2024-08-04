@@ -12,7 +12,11 @@ const ExamManage = () => {
             <Button handleBtnClick={openModal} variant="primary">
                 Add Quiz
             </Button>
-            <AddMCQModal isOpen={isModalOpen} setModalOpen={setIsModalOpen} onClose={closeModal} />
+            <AddMCQModal
+                isOpen={isModalOpen}
+                setModalOpen={setIsModalOpen}
+                onClose={closeModal}
+            />
         </div>
     );
 };

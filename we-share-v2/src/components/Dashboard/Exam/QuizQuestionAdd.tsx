@@ -46,30 +46,28 @@ const MCQQuestionsAdd: React.FC<{
         : { questions: initialQuestions };
 
     const validationSchema = Yup.object().shape({
-        questions: Yup.array()
-            .of(
-                Yup.object().shape({
-                    question: Yup.string().required('Question is required'),
-                    options: Yup.array()
-                        .of(
-                            Yup.object().shape({
-                                text: Yup.string().required(
-                                    'Option text is required'
-                                ),
-                            })
-                        )
-                        .min(
-                            initialQuestionOptionsLength,
-                            `At least ${initialQuestionOptionsLength} options are required`
-                        )
-                        .required('Options are required'),
-                    correctOptionIndex: Yup.number()
-                        .nullable()
-                        .required('Correct option is required')
-                        .min(0, 'Select a valid option'),
-                })
-            )
-
+        questions: Yup.array().of(
+            Yup.object().shape({
+                question: Yup.string().required('Question is required'),
+                options: Yup.array()
+                    .of(
+                        Yup.object().shape({
+                            text: Yup.string().required(
+                                'Option text is required'
+                            ),
+                        })
+                    )
+                    .min(
+                        initialQuestionOptionsLength,
+                        `At least ${initialQuestionOptionsLength} options are required`
+                    )
+                    .required('Options are required'),
+                correctOptionIndex: Yup.number()
+                    .nullable()
+                    .required('Correct option is required')
+                    .min(0, 'Select a valid option'),
+            })
+        ),
     });
 
     const handleSubmit = async (
@@ -121,9 +119,7 @@ const MCQQuestionsAdd: React.FC<{
                                                 <Button
                                                     variant="danger"
                                                     handleBtnClick={() =>
-
                                                         remove(index)
-
                                                     }
                                                     className="absolute top-[-12px] right-0"
                                                 >
@@ -170,7 +166,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                         <Button
                                                                             variant={
                                                                                 item.correctOptionIndex ===
-                                                                                    optionIndex
+                                                                                optionIndex
                                                                                     ? 'primary'
                                                                                     : 'secondary'
                                                                             }
@@ -183,7 +179,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                             className="w-[16rem]"
                                                                         >
                                                                             {item.correctOptionIndex ===
-                                                                                optionIndex
+                                                                            optionIndex
                                                                                 ? 'Correct'
                                                                                 : 'Set as Correct'}
                                                                         </Button>
@@ -198,12 +194,12 @@ const MCQQuestionsAdd: React.FC<{
                                                         )}
                                                         {item.options.length <
                                                             4 && (
-                                                                <div className="text-red-500 mt-2">
-                                                                    At least four
-                                                                    options are
-                                                                    required
-                                                                </div>
-                                                            )}
+                                                            <div className="text-red-500 mt-2">
+                                                                At least four
+                                                                options are
+                                                                required
+                                                            </div>
+                                                        )}
                                                         <Button
                                                             variant="primary"
                                                             handleBtnClick={() =>
@@ -223,8 +219,6 @@ const MCQQuestionsAdd: React.FC<{
                                                 component="div"
                                                 className="text-red-500 mt-2"
                                             />
-
-
                                         </div>
                                     ))}
                                     <div className="flex justify-start gap-5">

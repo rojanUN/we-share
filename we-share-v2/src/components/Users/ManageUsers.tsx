@@ -10,42 +10,51 @@ const ManageUsers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState<UserInterface | null>(null);
 
-
     const handleAddUser = (user: UserInterface) => {
         setUsers([...users, { ...user }]);
         setIsModalOpen(false);
     };
     const handleToggleStatus = (userId: number) => {
-        setUsers(users.map(user =>
-            user.id === userId ? { ...user, status: user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' } : user
-        ));
+        setUsers(
+            users.map((user) =>
+                user.id === userId
+                    ? {
+                          ...user,
+                          status:
+                              user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                      }
+                    : user
+            )
+        );
     };
     const getUserData = async () => {
         const response = await getUsers();
-        console.log("this is response", response);
+        console.log('this is response', response);
         if (response) {
             setUsers(response);
         }
-    }
+    };
 
     useEffect(() => {
         getUserData();
     }, [users]);
 
-
-
     const handleEditUser = (updatedUser: UserInterface) => {
-        setUsers(users.map(user => user.id === updatedUser.id ? updatedUser : user));
+        setUsers(
+            users.map((user) =>
+                user.id === updatedUser.id ? updatedUser : user
+            )
+        );
         setIsModalOpen(false);
     };
 
     const handleDeleteUser = (userId: number) => {
-        setUsers(users.filter(user => user.id !== userId));
+        setUsers(users.filter((user) => user.id !== userId));
     };
 
     return (
-        <div className="container mx-auto p-4" >
-            <div className='flex justify-end'>
+        <div className="container mx-auto p-4">
+            <div className="flex justify-end">
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                     onClick={() => {
@@ -53,15 +62,20 @@ const ManageUsers = () => {
                         setIsModalOpen(true);
                     }}
                 >
-                    <div className='flex justify-center items-center gap-2'>
+                    <div className="flex justify-center items-center gap-2">
                         Add User <FaUserPlus />
                     </div>
                 </button>
             </div>
-            <UserTable users={users} onEdit={(user) => {
-                setCurrentUser(user);
-                setIsModalOpen(true);
-            }} onDelete={handleDeleteUser} onToggleStatus={handleToggleStatus} />
+            <UserTable
+                users={users}
+                onEdit={(user) => {
+                    setCurrentUser(user);
+                    setIsModalOpen(true);
+                }}
+                onDelete={handleDeleteUser}
+                onToggleStatus={handleToggleStatus}
+            />
             {isModalOpen && (
                 <div>
                     <UserModal
@@ -70,7 +84,6 @@ const ManageUsers = () => {
                         onSave={currentUser ? handleEditUser : handleAddUser}
                     />
                 </div>
-
             )}
         </div>
     );
