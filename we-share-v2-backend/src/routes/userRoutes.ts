@@ -8,6 +8,7 @@ export class UserRouter extends RouterClass {
   }
 
   public define(): void {
-    this.router.route("/add/user").post(exceptionHandler(UserController.addUsers));
+    this.router.route("/add").post(exceptionHandler(UserController.addUsers));
+    this.router.route("/get").get(exceptionHandler(UserController.getUsers));
   }
 }

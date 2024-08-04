@@ -58,6 +58,7 @@ export class QuestionController {
       order: [Sequelize.fn("RANDOM")],
       limit: 1,
     });
+
     if (codeQuestions.length === 0) {
       codeQuestions = await CodeQuestion.findAll({
         where: {

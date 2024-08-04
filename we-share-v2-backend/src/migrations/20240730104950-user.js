@@ -13,7 +13,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      username: {
+      full_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -21,12 +21,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      status: {
+        type: Sequelize.ENUM("ACTIVE", "INACTIVE"),
+        defaultValue: "ACTIVE",
+        allowNull: false,
       },
-      exam_id: {
-        type: Sequelize.STRING,
+      role: {
+        type: Sequelize.ENUM("ADMIN", "USER"),
+        defaultValue: "USER",
         allowNull: false,
       },
       created_at: {
