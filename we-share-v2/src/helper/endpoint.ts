@@ -12,3 +12,10 @@ export const questionEndPoints = {
     addCodeQuestion: `${baseUrl}/api/questions/add/codequestions`,
     getRandomQuestions: `${baseUrl}/api/questions/get/questioncollections`,
 };
+
+export const userEndPoints = {
+    addUsers: `${baseUrl}/api/users/add`,
+    getUsers: `${baseUrl}/api/users/get`,
+    updateUser: `${baseUrl}/api/users/update`,
+    deleteUser: `${baseUrl}/api/users/delete`,
+};

@@ -69,8 +69,7 @@ const MCQQuestionsAdd: React.FC<{
                         .min(0, 'Select a valid option'),
                 })
             )
-            .min(1, 'At least one question is required')
-            .required('Questions are required'),
+
     });
 
     const handleSubmit = async (
@@ -122,7 +121,9 @@ const MCQQuestionsAdd: React.FC<{
                                                 <Button
                                                     variant="danger"
                                                     handleBtnClick={() =>
+
                                                         remove(index)
+
                                                     }
                                                     className="absolute top-[-12px] right-0"
                                                 >
@@ -169,7 +170,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                         <Button
                                                                             variant={
                                                                                 item.correctOptionIndex ===
-                                                                                optionIndex
+                                                                                    optionIndex
                                                                                     ? 'primary'
                                                                                     : 'secondary'
                                                                             }
@@ -182,7 +183,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                             className="w-[16rem]"
                                                                         >
                                                                             {item.correctOptionIndex ===
-                                                                            optionIndex
+                                                                                optionIndex
                                                                                 ? 'Correct'
                                                                                 : 'Set as Correct'}
                                                                         </Button>
@@ -197,12 +198,12 @@ const MCQQuestionsAdd: React.FC<{
                                                         )}
                                                         {item.options.length <
                                                             4 && (
-                                                            <div className="text-red-500 mt-2">
-                                                                At least four
-                                                                options are
-                                                                required
-                                                            </div>
-                                                        )}
+                                                                <div className="text-red-500 mt-2">
+                                                                    At least four
+                                                                    options are
+                                                                    required
+                                                                </div>
+                                                            )}
                                                         <Button
                                                             variant="primary"
                                                             handleBtnClick={() =>
@@ -223,11 +224,7 @@ const MCQQuestionsAdd: React.FC<{
                                                 className="text-red-500 mt-2"
                                             />
 
-                                            <ErrorMessage
-                                                name="questions"
-                                                component="div"
-                                                className="text-red-500 my-2"
-                                            />
+
                                         </div>
                                     ))}
                                     <div className="flex justify-start gap-5">

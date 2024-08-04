@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaUserPlus } from 'react-icons/fa';
 import { AiOutlineSetting } from 'react-icons/ai';
 
 const Sidebar: React.FC = () => {
@@ -8,7 +8,7 @@ const Sidebar: React.FC = () => {
 
     const menuItems = [
         { path: '/dashboard', label: 'Dashboard', icon: <FaHome /> },
-        { path: '/', label: 'Options', icon: <AiOutlineSetting /> },
+        { path: '/manage-user', label: 'Manage User', icon: <FaUserPlus /> },
         {
             path: '/quiz-manage',
             label: 'Quiz Manage',
