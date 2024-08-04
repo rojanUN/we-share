@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import Button from './Button';
 
 interface ModalType {
     isOpen: boolean;
     title: string;
     isSubmissionModal?: boolean;
+    isConfirmationModal?: boolean;
     onClose: () => void;
+    onConfirmationSubmit?: (e: FormEvent<Element>) => void;
     handleSubmit?: () => void;
     children: React.ReactNode;
 }
@@ -13,8 +15,10 @@ interface ModalType {
 const Modal = ({
     isOpen,
     isSubmissionModal,
+    isConfirmationModal,
     onClose,
     handleSubmit,
+    onConfirmationSubmit,
     title,
     children,
 }: ModalType) => {
@@ -44,6 +48,10 @@ const Modal = ({
                     <Button variant="danger" handleBtnClick={onClose} outline>
                         {isSubmissionModal ? 'Cancel' : 'Close'}
                     </Button>
+
+                    {isConfirmationModal && <Button variant="primary" handleBtnClick={onConfirmationSubmit} outline>
+                        Yes
+                    </Button>}
                     {isSubmissionModal && handleSubmit && (
                         <Button variant="primary" handleBtnClick={handleSubmit}>
                             submit

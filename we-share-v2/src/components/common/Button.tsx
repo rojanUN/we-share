@@ -6,7 +6,7 @@ interface ButtonType {
     outline?: boolean;
     type?: 'button' | 'submit' | 'reset';
     className?: string;
-    handleBtnClick: (e: React.FormEvent) => void;
+    handleBtnClick?: (e: React.FormEvent) => void;
 }
 
 function Button({

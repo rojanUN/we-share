@@ -35,7 +35,6 @@ const ExamPortal = function ExamPortal() {
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const questionStore = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
-
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [soundLevel, setSoundLevel] = useState(0);

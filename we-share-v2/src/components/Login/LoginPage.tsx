@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginForm from './LoginForm';
-import Image from "../../assets/Images/onlineexamimage.jpg";
+import Image from '../../assets/Images/onlineexamimage.jpg';
 
 const LoginPage: React.FC = () => {
     return (
@@ -13,7 +13,6 @@ const LoginPage: React.FC = () => {
                 <LoginForm />
             </div>
         </div>
-
     );
 };
 
