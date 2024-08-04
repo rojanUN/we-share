@@ -12,12 +12,16 @@ const initialState: QuestionStateType = {
     questions: [],
     checkedQuestions: [],
     showToast: false,
+    outOfViewCount: 0,
 };
 
 export const examSlice = createSlice({
     name: 'exam',
     initialState,
     reducers: {
+        setOutOfViewCount: (state, action: PayloadAction<number>) => {
+            state.outOfViewCount = action.payload;
+        },
         setShowToast: (state, action: PayloadAction<boolean>) => {
             state.showToast = action.payload;
         },
@@ -44,5 +48,6 @@ export const {
     setQuestions,
     setCheckedQuestions,
     setShowToast,
+    setOutOfViewCount,
 } = examSlice.actions;
 export default examSlice.reducer;

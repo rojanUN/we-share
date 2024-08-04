@@ -26,6 +26,7 @@ export interface CheckedQuestionType {
     id: number;
     selectedOption: string | null;
     selectedOptionIndex: number;
+    correctAnswer: number;
 }
 export interface IBlazeFaceModel {
     estimateFaces(input: any, returnTensors: boolean): Promise<any>;
@@ -43,6 +44,7 @@ export interface QuestionStateType {
     questions?: Question[] | null;
     checkedQuestions?: CheckedQuestionType[] | null;
     showToast?: boolean | null;
+    outOfViewCount?: number | null;
 }
 enum CustomError {
     webCamError = 'webCamError',

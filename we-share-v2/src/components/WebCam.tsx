@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 // import { detectNoise } from '../helper/helper';
 import { Toast } from '../helper/toast';
 import { CustomError } from '../types/question';
@@ -6,7 +6,8 @@ import '@tensorflow/tfjs';
 import { FacePrediction } from '../types/question';
 
 import { getModel } from '../helper/loadModelHelper';
-import { useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setOutOfViewCount } from '../feature/exam/examSlice';
 
 const WebCam = ({
     isModelsLoaded,
@@ -20,7 +21,11 @@ const WebCam = ({
     const videoRef = useRef<HTMLVideoElement>(null);
     const mediaStreamRef = useRef<MediaStream | null>(null);
     const showToast = useAppSelector((state) => state.exam.showToast);
+    const outOfViewCount = useAppSelector(
+        (state) => state.exam.outOfViewCount ?? 0
+    );
     const isDeviceCheckedRef = useRef<boolean>(isDeviceChecked ?? false);
+    const dispatch = useAppDispatch();
 
     // Update the ref when the prop changes
     useEffect(() => {
@@ -127,6 +132,7 @@ const WebCam = ({
                         const isLookingAtScreen =
                             isHorizontallyCentered && isVerticallyCentered;
                         if (!isLookingAtScreen && showToastOnce) {
+                            dispatch(setOutOfViewCount(outOfViewCount + 1));
                             showToastOnce = false;
                             showToast &&
                                 Toast.Error(

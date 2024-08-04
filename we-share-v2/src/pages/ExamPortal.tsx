@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Alert from '../components/common/Alert';
 import { getModel, loadModel } from '../helper/loadModelHelper';
 import DetectNoise from '../components/DetectNoise';
-import ErrorBoundary from '../components/ErrorBoundary';
+// import ErrorBoundary from '../components/ErrorBoundary';
 import { Toast } from '../helper/toast';
 import MCQQuestionView from '../components/MCQQuestionView';
 import CodeMirrorView from '../components/CodeMirrorView';
@@ -36,12 +36,37 @@ const ExamPortal = function ExamPortal() {
     const questionStore = useAppSelector((state) => state.exam);
     const dispatch = useAppDispatch();
     const [fullScreenExitedCount, setfullscreenExitedCount] = useState(0);
+    const [highNoiseCount, setHighNoiseCount] = useState(0);
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [soundLevel, setSoundLevel] = useState(0);
 
     useEffect(() => {
         dispatch(setShowToast(true));
     }, []);
+    // console.log(questionStore?.checkedQuestions, 'ke ke do you love');
+
+    const handleMCQSubmit = useCallback(() => {
+        const examData = {
+            fullScreenExitedCount,
+            highNoiseCount,
+            outOfViewCount: questionStore?.outOfViewCount,
+            solvedQuestions: questionStore?.checkedQuestions,
+        };
+        console.log(examData, 'exam Data>>>');
+        setCountDownTimer(examDuration || 3600);
+        SessionStorage.removeAllSession();
+        dispatch(setCheckedQuestions([]));
+
+        exitFullscreen();
+        setIsModalOpen(false);
+        navigate('/exam-completed');
+    }, [
+        dispatch,
+        navigate,
+        examDuration,
+        questionStore,
+        fullScreenExitedCount,
+    ]);
 
     useEffect(() => {
         const model = getModel();
@@ -65,20 +90,6 @@ const ExamPortal = function ExamPortal() {
             mediaQuery.removeEventListener('change', handleMediaQueryChange);
         };
     }, [fullScreenExitedCount]);
-
-    const handleMCQSubmit = useCallback(() => {
-        setCountDownTimer(examDuration || 30);
-        SessionStorage.removeAllSession();
-        dispatch(setCheckedQuestions([]));
-
-        // if (questionStore?.questions) {
-        //     setquestionStore(questionStore.questions[0]);
-        // }
-
-        exitFullscreen();
-        setIsModalOpen(false);
-        navigate('/exam-completed');
-    }, [dispatch, navigate]);
 
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -112,12 +123,12 @@ const ExamPortal = function ExamPortal() {
     }, [coutdownTime, handleMCQSubmit]);
 
     // Retrieve the saved state from sessionStorage when the component mounts
-    useEffect(() => {
-        const savedState = SessionStorage.getSessionItem('questionsState');
-        if (savedState) {
-            dispatch(setCheckedQuestions(JSON.parse(savedState)));
-        }
-    }, [dispatch]);
+    // useEffect(() => {
+    //     const savedState = SessionStorage.getSessionItem('questionsState');
+    //     if (savedState) {
+    //         dispatch(setCheckedQuestions(JSON.parse(savedState)));
+    //     }
+    // }, [dispatch]);
 
     const [showToastOnce, setShowToastOnce] = useState(false);
     const closePreviousToast = () => {
@@ -125,6 +136,7 @@ const ExamPortal = function ExamPortal() {
     };
     useEffect(() => {
         if (soundLevel > 50 && !showToastOnce) {
+            setHighNoiseCount((prev) => prev + 1);
             Toast.Error(
                 'High noise detected',
                 CustomError.audioError,
@@ -164,9 +176,9 @@ const ExamPortal = function ExamPortal() {
                 </div>
                 <QuestionNav />
             </div>
-            <ErrorBoundary>
-                <DetectNoise setSoundLevel={setSoundLevel} />
-            </ErrorBoundary>
+            {/* <ErrorBoundary> */}
+            <DetectNoise setSoundLevel={setSoundLevel} />
+            {/* </ErrorBoundary> */}
             <div className="flex-[6_6_0%] px-6 h-full bg-custom-gradient grid place-items-center">
                 <div className="flex flex-col h-max w-full md:min-w-[70%] bg-white rounded-[20px] px-10 py-2">
                     <div className="h-20 mb-3 w-full flex justify-between items-center">
