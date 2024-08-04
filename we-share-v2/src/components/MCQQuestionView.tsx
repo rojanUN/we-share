@@ -38,6 +38,7 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
         selectedOption,
         selectedOptionIndex,
         correctAnswer,
+        category,
     }: CheckedQuestionType) => {
         const existingQuestion = questionStore?.checkedQuestions?.find(
             (q) => q.id === id
@@ -53,6 +54,7 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                           selectedOption,
                           selectedOptionIndex,
                           correctAnswer,
+                          category,
                       }
                     : q
             );
@@ -65,6 +67,7 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                     selectedOption,
                     selectedOptionIndex,
                     correctAnswer,
+                    category,
                 },
             ];
         }
@@ -101,6 +104,9 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                                     correctAnswer:
                                         questionStore?.selectedQuestion
                                             ?.correctAnswer!,
+                                    category:
+                                        questionStore.selectedQuestion
+                                            ?.category,
                                 })
                             }
                             checkedQuestions={questionStore?.checkedQuestions!}
