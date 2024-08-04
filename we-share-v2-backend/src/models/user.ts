@@ -13,7 +13,7 @@ const User = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    fullName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -21,14 +21,16 @@ const User = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    password: {
-      type: Sequelize.STRING,
+    status: {
+      type: Sequelize.ENUM("ACTIVE", "INACTIVE"),
       allowNull: false,
+      defaultValue: "ACTIVE"
     },
-    examId: {
-      type: Sequelize.STRING,
+    role: {
+      type: Sequelize.ENUM("ADMIN", "USER"),
       allowNull: false,
-    },
+      defaultValue: "USER"
+    }
   },
   {
     timestamps: true,
