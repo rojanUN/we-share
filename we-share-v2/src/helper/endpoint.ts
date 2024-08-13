@@ -1,3 +1,5 @@
+import { searchUsers } from "../services/examService";
+
 const baseUrl = import.meta.env.VITE_API_URL;
 
 export const examEndpoints = {
@@ -6,6 +8,17 @@ export const examEndpoints = {
     getSubmissionDetails: `${baseUrl}/api/problems/get/submission`,
     getMultipleQuestions: `${baseUrl}/api/problems/get/multiple`,
 };
+
+export const examScheduleEndpoints = {
+    getExams: `${baseUrl}/api/exams/get-exam`,
+    addExams: `${baseUrl}/api/exams/add-exam`,
+    scheduleExams: `${baseUrl}/api/exams/schedule-exam`,
+    unscheduleExam: `${baseUrl}/api/exams/unschedule-exam`,
+}
+
+export const authEndPoints = {
+    loginExam: `${baseUrl}/api/exams/login-exam`,
+}
 
 export const questionEndPoints = {
     addMCQQuestion: `${baseUrl}/api/questions/add/mcqquestions`,
@@ -18,4 +31,6 @@ export const userEndPoints = {
     getUsers: `${baseUrl}/api/users/get`,
     updateUser: `${baseUrl}/api/users/update`,
     deleteUser: `${baseUrl}/api/users/delete`,
+
+    searchUsers: `${baseUrl}/api/users/search`,
 };

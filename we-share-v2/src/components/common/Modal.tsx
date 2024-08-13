@@ -49,9 +49,15 @@ const Modal = ({
                         {isSubmissionModal ? 'Cancel' : 'Close'}
                     </Button>
 
-                    {isConfirmationModal && <Button variant="primary" handleBtnClick={onConfirmationSubmit} outline>
-                        Yes
-                    </Button>}
+                    {isConfirmationModal && (
+                        <Button
+                            variant="primary"
+                            handleBtnClick={onConfirmationSubmit}
+                            outline
+                        >
+                            Yes
+                        </Button>
+                    )}
                     {isSubmissionModal && handleSubmit && (
                         <Button variant="primary" handleBtnClick={handleSubmit}>
                             submit

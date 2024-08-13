@@ -1,7 +1,16 @@
 import { useState } from 'react';
-import { FaAngleLeft, FaAngleRight, FaEdit, FaThumbsDown, FaThumbsUp, FaTrash } from 'react-icons/fa';
+import {
+    FaAngleLeft,
+    FaAngleRight,
+    FaChevronRight,
+    FaEdit,
+    FaThumbsDown,
+    FaThumbsUp,
+    FaTrash,
+} from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { UserInterface } from '../../interfaces/UserInterface';
+import { searchUsers } from '../../services/examService';
 interface UserTableProps {
     users: UserInterface[];
     onEdit: (userId: UserInterface) => void;
@@ -9,30 +18,30 @@ interface UserTableProps {
     onToggleStatus: (id: number) => void;
 }
 
-const UserTable = ({ users, onEdit, onDelete, onToggleStatus }: UserTableProps) => {
+const UserTable = ({
+    users,
+    onEdit,
+    onDelete,
+    onToggleStatus,
+}: UserTableProps) => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const usersPerPage = 10;
     const pageCount = Math.ceil(users.length / usersPerPage);
     const offset = currentPage * usersPerPage;
     const currentUsers = users.slice(offset, offset + usersPerPage);
 
-    console.log("this is userst", users);
 
     const handlePageClick = ({ selected }: { selected: number }) => {
         setCurrentPage(selected);
     };
 
     return (
-        <div className='border-[1px] border-solid border-gray-200 mt-2 rounded-[8px]'>
-
-
-            {/* <div className='flex items-center flex-row gap-1 p-4'>
+        <div className="border-[1px] border-solid border-gray-200 mt-2 rounded-[8px]">
+            <div className='flex items-center flex-row gap-1 p-4'>
                 <h2>User Table</h2>
                 <FaChevronRight fontSize={20} />
-            </div> */}
+            </div>
             <div className="max-h-[40rem] overflow-y-auto">
-
-
                 <table className="min-w-full bg-white">
                     <thead className="bg-gray-200 sticky top-0 z-10 h-16">
                         <tr>
@@ -44,13 +53,22 @@ const UserTable = ({ users, onEdit, onDelete, onToggleStatus }: UserTableProps) 
                         </tr>
                     </thead>
                     <tbody>
-                        {users.length === 0 ? <tr><td colSpan={5} className='text-center'>No Users found</td></tr> :
-
-
-                            currentUsers && currentUsers.reverse()?.map((user, index) => (
-
-                                <tr key={user.id} className="text-center border-b-2">
-                                    <td className="py-2">{offset + index + 1}</td>
+                        {(users.length === 0) ? (
+                            <tr>
+                                <td colSpan={5} className="text-center">
+                                    No Users found
+                                </td>
+                            </tr>
+                        ) : (
+                            currentUsers &&
+                            currentUsers.reverse()?.map((user, index) => (
+                                <tr
+                                    key={user.id}
+                                    className="text-center border-b-2"
+                                >
+                                    <td className="py-2">
+                                        {offset + index + 1}
+                                    </td>
                                     <td className="py-2">{user.fullName}</td>
                                     <td className="py-2">{user.email}</td>
                                     <td className="py-2">{user.status}</td>
@@ -68,15 +86,21 @@ const UserTable = ({ users, onEdit, onDelete, onToggleStatus }: UserTableProps) 
                                             <FaTrash />
                                         </button>
                                         <button
-                                            className={`${user?.status === "active" ? `bg-red-500` : `bg-blue-400`} text-white ml-2 px-4 py-2 rounded`}
-                                            onClick={() => onToggleStatus(user.id)}
+                                            className={`${user?.status === 'active' ? `bg-red-500` : `bg-blue-400`} text-white ml-2 px-4 py-2 rounded`}
+                                            onClick={() =>
+                                                onToggleStatus(user.id)
+                                            }
                                         >
-                                            {user?.status === "active" ? <FaThumbsDown /> : <FaThumbsUp />}
+                                            {user?.status === 'ACTIVE' ? (
+                                                <FaThumbsDown />
+                                            ) : (
+                                                <FaThumbsUp />
+                                            )}
                                         </button>
                                     </td>
                                 </tr>
                             ))
-                        }
+                        )}
                     </tbody>
                 </table>
             </div>

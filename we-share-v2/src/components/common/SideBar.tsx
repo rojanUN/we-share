@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
             label: 'Quiz Manage',
             icon: <AiOutlineSetting />,
         },
-        { path: '/', label: 'Options', icon: <AiOutlineSetting /> },
+        { path: '/add-exam', label: 'Exam Manage', icon: <AiOutlineSetting /> },
         { path: '/', label: 'Options', icon: <AiOutlineSetting /> },
         { path: '/', label: 'Options', icon: <AiOutlineSetting /> },
     ];

@@ -14,9 +14,11 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ExamManage from './components/Dashboard/Exam/ExamManage';
 import LoginPage from './components/Login/LoginPage';
 import ManageUsers from './components/Users/ManageUsers';
+import ManageExams from './components/Dashboard/Exam/ExamManage/ManageExams';
+import PrivateRoute from './components/Routes/PrivateRoutes';
 
 const App = () => {
-    const [canAccessExamPortal, setCanAccessExamPortal] = useState(false);
+    const [canAccessExamPortal, setCanAccessExamPortal] = useState(true);
 
     const router = createBrowserRouter([
         {
@@ -25,11 +27,21 @@ const App = () => {
         },
         {
             path: '/exam-playground',
-            element: <ExamDeviceCheck setCanAccessExamPortal={setCanAccessExamPortal} />,
+            element: (
+                <ExamDeviceCheck
+                    setCanAccessExamPortal={setCanAccessExamPortal}
+                />
+            ),
         },
         {
             path: '/exam-portal',
-            element: canAccessExamPortal ? <ExamPortal /> : <ExamDeviceCheck setCanAccessExamPortal={setCanAccessExamPortal} />,
+            element: canAccessExamPortal ? (
+                <ExamPortal />
+            ) : (
+                <ExamDeviceCheck
+                    setCanAccessExamPortal={setCanAccessExamPortal}
+                />
+            ),
         },
         {
             path: '/exam-completed',
@@ -41,19 +53,33 @@ const App = () => {
         },
         {
             path: '/',
-            element: <Layout />,
+
+            // element: (<PrivateRoute><Layout /> </PrivateRoute>),
+            element: (<Layout />),
             children: [
                 {
                     path: '/dashboard',
-                    element: <Dashboard />,
+                    element: (
+                        <Dashboard />
+                    ),
                 },
                 {
                     path: '/quiz-manage',
-                    element: <ExamManage />,
+                    element: (
+                        <ExamManage />
+                    ),
                 },
                 {
                     path: '/manage-user',
-                    element: <ManageUsers />
+                    element: (
+                        <ManageUsers />
+                    ),
+                },
+                {
+                    path: '/add-exam',
+                    element: (
+                        <ManageExams />
+                    ),
                 }
             ],
         },
@@ -79,6 +105,7 @@ const App = () => {
         </React.StrictMode>
     );
 };
+
 export default App;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
