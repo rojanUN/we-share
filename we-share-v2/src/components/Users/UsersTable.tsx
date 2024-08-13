@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+import { UserInterface } from "../../interfaces/UserInterface";
+import { searchUsers } from "../../services/examService";
+
 import {
     FaAngleLeft,
     FaAngleRight,
@@ -8,9 +12,6 @@ import {
     FaThumbsUp,
     FaTrash,
 } from 'react-icons/fa';
-import ReactPaginate from 'react-paginate';
-import { UserInterface } from '../../interfaces/UserInterface';
-import { searchUsers } from '../../services/examService';
 interface UserTableProps {
     users: UserInterface[];
     onEdit: (userId: UserInterface) => void;
