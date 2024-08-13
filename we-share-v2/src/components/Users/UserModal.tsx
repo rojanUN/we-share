@@ -27,7 +27,7 @@ const UserModal = ({ user, onClose, onSave, onUpdated }: UserModalProps) => {
         await addUsers({ id: user?.id, fullName, email })
             .then((_) => {
                 onSave({ id: user?.id, fullName, email });
-                onUpdated()
+                onUpdated();
 
                 Toast.Success('User Added Successfully');
             })

@@ -22,10 +22,10 @@ const ManageUsers = () => {
             users.map((user) =>
                 user.id === userId
                     ? {
-                        ...user,
-                        status:
-                            user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
-                    }
+                          ...user,
+                          status:
+                              user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                      }
                     : user
             )
         );
@@ -59,24 +59,37 @@ const ManageUsers = () => {
 
     const debouncedSearch = useDebounce(search, 300);
     const searchusers = async () => {
-        console.log(debouncedSearch, "this is seach debounced text");
+        console.log(debouncedSearch, 'this is seach debounced text');
         const response = await searchUsers({ searchText: debouncedSearch });
         if (response) {
             setUsers(response);
         }
-    }
+    };
 
     useEffect(() => {
-        console.log("called")
-        searchusers()
-    }, [debouncedSearch])
+        console.log('called');
+        searchusers();
+    }, [debouncedSearch]);
 
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between">
                 <div className="flex flex-row gap-2">
-                    <input type="text" name="search" value={search} placeholder="Search Users" onChange={(e) => setSearch(e.target.value)} id="search" className="border border-gray-300 p-2 rounded" />
-                    <Button variant="secondary" handleBtnClick={() => setSearch("")}>Reset</Button>
+                    <input
+                        type="text"
+                        name="search"
+                        value={search}
+                        placeholder="Search Users"
+                        onChange={(e) => setSearch(e.target.value)}
+                        id="search"
+                        className="border border-gray-300 p-2 rounded"
+                    />
+                    <Button
+                        variant="secondary"
+                        handleBtnClick={() => setSearch('')}
+                    >
+                        Reset
+                    </Button>
                 </div>
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded"

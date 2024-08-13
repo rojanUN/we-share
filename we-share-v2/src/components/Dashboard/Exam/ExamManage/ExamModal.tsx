@@ -7,7 +7,6 @@ import { Toast } from '../../../../helper/toast';
 interface ExamInfoProps {
     onClose: () => void;
     onExamAdded: () => void;
-
 }
 
 const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
@@ -16,29 +15,34 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
     const validationSchema = Yup.object().shape({
         examTitle: Yup.string().required('Exam Title is required'),
         examDescription: Yup.string().required('Exam Description is required'),
-        mcqMarks: Yup.number().required('MCQ Question Marks are required').min(1, 'Must be greater than 0'),
+        mcqMarks: Yup.number()
+            .required('MCQ Question Marks are required')
+            .min(1, 'Must be greater than 0'),
         easyMarks: Yup.number().when('includeCodeQuestions', {
             is: true,
-            then: Yup.number().required('Code Questions Easy Marks are required').min(1, 'Must be greater than 0')
+            then: Yup.number()
+                .required('Code Questions Easy Marks are required')
+                .min(1, 'Must be greater than 0'),
         }),
         mediumMarks: Yup.number().when('includeCodeQuestions', {
             is: true,
-            then: Yup.number().required('Code Questions Medium and Hard Marks are required').min(1, 'Must be greater than 0')
+            then: Yup.number()
+                .required('Code Questions Medium and Hard Marks are required')
+                .min(1, 'Must be greater than 0'),
         }),
     });
 
     const handleSubmit = async (values: any) => {
-
         const createExam = await addExam(values, includeCodeQuestions);
         if (createExam) {
-            Toast.Success("Exam added successfully");
+            Toast.Success('Exam added successfully');
             onExamAdded();
 
             onClose();
             return;
         }
-        Toast.Error("Error adding Exams");
-    }
+        Toast.Error('Error adding Exams');
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -53,7 +57,6 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                         easyMarks: 0,
                         mediumMarks: 0,
                         includeCodeQuestions: false,
-
                     }}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
@@ -67,55 +70,89 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     name="examTitle"
                                     className="w-full p-2 border"
                                 />
-                                <ErrorMessage name="examTitle" component="div" className="text-red-500" />
+                                <ErrorMessage
+                                    name="examTitle"
+                                    component="div"
+                                    className="text-red-500"
+                                />
                             </div>
                             <div className="mb-4">
-                                <label className="block mb-2">Exam Description</label>
+                                <label className="block mb-2">
+                                    Exam Description
+                                </label>
                                 <Field
                                     as="textarea"
                                     name="examDescription"
                                     className="w-full p-2 border"
                                 />
-                                <ErrorMessage name="examDescription" component="div" className="text-red-500" />
+                                <ErrorMessage
+                                    name="examDescription"
+                                    component="div"
+                                    className="text-red-500"
+                                />
                             </div>
                             <div className="mb-4">
-                                <label className="block mb-2">MCQ Question Marks</label>
+                                <label className="block mb-2">
+                                    MCQ Question Marks
+                                </label>
                                 <Field
                                     type="number"
                                     name="mcqMarks"
                                     className="w-full p-2 border"
                                 />
-                                <ErrorMessage name="mcqMarks" component="div" className="text-red-500" />
+                                <ErrorMessage
+                                    name="mcqMarks"
+                                    component="div"
+                                    className="text-red-500"
+                                />
                             </div>
                             <div className="mb-4">
-                                <label className="block mb-2">Include Code Questions</label>
+                                <label className="block mb-2">
+                                    Include Code Questions
+                                </label>
                                 <Field
                                     type="checkbox"
                                     name="includeCodeQuestions"
                                     checked={values.includeCodeQuestions}
-                                    onChange={() => setIncludeCodeQuestions(!includeCodeQuestions)}
+                                    onChange={() =>
+                                        setIncludeCodeQuestions(
+                                            !includeCodeQuestions
+                                        )
+                                    }
                                     className="ml-2"
                                 />
                             </div>
                             {includeCodeQuestions && (
                                 <>
                                     <div className="mb-4">
-                                        <label className="block mb-2">Code Questions Easy Marks</label>
+                                        <label className="block mb-2">
+                                            Code Questions Easy Marks
+                                        </label>
                                         <Field
                                             type="number"
                                             name="easyMarks"
                                             className="w-full p-2 border"
                                         />
-                                        <ErrorMessage name="easyMarks" component="div" className="text-red-500" />
+                                        <ErrorMessage
+                                            name="easyMarks"
+                                            component="div"
+                                            className="text-red-500"
+                                        />
                                     </div>
                                     <div className="mb-4">
-                                        <label className="block mb-2">Code Questions Medium and Hard Marks</label>
+                                        <label className="block mb-2">
+                                            Code Questions Medium and Hard Marks
+                                        </label>
                                         <Field
                                             type="number"
                                             name="mediumMarks"
                                             className="w-full p-2 border"
                                         />
-                                        <ErrorMessage name="mediumMarks" component="div" className="text-red-500" />
+                                        <ErrorMessage
+                                            name="mediumMarks"
+                                            component="div"
+                                            className="text-red-500"
+                                        />
                                     </div>
                                 </>
                             )}

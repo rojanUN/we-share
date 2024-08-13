@@ -55,32 +55,24 @@ const App = () => {
             path: '/',
 
             // element: (<PrivateRoute><Layout /> </PrivateRoute>),
-            element: (<Layout />),
+            element: <Layout />,
             children: [
                 {
                     path: '/dashboard',
-                    element: (
-                        <Dashboard />
-                    ),
+                    element: <Dashboard />,
                 },
                 {
                     path: '/quiz-manage',
-                    element: (
-                        <ExamManage />
-                    ),
+                    element: <ExamManage />,
                 },
                 {
                     path: '/manage-user',
-                    element: (
-                        <ManageUsers />
-                    ),
+                    element: <ManageUsers />,
                 },
                 {
                     path: '/add-exam',
-                    element: (
-                        <ManageExams />
-                    ),
-                }
+                    element: <ManageExams />,
+                },
             ],
         },
     ]);

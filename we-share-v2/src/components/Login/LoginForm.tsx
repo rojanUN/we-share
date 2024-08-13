@@ -1,10 +1,10 @@
-import * as Yup from "yup";
-import React from "react";
-import { useFormik } from "formik";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { SessionStorage } from "../../helper/sessionStorage";
-import { Toast } from "../../helper/toast";
-import { loginExam } from "../../services/examService";
+import * as Yup from 'yup';
+import React from 'react';
+import { useFormik } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { SessionStorage } from '../../helper/sessionStorage';
+import { Toast } from '../../helper/toast';
+import { loginExam } from '../../services/examService';
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
@@ -28,23 +28,27 @@ const LoginForm: React.FC = () => {
         onSubmit: async (values) => {
             console.log(values.email, values.password, token);
             if (token) {
-                console.log("this is token", token);
-                const login = await loginExam({ email: values.email, password: values.password, token });
+                console.log('this is token', token);
+                const login = await loginExam({
+                    email: values.email,
+                    password: values.password,
+                    token,
+                });
                 if (login?.success === true) {
                     Toast.Success(login.message);
-                    SessionStorage.setSessionItem("token", token);
-                    navigate("/exam-playground");
+                    SessionStorage.setSessionItem('token', token);
+                    navigate('/exam-playground');
                 } else {
                     Toast.Error(login?.message);
                 }
             } else {
-                Toast.Error("token not found");
+                Toast.Error('token not found');
             }
         },
     });
 
     return (
-        <div className="flex-1 p-10 md:p-16 " >
+        <div className="flex-1 p-10 md:p-16 ">
             <div className="max-w-md w-full space-y-6">
                 <div className="flex justify-center">
                     <svg
@@ -93,7 +97,9 @@ const LoginForm: React.FC = () => {
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         />
                         {formik.touched.email && formik.errors.email ? (
-                            <div className="text-red-600 text-sm">{formik.errors.email}</div>
+                            <div className="text-red-600 text-sm">
+                                {formik.errors.email}
+                            </div>
                         ) : null}
                     </div>
                     <div className="relative mt-2">
@@ -114,7 +120,9 @@ const LoginForm: React.FC = () => {
                             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         />
                         {formik.touched.password && formik.errors.password ? (
-                            <div className="text-red-600 text-sm">{formik.errors.password}</div>
+                            <div className="text-red-600 text-sm">
+                                {formik.errors.password}
+                            </div>
                         ) : null}
                     </div>
 

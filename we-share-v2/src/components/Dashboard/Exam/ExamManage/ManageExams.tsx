@@ -10,7 +10,6 @@ const ManageExams = () => {
     const [exam, setExams] = useState<ExamInterface[] | []>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-
     const getExamData = async () => {
         const response = await getExam();
         setExams(response);
@@ -19,7 +18,6 @@ const ManageExams = () => {
     useEffect(() => {
         getExamData();
     }, []);
-
 
     return (
         <div className="container mx-auto p-4">
@@ -35,17 +33,12 @@ const ManageExams = () => {
                     </div>
                 </button>
             </div>
-            <ExamTable
-                exams={exam}
-                onUpdated={getExamData}
-
-            />
+            <ExamTable exams={exam} onUpdated={getExamData} />
             {isModalOpen && (
                 <div>
                     <ExamInfo
                         onClose={() => setIsModalOpen(false)}
                         onExamAdded={getExamData}
-
                     />
                 </div>
             )}

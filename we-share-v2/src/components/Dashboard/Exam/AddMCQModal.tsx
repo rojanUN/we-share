@@ -34,9 +34,9 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({
 
     const handlePrevStep = () => {
         if (step !== 1) {
-            setStep(step - 1)
+            setStep(step - 1);
         }
-    }
+    };
 
     if (!isOpen) return null;
 
@@ -65,7 +65,6 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({
                     &times;
                 </button>
                 <div>
-
                     {step === 1 && (
                         <MCQQuestionsAdd
                             nextStep={nextStep}

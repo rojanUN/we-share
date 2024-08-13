@@ -1,4 +1,4 @@
-import { searchUsers } from "../services/examService";
+import { searchUsers } from '../services/examService';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -14,11 +14,11 @@ export const examScheduleEndpoints = {
     addExams: `${baseUrl}/api/exams/add-exam`,
     scheduleExams: `${baseUrl}/api/exams/schedule-exam`,
     unscheduleExam: `${baseUrl}/api/exams/unschedule-exam`,
-}
+};
 
 export const authEndPoints = {
     loginExam: `${baseUrl}/api/exams/login-exam`,
-}
+};
 
 export const questionEndPoints = {
     addMCQQuestion: `${baseUrl}/api/questions/add/mcqquestions`,

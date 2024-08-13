@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-    FaAngleLeft,
-    FaAngleRight,
-    FaChevronRight,
-} from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa';
 import ReactPaginate from 'react-paginate';
 import { ExamInterface } from '../../../../interfaces/UserInterface';
 import Button from '../../../common/Button';
@@ -69,12 +65,10 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                     title="Cancel Exam"
                     onClose={() => setCloseModalOpen(false)}
                 >
-                    <div>
-                        Are you sure you want to cancel the exam?
-                    </div>
+                    <div>Are you sure you want to cancel the exam?</div>
                 </Modal>
             )}
-            <div className='flex items-center flex-row gap-1 p-4'>
+            <div className="flex items-center flex-row gap-1 p-4">
                 <h2>Exam Table</h2>
                 <FaChevronRight fontSize={20} />
             </div>
@@ -110,23 +104,35 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                                         {offset + index + 1}
                                     </td>
                                     <td className="py-2">{exam.examTitle}</td>
-                                    <td className="py-2">{exam.examDescription}</td>
-                                    <td className="py-2">{exam.mcqQuestionMarks}</td>
-                                    <td className="py-2">{exam.codeQuestionEasyMarks}</td>
-                                    <td className="py-2">{exam.codeQuestionMediumHardMarks}</td>
+                                    <td className="py-2">
+                                        {exam.examDescription}
+                                    </td>
+                                    <td className="py-2">
+                                        {exam.mcqQuestionMarks}
+                                    </td>
+                                    <td className="py-2">
+                                        {exam.codeQuestionEasyMarks}
+                                    </td>
+                                    <td className="py-2">
+                                        {exam.codeQuestionMediumHardMarks}
+                                    </td>
                                     <td className="py-2">{exam.totalMarks}</td>
-                                    <td className="py-2 px-1" align='center'>
+                                    <td className="py-2 px-1" align="center">
                                         {exam.existScheduleExam ? (
                                             <Button
                                                 variant="primary"
-                                                handleBtnClick={() => handleUnschedule(exam.id)}
+                                                handleBtnClick={() =>
+                                                    handleUnschedule(exam.id)
+                                                }
                                             >
                                                 Cancel Exam
                                             </Button>
                                         ) : (
                                             <Button
                                                 variant="primary"
-                                                handleBtnClick={() => handleSchedule(exam.id)}
+                                                handleBtnClick={() =>
+                                                    handleSchedule(exam.id)
+                                                }
                                             >
                                                 Schedule
                                             </Button>

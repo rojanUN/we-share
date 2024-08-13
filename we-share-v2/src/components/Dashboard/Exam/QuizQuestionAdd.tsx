@@ -166,7 +166,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                         <Button
                                                                             variant={
                                                                                 item.correctOptionIndex ===
-                                                                                    optionIndex
+                                                                                optionIndex
                                                                                     ? 'primary'
                                                                                     : 'secondary'
                                                                             }
@@ -179,7 +179,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                             className="w-[16rem]"
                                                                         >
                                                                             {item.correctOptionIndex ===
-                                                                                optionIndex
+                                                                            optionIndex
                                                                                 ? 'Correct'
                                                                                 : 'Set as Correct'}
                                                                         </Button>
@@ -194,12 +194,12 @@ const MCQQuestionsAdd: React.FC<{
                                                         )}
                                                         {item.options.length <
                                                             4 && (
-                                                                <div className="text-red-500 mt-2">
-                                                                    At least four
-                                                                    options are
-                                                                    required
-                                                                </div>
-                                                            )}
+                                                            <div className="text-red-500 mt-2">
+                                                                At least four
+                                                                options are
+                                                                required
+                                                            </div>
+                                                        )}
                                                         <Button
                                                             variant="primary"
                                                             handleBtnClick={() =>

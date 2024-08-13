@@ -30,14 +30,13 @@ const UserTable = ({
     const offset = currentPage * usersPerPage;
     const currentUsers = users.slice(offset, offset + usersPerPage);
 
-
     const handlePageClick = ({ selected }: { selected: number }) => {
         setCurrentPage(selected);
     };
 
     return (
         <div className="border-[1px] border-solid border-gray-200 mt-2 rounded-[8px]">
-            <div className='flex items-center flex-row gap-1 p-4'>
+            <div className="flex items-center flex-row gap-1 p-4">
                 <h2>User Table</h2>
                 <FaChevronRight fontSize={20} />
             </div>
@@ -53,7 +52,7 @@ const UserTable = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {(users.length === 0) ? (
+                        {users.length === 0 ? (
                             <tr>
                                 <td colSpan={5} className="text-center">
                                     No Users found

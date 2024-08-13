@@ -32,7 +32,7 @@ export const submitMCQQuestions = async (questions: Question[]) => {
         questions: formattedQuestions,
     });
     if (response.data.message === 'MCQ questions added successfully')
-        console.log("hereee");
+        console.log('hereee');
     return true;
 };
 
@@ -41,13 +41,13 @@ export const submitCodeQuestions = async (questions: CodeQuestion[]) => {
         questions,
     });
     if (response.data.message === 'Code questions added successfully')
-        console.log("hereee");
+        console.log('hereee');
     return true;
 };
 
 export const getRandomQuestions = async () => {
     const URL = questionEndPoints.getRandomQuestions;
     const response: RandomQuestionResponse = await api.get(URL);
-    console.log("hereeeeeeeee");
+    console.log('hereeeeeeeee');
     return response;
 };
