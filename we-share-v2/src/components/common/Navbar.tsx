@@ -1,15 +1,13 @@
 import React from 'react';
 
-
-
 const Navbar: React.FC = () => {
-    const name = "Rohan Rana Magar";
-    const initials = name.split(" ").map(word => word[0].toUpperCase());
+    const name = 'Rohan Rana Magar';
+    const initials = name.split(' ').map((word) => word[0].toUpperCase());
 
-    const displayInitials = initials.length >= 2
-        ? initials.slice(0, 2).join("")
-        : initials[0] + initials[0];
-
+    const displayInitials =
+        initials.length >= 2
+            ? initials.slice(0, 2).join('')
+            : initials[0] + initials[0];
 
     return (
         <div className="bg-blue-900 text-white flex items-center justify-between p-4 md:p-6">

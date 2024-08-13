@@ -9,10 +9,14 @@ import { clearAllQuestions } from '../../../feature/questions/questionsSlice';
 interface AddMCQModalProps {
     isOpen: boolean;
     onClose: () => void;
-    setModalOpen: Dispatch<SetStateAction<boolean>>
+    setModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose, setModalOpen }) => {
+const AddMCQModal: React.FC<AddMCQModalProps> = ({
+    isOpen,
+    onClose,
+    setModalOpen,
+}) => {
     const [quizTitle, setQuizTitle] = useState('');
     const [quizDescription, setQuizDescription] = useState('');
     const [quizMarks, setQuizMarks] = useState('');
@@ -23,8 +27,7 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose, setModalOpen
         setModalOpen(false);
         setCloseModalOpen(false);
         dispatch(clearAllQuestions());
-
-    }
+    };
     const [step, setStep] = useState(1);
 
     const nextStep = () => setStep(step + 1);
@@ -33,9 +36,22 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose, setModalOpen
     if (!isOpen) return null;
 
     return (
-
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-            {closeModalOpen && <Modal isOpen={isOpen} onConfirmationSubmit={handleClose} isConfirmationModal isSubmissionModal title="Exit" onClose={() => setCloseModalOpen(false)}><div>Are you sure you want to exit? All entered datas will be lost</div></Modal>}
+            {closeModalOpen && (
+                <Modal
+                    isOpen={isOpen}
+                    onConfirmationSubmit={handleClose}
+                    isConfirmationModal
+                    isSubmissionModal
+                    title="Exit"
+                    onClose={() => setCloseModalOpen(false)}
+                >
+                    <div>
+                        Are you sure you want to exit? All entered datas will be
+                        lost
+                    </div>
+                </Modal>
+            )}
             <div className="relative bg-white p-6 w-full max-w-2xl h-full max-h-full overflow-y-auto">
                 <button
                     onClick={() => setCloseModalOpen(true)}
@@ -71,7 +87,7 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({ isOpen, onClose, setModalOpen
                     )}
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

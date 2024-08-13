@@ -25,11 +25,21 @@ const App = () => {
         },
         {
             path: '/exam-playground',
-            element: <ExamDeviceCheck setCanAccessExamPortal={setCanAccessExamPortal} />,
+            element: (
+                <ExamDeviceCheck
+                    setCanAccessExamPortal={setCanAccessExamPortal}
+                />
+            ),
         },
         {
             path: '/exam-portal',
-            element: canAccessExamPortal ? <ExamPortal /> : <ExamDeviceCheck setCanAccessExamPortal={setCanAccessExamPortal} />,
+            element: canAccessExamPortal ? (
+                <ExamPortal />
+            ) : (
+                <ExamDeviceCheck
+                    setCanAccessExamPortal={setCanAccessExamPortal}
+                />
+            ),
         },
         {
             path: '/exam-completed',
@@ -53,8 +63,8 @@ const App = () => {
                 },
                 {
                     path: '/manage-user',
-                    element: <ManageUsers />
-                }
+                    element: <ManageUsers />,
+                },
             ],
         },
     ]);

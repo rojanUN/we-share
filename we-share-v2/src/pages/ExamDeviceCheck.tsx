@@ -22,7 +22,11 @@ import DetectNoise from '../components/DetectNoise';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Loader from '../components/common/Loader';
 
-function ExamDeviceCheck({ setCanAccessExamPortal }: { setCanAccessExamPortal: React.Dispatch<React.SetStateAction<boolean>> }) {
+function ExamDeviceCheck({
+    setCanAccessExamPortal,
+}: {
+    setCanAccessExamPortal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [isDeviceChecked, setIsDeviceChecked] = useState(false);
@@ -276,7 +280,7 @@ function ExamDeviceCheck({ setCanAccessExamPortal }: { setCanAccessExamPortal: R
             getMediaStream();
         }
 
-        return () => { };
+        return () => {};
     }, [selectedAudioDevice, selectedVideoDevice]);
 
     return (
@@ -461,7 +465,7 @@ function ExamDeviceCheck({ setCanAccessExamPortal }: { setCanAccessExamPortal: R
                                 </p>
                             )}
                             {detectSoundOnceRef.current &&
-                                checkMicPermission ? (
+                            checkMicPermission ? (
                                 <p className="text-[#47a992]">
                                     Sound Detected Successfully.
                                 </p>

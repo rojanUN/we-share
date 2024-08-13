@@ -13,6 +13,7 @@ import Button from './common/Button';
 import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
 import { asyncHandler } from '../helper/helper';
 import {
+    CheckedQuestionSetType,
     LeetCodeQuestion,
     Question,
     SubmissionResponse,
@@ -27,6 +28,8 @@ import Modal from './common/Modal';
 import { Toast } from '../helper/toast';
 import CircularProgress from './common/CircularProgress';
 import CodeMirrorIDE from './common/CodeMirrorIDE';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setCheckedQuestions } from '../feature/exam/examSlice';
 
 const languages = [
     'JavaScript',
@@ -48,6 +51,10 @@ interface CodeMirrorViewType {
 
 function CodeMirrorView(props: CodeMirrorViewType) {
     const { activeQuestionIndex, question, questions } = props;
+    const dispatch = useAppDispatch();
+    const checkedQuestions = useAppSelector(
+        (state) => state.exam.checkedQuestions
+    );
     const [code, setCode] = useState(
         questions?.reduce((acc: any, question: any) => {
             acc[question && question.id] = '';
@@ -70,7 +77,13 @@ function CodeMirrorView(props: CodeMirrorViewType) {
     };
 
     const handleRunCodeBtnClick = asyncHandler(
-        async (slug: string, code: string, lang: string) => {
+        async (
+            slug: string,
+            code: string,
+            lang: string,
+            quesId: number,
+            category: string
+        ) => {
             setIsSubmitting(true);
             const response = await handleQuestonSubmission(
                 slug,
@@ -81,6 +94,25 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             const submissionDetails = await pollSubmissionDetails(
                 response?.data?.id
             );
+            const codeTestData = {
+                id: quesId,
+                category,
+                isSolved:
+                    submissionDetails.totalCorrect ===
+                    submissionDetails.totalTestcases
+                        ? true
+                        : false,
+                slug,
+            };
+            let checkedQuestionSet: CheckedQuestionSetType[] = [];
+            if (checkedQuestions) {
+                if (checkedQuestions.length > 0) {
+                    checkedQuestionSet = [...checkedQuestions, codeTestData];
+                } else {
+                    checkedQuestionSet = [codeTestData];
+                }
+            }
+            dispatch(setCheckedQuestions(checkedQuestionSet));
             console.log(submissionDetails, 'submsisson details');
             setSubmissionDetails(submissionDetails);
             setShowSubmissionModal(true);
@@ -169,7 +201,9 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                             handleRunCodeBtnClick(
                                 question!.question,
                                 code[question!.id],
-                                currentLanguage
+                                currentLanguage,
+                                question!.id,
+                                question!.category
                             )
                         }
                         outline
