@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
-import UserTable from './UsersTable';
-import UserModal from './UserModal';
-import { FaUserPlus } from 'react-icons/fa';
-import { getUsers } from '../../services/userServices';
-import { UserInterface } from '../../interfaces/UserInterface';
+import Button from "../common/Button";
+import UserModal from "./UserModal";
+import UserTable from "./UsersTable";
+import useDebounce from "../hooks/useDebounce";
+import { useEffect, useState } from "react";
+import { FaUserPlus } from "react-icons/fa";
+import { UserInterface } from "../../interfaces/UserInterface";
+import { searchUsers } from "../../services/examService";
+import { getUsers } from "../../services/userServices";
 
 const ManageUsers = () => {
     const [users, setUsers] = useState<UserInterface[]>([]);
@@ -19,10 +22,10 @@ const ManageUsers = () => {
             users.map((user) =>
                 user.id === userId
                     ? {
-                          ...user,
-                          status:
-                              user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
-                      }
+                        ...user,
+                        status:
+                            user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                    }
                     : user
             )
         );
@@ -37,7 +40,7 @@ const ManageUsers = () => {
 
     useEffect(() => {
         getUserData();
-    }, [users]);
+    }, []);
 
     const handleEditUser = (updatedUser: UserInterface) => {
         setUsers(
@@ -52,9 +55,43 @@ const ManageUsers = () => {
         setUsers(users.filter((user) => user.id !== userId));
     };
 
+    const [search, setSearch] = useState<string>('');
+
+    const debouncedSearch = useDebounce(search, 300);
+    const searchusers = async () => {
+        console.log(debouncedSearch, 'this is seach debounced text');
+        const response = await searchUsers({ searchText: debouncedSearch });
+        if (response) {
+            setUsers(response);
+        }
+
+    };
+
+    useEffect(() => {
+        console.log('called');
+        searchusers();
+    }, [debouncedSearch]);
+
     return (
         <div className="container mx-auto p-4">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+                <div className="flex flex-row gap-2">
+                    <input
+                        type="text"
+                        name="search"
+                        value={search}
+                        placeholder="Search Users"
+                        onChange={(e) => setSearch(e.target.value)}
+                        id="search"
+                        className="border border-gray-300 p-2 rounded"
+                    />
+                    <Button
+                        variant="secondary"
+                        handleBtnClick={() => setSearch('')}
+                    >
+                        Reset
+                    </Button>
+                </div>
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                     onClick={() => {
@@ -80,6 +117,7 @@ const ManageUsers = () => {
                 <div>
                     <UserModal
                         user={currentUser}
+                        onUpdated={getUserData}
                         onClose={() => setIsModalOpen(false)}
                         onSave={currentUser ? handleEditUser : handleAddUser}
                     />

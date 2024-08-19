@@ -1,5 +1,11 @@
 import { api } from '../helper/axios';
-import { examEndpoints } from '../helper/endpoint';
+import {
+    authEndPoints,
+    examEndpoints,
+    examScheduleEndpoints,
+    userEndPoints,
+} from '../helper/endpoint';
+import { ExamInterface } from '../interfaces/UserInterface';
 import { SubmissionResponse } from '../types/question';
 
 export const handleSingleQuestionFetch = async (value: string) => {
@@ -79,4 +85,94 @@ export const pollSubmissionDetails = (
             }
         }, interval);
     });
+};
+
+export const getExam = async () => {
+    const URL = examScheduleEndpoints.getExams;
+    const response = await api.get(URL);
+    console.log('htis is get Exam', response.data);
+
+    return response.data;
+};
+
+export const addExam = async (values: any, includeCodeQuestions: boolean) => {
+    const URL = examScheduleEndpoints.addExams;
+    console.log('this is values', values);
+    const response = await api.post(URL, {
+        examTitle: values.examTitle,
+        examDescription: values.examDescription,
+        mcqQuestionMarks: values.mcqMarks,
+        codeQuestionEasyMarks: values.easyMarks,
+        codeQuestionMediumHardMarks: values.mediumMarks,
+        hasCodeQuestions: includeCodeQuestions,
+    });
+    if (response && response.data) {
+        return true;
+    }
+    return false;
+};
+
+export const scheduleExam = async (examId: number) => {
+    const URL = examScheduleEndpoints.scheduleExams;
+    const response = await api.post(URL, { examId });
+    if (response) {
+        return true;
+    } else return false;
+};
+
+export const UnscheduleExam = async (examId: number) => {
+    const URL = examScheduleEndpoints.unscheduleExam;
+
+    try {
+        const response = await api.post(URL, { examId });
+
+        if (response) {
+            return { success: true, message: 'Exam Unscheduled successfully' };
+        } else {
+            return { success: false, message: 'Failed to unschedule exam' };
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: 'An error occurred while unscheduling the exam',
+        };
+    }
+};
+
+interface loginData {
+    email: string;
+    password: string;
+    token: string;
+}
+export const loginExam = async (authData: loginData) => {
+    try {
+        const url = authEndPoints.loginExam;
+        const response = await api.post(url, authData);
+        if (response)
+            return { success: true, message: 'Exam login successfully' };
+    } catch (error: any) {
+        return {
+            success: false,
+            message:
+                error.response.data.message || 'An error occurred during login',
+        };
+    }
+};
+
+interface searchData {
+    searchText?: string;
+    status?: string;
+}
+
+export const searchUsers = async (searchData: searchData) => {
+    const URL = userEndPoints.searchUsers;
+    const response = await api.post(URL, {
+        searchText: searchData.searchText,
+        status: searchData.status,
+    });
+    console.log('this is responsasdfasdfe', response);
+    if (response?.message === 'No Users found') return [];
+    if (response) {
+        return response.data;
+    } else return 'failed to search users';
 };

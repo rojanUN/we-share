@@ -6,12 +6,12 @@ interface UserModalProps {
     user: UserInterface;
     onClose: () => void;
     onSave: (user: any) => void;
+    onUpdated: () => void;
 }
 
-const UserModal = ({ user, onClose, onSave }: UserModalProps) => {
+const UserModal = ({ user, onClose, onSave, onUpdated }: UserModalProps) => {
     const [fullName, setfullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-
     useEffect(() => {
         if (user) {
             setfullName(user?.fullName);
@@ -27,6 +27,8 @@ const UserModal = ({ user, onClose, onSave }: UserModalProps) => {
         await addUsers({ id: user?.id, fullName, email })
             .then((_) => {
                 onSave({ id: user?.id, fullName, email });
+                onUpdated();
+
                 Toast.Success('User Added Successfully');
             })
             .catch((_) => {

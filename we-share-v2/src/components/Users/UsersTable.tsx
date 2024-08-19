@@ -1,14 +1,17 @@
+import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
+import { UserInterface } from '../../interfaces/UserInterface';
+import { searchUsers } from '../../services/examService';
+
 import {
     FaAngleLeft,
     FaAngleRight,
+    FaChevronRight,
     FaEdit,
     FaThumbsDown,
     FaThumbsUp,
     FaTrash,
 } from 'react-icons/fa';
-import ReactPaginate from 'react-paginate';
-import { UserInterface } from '../../interfaces/UserInterface';
 interface UserTableProps {
     users: UserInterface[];
     onEdit: (userId: UserInterface) => void;
@@ -28,18 +31,16 @@ const UserTable = ({
     const offset = currentPage * usersPerPage;
     const currentUsers = users.slice(offset, offset + usersPerPage);
 
-    console.log('this is userst', users);
-
     const handlePageClick = ({ selected }: { selected: number }) => {
         setCurrentPage(selected);
     };
 
     return (
         <div className="border-[1px] border-solid border-gray-200 mt-2 rounded-[8px]">
-            {/* <div className='flex items-center flex-row gap-1 p-4'>
+            <div className="flex items-center flex-row gap-1 p-4">
                 <h2>User Table</h2>
                 <FaChevronRight fontSize={20} />
-            </div> */}
+            </div>
             <div className="max-h-[40rem] overflow-y-auto">
                 <table className="min-w-full bg-white">
                     <thead className="bg-gray-200 sticky top-0 z-10 h-16">
@@ -90,7 +91,7 @@ const UserTable = ({
                                                 onToggleStatus(user.id)
                                             }
                                         >
-                                            {user?.status === 'active' ? (
+                                            {user?.status === 'ACTIVE' ? (
                                                 <FaThumbsDown />
                                             ) : (
                                                 <FaThumbsUp />

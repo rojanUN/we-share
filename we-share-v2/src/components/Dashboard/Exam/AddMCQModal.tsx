@@ -1,8 +1,8 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import QuizInfo from './QuizInfo';
-import MCQQuestionsAdd from './QuizQuestionAdd';
 import LeetCodeProblemsTable from './LeetCodeProblemsTable';
+import MCQQuestionsAdd from './QuizQuestionAdd';
 import Modal from '../../common/Modal';
+import QuizInfo from './QuizInfo';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { clearAllQuestions } from '../../../feature/questions/questionsSlice';
 
@@ -31,12 +31,17 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({
     const [step, setStep] = useState(1);
 
     const nextStep = () => setStep(step + 1);
-    const prevStep = () => setStep(step - 1);
+
+    const handlePrevStep = () => {
+        if (step !== 1) {
+            setStep(step - 1);
+        }
+    };
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-[99]">
             {closeModalOpen && (
                 <Modal
                     isOpen={isOpen}
@@ -61,26 +66,15 @@ const AddMCQModal: React.FC<AddMCQModalProps> = ({
                 </button>
                 <div>
                     {step === 1 && (
-                        <QuizInfo
-                            quizTitle={quizTitle}
-                            setQuizTitle={setQuizTitle}
-                            quizDescription={quizDescription}
-                            setQuizDescription={setQuizDescription}
-                            quizMarks={quizMarks}
-                            setQuizMarks={setQuizMarks}
-                            nextStep={nextStep}
-                        />
-                    )}
-                    {step === 2 && (
                         <MCQQuestionsAdd
                             nextStep={nextStep}
-                            prevStep={prevStep}
+                            prevStep={handlePrevStep}
                         />
                     )}
 
-                    {step === 3 && (
+                    {step === 2 && (
                         <LeetCodeProblemsTable
-                            prevStep={prevStep}
+                            prevStep={handlePrevStep}
                             onClose={onClose}
                             limit={10}
                         />
