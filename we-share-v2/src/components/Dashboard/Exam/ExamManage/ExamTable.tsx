@@ -1,11 +1,11 @@
-import Button from "../../../common/Button";
-import Modal from "../../../common/Modal";
-import ReactPaginate from "react-paginate";
-import { useState } from "react";
-import { FaAngleLeft, FaAngleRight, FaChevronRight } from "react-icons/fa";
-import { Toast } from "../../../../helper/toast";
-import { ExamInterface } from "../../../../interfaces/UserInterface";
-import { UnscheduleExam, scheduleExam } from "../../../../services/examService";
+import Button from '../../../common/Button';
+import Modal from '../../../common/Modal';
+import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
+import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa';
+import { Toast } from '../../../../helper/toast';
+import { ExamInterface } from '../../../../interfaces/UserInterface';
+import { UnscheduleExam, scheduleExam } from '../../../../services/examService';
 
 interface ExamTableProps {
     exams: ExamInterface[];
@@ -73,7 +73,6 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                 <FaChevronRight fontSize={20} />
             </div>
             <div className="max-h-[40rem] overflow-x-auto overflow-y-auto">
-
                 <table className="bg-white min-w-full">
                     <thead className="bg-gray-200 sticky top-0 z-10 h-16">
                         <tr>
@@ -144,7 +143,6 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                         )}
                     </tbody>
                 </table>
-
             </div>
             <div className="flex justify-center items-center mt-4">
                 <ReactPaginate

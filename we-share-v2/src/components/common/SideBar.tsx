@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { AiOutlineSetting } from "react-icons/ai";
-import { FaHome, FaUserPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { FaHome, FaUserPlus } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Sidebar: React.FC = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
