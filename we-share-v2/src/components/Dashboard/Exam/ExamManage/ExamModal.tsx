@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { addExam } from '../../../../services/examService';
-import { Toast } from '../../../../helper/toast';
+import * as Yup from "yup";
+import CircularTimePicker from "../../../common/CircularTimePicker";
+import React, { useState } from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Toast } from "../../../../helper/toast";
+import { addExam } from "../../../../services/examService";
 
 interface ExamInfoProps {
     onClose: () => void;
@@ -63,6 +64,8 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                 >
                     {({ values }) => (
                         <Form>
+                            <CircularTimePicker />
+
                             <div className="mb-4">
                                 <label className="block mb-2">Exam Title</label>
                                 <Field
@@ -91,6 +94,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     className="text-red-500"
                                 />
                             </div>
+
                             <div className="mb-4">
                                 <label className="block mb-2">
                                     MCQ Question Marks

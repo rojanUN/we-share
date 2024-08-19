@@ -1,4 +1,4 @@
-import { searchUsers } from '../services/examService';
+import { searchUsers } from "../services/examService";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -27,10 +27,13 @@ export const questionEndPoints = {
 };
 
 export const userEndPoints = {
+    verifyToken: `${baseUrl}/api/users/verify`,
     addUsers: `${baseUrl}/api/users/add`,
     getUsers: `${baseUrl}/api/users/get`,
     updateUser: `${baseUrl}/api/users/update`,
     deleteUser: `${baseUrl}/api/users/delete`,
 
     searchUsers: `${baseUrl}/api/users/search`,
+
+    loginAdmin: `${baseUrl}/api/users/admin/login`,
 };

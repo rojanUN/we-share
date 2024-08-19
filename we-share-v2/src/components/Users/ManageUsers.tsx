@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import UserTable from './UsersTable';
-import UserModal from './UserModal';
-import { FaUserPlus } from 'react-icons/fa';
-import { getUsers } from '../../services/userServices';
-import { UserInterface } from '../../interfaces/UserInterface';
-import { searchUsers } from '../../services/examService';
-import useDebounce from '../hooks/useDebounce';
-import Button from '../common/Button';
+import Button from "../common/Button";
+import UserModal from "./UserModal";
+import UserTable from "./UsersTable";
+import useDebounce from "../hooks/useDebounce";
+import { useEffect, useState } from "react";
+import { FaUserPlus } from "react-icons/fa";
+import { UserInterface } from "../../interfaces/UserInterface";
+import { searchUsers } from "../../services/examService";
+import { getUsers } from "../../services/userServices";
 
 const ManageUsers = () => {
     const [users, setUsers] = useState<UserInterface[]>([]);
@@ -22,10 +22,10 @@ const ManageUsers = () => {
             users.map((user) =>
                 user.id === userId
                     ? {
-                          ...user,
-                          status:
-                              user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
-                      }
+                        ...user,
+                        status:
+                            user.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+                    }
                     : user
             )
         );
@@ -64,6 +64,7 @@ const ManageUsers = () => {
         if (response) {
             setUsers(response);
         }
+
     };
 
     useEffect(() => {

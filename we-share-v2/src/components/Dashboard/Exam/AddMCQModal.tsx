@@ -1,10 +1,10 @@
-import LeetCodeProblemsTable from "./LeetCodeProblemsTable";
-import MCQQuestionsAdd from "./QuizQuestionAdd";
-import Modal from "../../common/Modal";
-import QuizInfo from "./QuizInfo";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { useAppDispatch } from "../../../app/hooks";
-import { clearAllQuestions } from "../../../feature/questions/questionsSlice";
+import LeetCodeProblemsTable from './LeetCodeProblemsTable';
+import MCQQuestionsAdd from './QuizQuestionAdd';
+import Modal from '../../common/Modal';
+import QuizInfo from './QuizInfo';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useAppDispatch } from '../../../app/hooks';
+import { clearAllQuestions } from '../../../feature/questions/questionsSlice';
 
 interface AddMCQModalProps {
     isOpen: boolean;

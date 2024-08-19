@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import './index.css';
-import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import ExamPortal from './pages/ExamPortal';
-import Home from './pages/Home';
-import ExamCompletion from './pages/ExamCompletion';
-import ExamDeviceCheck from './pages/ExamDeviceCheck';
-import { ToastContainer } from 'react-toastify';
-import Layout from './components/Dashboard/Layout';
-import Dashboard from './components/Dashboard/Dashboard';
-import ExamManage from './components/Dashboard/Exam/ExamManage';
-import LoginPage from './components/Login/LoginPage';
-import ManageUsers from './components/Users/ManageUsers';
-import ManageExams from './components/Dashboard/Exam/ExamManage/ManageExams';
-import PrivateRoute from './components/Routes/PrivateRoutes';
+import "./index.css";
+import Dashboard from "./components/Dashboard/Dashboard";
+import ExamCompletion from "./pages/ExamCompletion";
+import ExamDeviceCheck from "./pages/ExamDeviceCheck";
+import ExamManage from "./components/Dashboard/Exam/ExamManage";
+import ExamPortal from "./pages/ExamPortal";
+import Home from "./pages/Home";
+import Layout from "./components/Dashboard/Layout";
+import LoginPage from "./components/Login/LoginPage";
+import ManageExams from "./components/Dashboard/Exam/ExamManage/ManageExams";
+import ManageUsers from "./components/Users/ManageUsers";
+import PrivateRoute from "./components/Routes/PrivateRoutes";
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { store } from "./app/store";
 
 const App = () => {
     const [canAccessExamPortal, setCanAccessExamPortal] = useState(true);
@@ -54,8 +54,8 @@ const App = () => {
         {
             path: '/',
 
-            // element: (<PrivateRoute><Layout /> </PrivateRoute>),
-            element: <Layout />,
+            element: (<PrivateRoute><Layout /> </PrivateRoute>),
+            // element: <Layout />,
             children: [
                 {
                     path: '/dashboard',

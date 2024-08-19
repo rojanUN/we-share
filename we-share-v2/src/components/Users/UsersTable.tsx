@@ -1,7 +1,7 @@
-import ReactPaginate from "react-paginate";
-import { useState } from "react";
-import { UserInterface } from "../../interfaces/UserInterface";
-import { searchUsers } from "../../services/examService";
+import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
+import { UserInterface } from '../../interfaces/UserInterface';
+import { searchUsers } from '../../services/examService';
 
 import {
     FaAngleLeft,

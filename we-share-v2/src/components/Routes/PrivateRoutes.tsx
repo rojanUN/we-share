@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { SessionStorage } from '../../helper/sessionStorage';
+import { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { CookieStorage } from "../../helper/CookieStorage";
+import { SessionStorage } from "../../helper/sessionStorage";
+import { verifyToken } from "../../services/userServices";
 
 function PrivateRoute({ children }: React.PropsWithChildren<any>) {
     const [isLoading, setIsLoading] = useState(true);
@@ -8,10 +10,29 @@ function PrivateRoute({ children }: React.PropsWithChildren<any>) {
     const location = useLocation();
 
     useEffect(() => {
-        // Simulate fetching authentication status
-        const isLoggedIn = SessionStorage.getSessionItem('authtoken');
-        setIsLoggedIn(isLoggedIn);
-        setIsLoading(false);
+        const checkAuth = async () => {
+            const token = CookieStorage.getCookieItem('authToken');
+
+            if (token) {
+                try {
+                    const verifyTokenResponse = await verifyToken(token);
+                    console.log('verifyTokenResponse', verifyTokenResponse);
+                    if (verifyTokenResponse?.success) {
+                        console.log("herehrherherhehr");
+                        setIsLoggedIn(true);
+                    } else {
+                        setIsLoggedIn(false);
+                    }
+                } catch (error) {
+                    setIsLoggedIn(false);
+                }
+            } else {
+                setIsLoggedIn(false);
+            }
+            setIsLoading(false);
+        };
+
+        checkAuth();
     }, []);
 
     if (isLoading) {

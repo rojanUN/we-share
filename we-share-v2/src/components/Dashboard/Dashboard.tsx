@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import Card from '../common/Card';
-import { getUsers } from '../../services/userServices';
-import { number } from 'yup';
-import { getExam } from '../../services/examService';
+import Card from "../common/Card";
+import React, { useEffect, useState } from "react";
+import { number } from "yup";
+import { getExam } from "../../services/examService";
+import { getUsers } from "../../services/userServices";
 
 const Dashboard: React.FC = () => {
     const [userCount, setUserCount] = useState<number>(0);
