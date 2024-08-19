@@ -18,6 +18,7 @@
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@joi/date": "^2.1.1",
+    "@types/nodemailer": "^6.4.15",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -25,7 +26,9 @@
     "express": "^4.18.2",
     "generate-password": "^1.7.1",
     "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
     "leetcode-api-typescript": "^1.12.2",
+    "nodemailer": "^6.9.14",
     "pg": "^8.12.0",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2"

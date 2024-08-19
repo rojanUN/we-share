@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-import MCQQuestion from "../models/mcqQuestionsModel";
 import CodeQuestion from "../models/codeQuestionsModel";
-import { Sequelize, Op } from "sequelize";
+import Exams from "../models/exam";
+import MCQQuestion from "../models/mcqQuestionsModel";
+import { NextFunction, Request, Response } from "express";
+import { Op, Sequelize } from "sequelize";
 
 export class QuestionController {
   public constructor() { }
@@ -20,6 +21,8 @@ export class QuestionController {
       next(error);
     }
   }
+
+
 
   public static async addCodeQuestion(req: Request, res: Response, next: NextFunction) {
     try {
@@ -73,13 +76,24 @@ export class QuestionController {
   }
   public static async getRandomQuestion(req: Request, res: Response, next: NextFunction) {
     try {
+      const { id } = req.params;
       const randomMCQQuestions = await QuestionController.getRandomMCQQuestion();
-      const randomEasyCodeQuestions = await QuestionController.getRandomEasyCodeQuestion();
-      const randomMediumHardCodeQuestions = await QuestionController.getRandomMediumOrHardCodeQuestion();
-      const questionCollection = [...randomMCQQuestions, ...randomEasyCodeQuestions, ...randomMediumHardCodeQuestions];
+
+      const getExam = await Exams.findOne({ where: { id } });
+      let questionCollection = [];
+
+      if (getExam && getExam.hasCodeQuestions === true) {
+        const randomEasyCodeQuestions = await QuestionController.getRandomEasyCodeQuestion();
+        const randomMediumHardCodeQuestions = await QuestionController.getRandomMediumOrHardCodeQuestion();
+        questionCollection = [...randomMCQQuestions, ...randomEasyCodeQuestions, ...randomMediumHardCodeQuestions];
+      }
+      else {
+        questionCollection = [...randomMCQQuestions];
+      }
       res.json({ questionCollection, message: "Questions fetched successfully" });
     } catch (error) {
       next(error);
     }
   }
+
 }

@@ -3,6 +3,7 @@ import { ProblemRouter } from "./problemRoutes";
 import { IRouteInterface } from "../interfaces";
 import { QuestionRouter } from "./questionRoutes";
 import { UserRouter } from "./userRoutes";
+import { ExamRouter } from "./examRoutes";
 
 class ProxyRouter {
   private static instance: ProxyRouter;
@@ -20,9 +21,13 @@ class ProxyRouter {
       segment: "/users",
       provider: UserRouter,
     },
+    {
+      segment: "/exams",
+      provider: ExamRouter
+    }
   ];
 
-  private constructor() {}
+  private constructor() { }
 
   public static get(): ProxyRouter {
     if (!ProxyRouter.instance) ProxyRouter.instance = new ProxyRouter();
