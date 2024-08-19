@@ -25,7 +25,7 @@ module.exports = {
       has_code_questions: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       mcq_question_marks: {
         type: Sequelize.INTEGER,
@@ -41,7 +41,7 @@ module.exports = {
       },
       total_marks: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,

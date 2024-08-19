@@ -14,7 +14,3 @@ module.exports = {
     await queryInterface.removeColumn("codequestions", "difficulty");
   },
 };
-
-
-
-
