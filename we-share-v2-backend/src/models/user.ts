@@ -1,5 +1,4 @@
 import * as Sequelize from "sequelize";
-
 import { Database } from "../config";
 
 const sequelize = Database.sequelize;
@@ -21,16 +20,20 @@ const User = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     status: {
       type: Sequelize.ENUM("ACTIVE", "INACTIVE"),
       allowNull: false,
-      defaultValue: "ACTIVE"
+      defaultValue: "ACTIVE",
     },
     role: {
       type: Sequelize.ENUM("ADMIN", "USER"),
       allowNull: false,
-      defaultValue: "USER"
-    }
+      defaultValue: "USER",
+    },
   },
   {
     timestamps: true,
