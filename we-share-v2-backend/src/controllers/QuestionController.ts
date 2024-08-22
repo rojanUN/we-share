@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import { Op, Sequelize } from "sequelize";
 
 export class QuestionController {
-  public constructor() { }
+  public constructor() {}
 
   public static async addMcqQuestions(req: Request, res: Response, next: NextFunction) {
     try {
@@ -21,8 +21,6 @@ export class QuestionController {
       next(error);
     }
   }
-
-
 
   public static async addCodeQuestion(req: Request, res: Response, next: NextFunction) {
     try {
@@ -86,8 +84,7 @@ export class QuestionController {
         const randomEasyCodeQuestions = await QuestionController.getRandomEasyCodeQuestion();
         const randomMediumHardCodeQuestions = await QuestionController.getRandomMediumOrHardCodeQuestion();
         questionCollection = [...randomMCQQuestions, ...randomEasyCodeQuestions, ...randomMediumHardCodeQuestions];
-      }
-      else {
+      } else {
         questionCollection = [...randomMCQQuestions];
       }
       res.json({ questionCollection, message: "Questions fetched successfully" });
@@ -95,5 +92,4 @@ export class QuestionController {
       next(error);
     }
   }
-
 }

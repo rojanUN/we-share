@@ -8,7 +8,7 @@ import { sign } from "jsonwebtoken";
 import { Op } from "sequelize";
 
 export class UserController {
-  public constructor() { }
+  public constructor() {}
 
   public static async getUsers(req: Request, res: Response, next: NextFunction) {
     try {
@@ -29,9 +29,6 @@ export class UserController {
     }
   }
 
-
-
-
   public static async LoginAdmin(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
@@ -44,7 +41,6 @@ export class UserController {
       if (password !== user.password) {
         throw conflict("Invalid Credentials");
       }
-
 
       if (user.role !== "ADMIN") {
         throw conflict("The user is not authorized");
@@ -72,8 +68,7 @@ export class UserController {
       const userData = (req as any).user;
       console.log("asdfadfasdfasdfasdfhere>>>");
       res.status(200).json({ data: userData, message: "User verified successfully" });
-    }
-    catch (error) {
+    } catch (error) {
       next(error);
     }
   }
@@ -89,14 +84,13 @@ export class UserController {
 
       if (userUpdated) {
         res.status(200).json({
-          data: userUpdated, message: "User status updated successfully"
+          data: userUpdated,
+          message: "User status updated successfully",
         });
-      }
-      else {
+      } else {
         throw conflict("User updated failed");
       }
-    }
-    catch (error) {
+    } catch (error) {
       next(error);
     }
   }
@@ -128,21 +122,16 @@ export class UserController {
 
       const isUserExisted = await User.findAll({
         where: {
-          [Op.or]: [
-            { fullName: { [Op.like]: `%${searchText}%` } },
-            { email: { [Op.like]: `%${searchText}%` } },
-          ],
-          role: "USER"
-        }
+          [Op.or]: [{ fullName: { [Op.like]: `%${searchText}%` } }, { email: { [Op.like]: `%${searchText}%` } }],
+          role: "USER",
+        },
       });
       console.log("this is user", isUserExisted);
       if (isUserExisted.length === 0) {
         res.status(200).json({ message: "No Users found" });
-      }
-      else {
+      } else {
         res.status(200).json({ data: isUserExisted, message: "Users fetched successfully" });
       }
-
     } catch (error) {
       console.log(error);
       next(error);
