@@ -23,7 +23,7 @@ function QuestionNav() {
                 dispatch(setSelectedQuestion(randomQuestions[0]));
                 dispatch(setActiveQuesIndex(0));
             } catch (err: any) {
-                console.log(err.msg);
+                console.log(err);
                 throw err;
             }
         }

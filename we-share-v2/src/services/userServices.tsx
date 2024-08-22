@@ -10,6 +10,7 @@ export const getUsers = async () => {
 };
 
 export const addUsers = async (users: UserInterface) => {
+    console.log(userEndPoints.addUsers, users, '>>>>>');
     const response = await api.post(userEndPoints.addUsers, users);
     if (response.status === 200) return response.data;
 };
