@@ -59,6 +59,7 @@ export class UserController {
 
       res.status(200).json({ data: { token, fullName: user.fullName }, message: "Admin logged in successfully" });
     } catch (error) {
+      console.log(error, "error>>>>>>>>>>>>>>>");
       next(error);
     }
   }
@@ -98,6 +99,7 @@ export class UserController {
   public static async addUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const { fullName, email } = req.body;
+      console.log(fullName, email);
 
       const isUserExisted = await User.findOne({ where: { email } });
 
@@ -111,6 +113,7 @@ export class UserController {
       const createdUser = await User.create(userData);
       if (createdUser) res.status(200).json({ data: createdUser, message: "User added successfull" });
     } catch (error) {
+      console.log(error, "user error add >>>>>>>");
       next(error);
     }
   }
@@ -133,7 +136,6 @@ export class UserController {
         res.status(200).json({ data: isUserExisted, message: "Users fetched successfully" });
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

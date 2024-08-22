@@ -33,6 +33,7 @@ export class QuestionController {
       console.log(data);
       res.status(200).json({ data, message: "Code questions added successfully" });
     } catch (error) {
+      console.log(error, "question add error>>>>>>>>>>>>>");
       next(error);
     }
   }

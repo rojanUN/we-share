@@ -71,25 +71,10 @@ export class ExamController {
         codeQuestionEasyMarks,
         codeQuestionMediumHardMarks,
         hasCodeQuestions,
-        startTime,
-        endTime,
-        startDate,
-        endDate,
       } = req.body;
 
       console.log("this is req.body", req.body);
       const data = {
-        startTime,
-        endTime,
-        startDate,
-        endDate,
-        examTitle,
-        examDescription,
-        mcqQuestionMarks,
-        codeQuestionEasyMarks,
-        codeQuestionMediumHardMarks,
-        hasCodeQuestions,
-        totalMarks: mcqQuestionMarks * 25 + codeQuestionEasyMarks + codeQuestionMediumHardMarks,
       };
       console.log("this is data", data);
       const createdExamData = await Exams.create(data);
