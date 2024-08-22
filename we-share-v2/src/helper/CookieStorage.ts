@@ -1,7 +1,11 @@
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 export class CookieStorage {
-    public static setCookieItem(key: string, value: any, options?: Cookies.CookieAttributes) {
+    public static setCookieItem(
+        key: string,
+        value: any,
+        options?: Cookies.CookieAttributes
+    ) {
         Cookies.set(key, JSON.stringify(value), options);
     }
 

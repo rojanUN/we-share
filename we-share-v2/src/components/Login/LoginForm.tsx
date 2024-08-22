@@ -1,12 +1,12 @@
-import * as Yup from "yup";
-import React from "react";
-import { useFormik } from "formik";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { CookieStorage } from "../../helper/CookieStorage";
-import { SessionStorage } from "../../helper/sessionStorage";
-import { Toast } from "../../helper/toast";
-import { loginExam } from "../../services/examService";
-import { loginAdmin } from "../../services/userServices";
+import * as Yup from 'yup';
+import React from 'react';
+import { useFormik } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CookieStorage } from '../../helper/CookieStorage';
+import { SessionStorage } from '../../helper/sessionStorage';
+import { Toast } from '../../helper/toast';
+import { loginExam } from '../../services/examService';
+import { loginAdmin } from '../../services/userServices';
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
@@ -43,12 +43,19 @@ const LoginForm: React.FC = () => {
                     Toast.Error(login?.message);
                 }
             } else {
-                const response = await loginAdmin({ email: values.email, password: values.password });
+                const response = await loginAdmin({
+                    email: values.email,
+                    password: values.password,
+                });
                 console.log('response out side', response);
                 if (response?.status === 404) {
-                    return Toast.Error('Token not found', undefined, undefined, "Please check your mail and try again");
-                }
-                else if (response?.success === true) {
+                    return Toast.Error(
+                        'Token not found',
+                        undefined,
+                        undefined,
+                        'Please check your mail and try again'
+                    );
+                } else if (response?.success === true) {
                     CookieStorage.setCookieItem('authToken', response.token);
                     Toast.Success(response.message);
                     navigate('/dashboard');
@@ -56,7 +63,6 @@ const LoginForm: React.FC = () => {
                 }
 
                 Toast.Error(response?.message);
-
             }
         },
     });

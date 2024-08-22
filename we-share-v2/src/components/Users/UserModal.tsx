@@ -24,9 +24,9 @@ const UserModal = ({ user, onClose, onSave, onUpdated }: UserModalProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await addUsers({ id: user?.id, fullName, email })
+        await addUsers({ fullName, email })
             .then((_) => {
-                onSave({ id: user?.id, fullName, email });
+                onSave({ fullName, email });
                 onUpdated();
 
                 Toast.Success('User Added Successfully');

@@ -1,5 +1,3 @@
-import { searchUsers } from "../services/examService";
-
 const baseUrl = import.meta.env.VITE_API_URL;
 
 export const examEndpoints = {
@@ -7,6 +5,7 @@ export const examEndpoints = {
     getSubmissionId: `${baseUrl}/api/problems/submit`,
     getSubmissionDetails: `${baseUrl}/api/problems/get/submission`,
     getMultipleQuestions: `${baseUrl}/api/problems/get/multiple`,
+    handleResultEvaluation: `${baseUrl}/api/exams/results`,
 };
 
 export const examScheduleEndpoints = {
@@ -23,7 +22,7 @@ export const authEndPoints = {
 export const questionEndPoints = {
     addMCQQuestion: `${baseUrl}/api/questions/add/mcqquestions`,
     addCodeQuestion: `${baseUrl}/api/questions/add/codequestions`,
-    getRandomQuestions: `${baseUrl}/api/questions/get/questioncollections`,
+    getRandomQuestions: `${baseUrl}/api/questions/get/questioncollections/1`,
 };
 
 export const userEndPoints = {

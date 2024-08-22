@@ -5,7 +5,6 @@ import {
     examScheduleEndpoints,
     userEndPoints,
 } from '../helper/endpoint';
-import { ExamInterface } from '../interfaces/UserInterface';
 import { SubmissionResponse } from '../types/question';
 
 export const handleSingleQuestionFetch = async (value: string) => {
@@ -175,4 +174,10 @@ export const searchUsers = async (searchData: searchData) => {
     if (response) {
         return response.data;
     } else return 'failed to search users';
+};
+
+export const handleExamSubmit = async (examData: any) => {
+    const URL = examEndpoints.handleResultEvaluation;
+    const response = await api.post(URL, examData);
+    return response;
 };

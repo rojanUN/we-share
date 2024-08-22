@@ -19,6 +19,7 @@ import DetectNoise from '../components/DetectNoise';
 import { Toast } from '../helper/toast';
 import MCQQuestionView from '../components/MCQQuestionView';
 import CodeMirrorView from '../components/CodeMirrorView';
+import { handleExamSubmit } from '../services/examService';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -45,21 +46,28 @@ const ExamPortal = function ExamPortal() {
     }, []);
     // console.log(questionStore?.checkedQuestions, 'ke ke do you love');
 
-    const handleMCQSubmit = useCallback(() => {
+    const handleMCQSubmit = useCallback(async () => {
         const examData = {
             fullScreenExitedCount,
             highNoiseCount,
             outOfViewCount: questionStore?.outOfViewCount,
             solvedQuestions: questionStore?.checkedQuestions,
         };
-        console.log(examData, 'exam Data>>>');
-        setCountDownTimer(examDuration || 3600);
-        SessionStorage.removeAllSession();
-        dispatch(setCheckedQuestions([]));
+        try {
+            console.log(examData, 'exam Data>>>');
+            setCountDownTimer(examDuration || 3600);
+            SessionStorage.removeAllSession();
+            dispatch(setCheckedQuestions([]));
 
-        exitFullscreen();
-        setIsModalOpen(false);
-        navigate('/exam-completed');
+            const response = await handleExamSubmit(examData);
+            console.log(response, 'exam submit result response');
+
+            exitFullscreen();
+            setIsModalOpen(false);
+            navigate('/exam-completed');
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
     }, [
         dispatch,
         navigate,
