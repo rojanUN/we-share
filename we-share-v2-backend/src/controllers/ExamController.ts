@@ -10,7 +10,7 @@ import { sign, verify } from "jsonwebtoken";
 import { sendEmail } from "../utils/nodemailer/mailer";
 
 export class ExamController {
-  public constructor() { }
+  public constructor() {}
 
   public static async LoginExam(req: Request, res: Response, next: NextFunction) {
     try {
@@ -74,7 +74,7 @@ export class ExamController {
         startTime,
         endTime,
         startDate,
-        endDate
+        endDate,
       } = req.body;
 
       console.log("this is req.body", req.body);

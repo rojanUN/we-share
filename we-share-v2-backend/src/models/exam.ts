@@ -44,21 +44,20 @@ const Exams = sequelize.define(
     },
     startTime: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
     },
     endTime: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
     },
     startDate: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: true,
     },
     endDate: {
       type: Sequelize.STRING,
-      allowNull: true
-    }
-
+      allowNull: true,
+    },
   },
   {
     timestamps: true,
