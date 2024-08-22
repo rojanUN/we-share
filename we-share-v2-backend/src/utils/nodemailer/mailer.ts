@@ -1,4 +1,4 @@
-import nodemailer, { Transporter, SendMailOptions, SentMessageInfo } from 'nodemailer';
+import nodemailer, { Transporter, SendMailOptions, SentMessageInfo } from "nodemailer";
 
 interface User {
   email: string;
@@ -12,7 +12,7 @@ interface SendEmailParams {
 }
 
 function mailer(): Transporter {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     // Transporter for development
     return nodemailer.createTransport({
       host: process.env.NODEMAILER_HOST as string,
@@ -47,11 +47,11 @@ const sendEmail = async (user: User, schedule: ScheduleData, token: string): Pro
   const mailOptions: SendMailOptions = {
     to: user?.email,
     from: `"Online Exam" <${process.env.NODEMAILER_USERNAME}>`,
-    subject: 'Online Exam Link',
+    subject: "Online Exam Link",
     html: `
       <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border: 1px solid #ddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9;">
         <div style="text-align: center; padding-bottom: 20px;">
-          <h2 style="color: #333; margin: 0;">Greetings, ${user?.fullName || 'Sir'}</h2>
+          <h2 style="color: #333; margin: 0;">Greetings, ${user?.fullName || "Sir"}</h2>
         </div>
         <p style="font-size: 16px; color: #333; line-height: 1.5;">
         Please use the below login credential to login for exam:
@@ -77,13 +77,11 @@ const sendEmail = async (user: User, schedule: ScheduleData, token: string): Pro
 
   try {
     const response: SentMessageInfo = await mailer().sendMail(mailOptions);
-    console.log(response, 'mail');
+    console.log(response, "mail");
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
 
-export {
-  sendEmail,
-};
+export { sendEmail };

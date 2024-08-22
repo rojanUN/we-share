@@ -8,10 +8,10 @@ const CodeQuestion = sequelize.define(
   "codequestions",
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: Sequelize.UUIDV4,
     },
     question: {
       type: Sequelize.STRING,
