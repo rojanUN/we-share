@@ -1,6 +1,6 @@
-import { toast } from "react-toastify";
-import { CustomError } from "../types/question";
-import { CameraIcon, ErrorIcon, MicIcon } from "./icons";
+import { toast } from 'react-toastify';
+import { CustomError } from '../types/question';
+import { CameraIcon, ErrorIcon, MicIcon } from './icons';
 
 function getToastErrorIcon(type: CustomError) {
     switch (type) {
@@ -14,7 +14,11 @@ function getToastErrorIcon(type: CustomError) {
 }
 
 export class Toast {
-    public static Success(title: string, closePreviousToast?: () => void, desc?: string) {
+    public static Success(
+        title: string,
+        closePreviousToast?: () => void,
+        desc?: string
+    ) {
         toast.success(
             <>
                 <div>{title}</div>
@@ -42,22 +46,25 @@ export class Toast {
         closePreviousToast?: () => void,
         desc?: string
     ) {
-        toast.error(<>
-            <div>{title}</div>
-            {desc && <div>{desc}</div>}
-        </>, {
-            icon: () => getToastErrorIcon(type!),
-            onClose: () => {
-                closePreviousToast && closePreviousToast();
-            },
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: type ? 'light' : 'colored',
-        });
+        toast.error(
+            <>
+                <div>{title}</div>
+                {desc && <div>{desc}</div>}
+            </>,
+            {
+                icon: () => getToastErrorIcon(type!),
+                onClose: () => {
+                    closePreviousToast && closePreviousToast();
+                },
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                progress: undefined,
+                theme: type ? 'light' : 'colored',
+            }
+        );
     }
 }

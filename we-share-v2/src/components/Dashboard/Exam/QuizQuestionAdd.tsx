@@ -1,10 +1,9 @@
-import React from 'react';
-import { Formik, Field, FieldArray, ErrorMessage, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-
-import Button from '../../common/Button';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { setMCQFormValues } from '../../../feature/questions/questionsSlice';
+import * as Yup from "yup";
+import Button from "../../common/Button";
+import React from "react";
+import { ErrorMessage, Field, FieldArray, Formik, FormikHelpers } from "formik";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { setMCQFormValues } from "../../../feature/questions/questionsSlice";
 
 interface Option {
     text: string;
@@ -166,7 +165,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                         <Button
                                                                             variant={
                                                                                 item.correctOptionIndex ===
-                                                                                optionIndex
+                                                                                    optionIndex
                                                                                     ? 'primary'
                                                                                     : 'secondary'
                                                                             }
@@ -179,7 +178,7 @@ const MCQQuestionsAdd: React.FC<{
                                                                             className="w-[16rem]"
                                                                         >
                                                                             {item.correctOptionIndex ===
-                                                                            optionIndex
+                                                                                optionIndex
                                                                                 ? 'Correct'
                                                                                 : 'Set as Correct'}
                                                                         </Button>
@@ -194,12 +193,12 @@ const MCQQuestionsAdd: React.FC<{
                                                         )}
                                                         {item.options.length <
                                                             4 && (
-                                                            <div className="text-red-500 mt-2">
-                                                                At least four
-                                                                options are
-                                                                required
-                                                            </div>
-                                                        )}
+                                                                <div className="text-red-500 mt-2">
+                                                                    At least four
+                                                                    options are
+                                                                    required
+                                                                </div>
+                                                            )}
                                                         <Button
                                                             variant="primary"
                                                             handleBtnClick={() =>

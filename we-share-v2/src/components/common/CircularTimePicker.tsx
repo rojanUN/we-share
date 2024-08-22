@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 function CircularTimePicker() {
     const [selectedHour, setSelectedHour] = useState<number | null>(null);
@@ -7,7 +7,11 @@ function CircularTimePicker() {
     const hours = Array.from({ length: 12 }, (_, i) => i + 1);
     const minutes = Array.from({ length: 60 }, (_, i) => i);
 
-    const renderCircleItems = (items: number[], selected: number | null, setSelected: (value: number) => void) => {
+    const renderCircleItems = (
+        items: number[],
+        selected: number | null,
+        setSelected: (value: number) => void
+    ) => {
         const radius = 100; // Adjust radius as needed
         const angleStep = 360 / items.length;
 
@@ -19,8 +23,9 @@ function CircularTimePicker() {
             return (
                 <div
                     key={item}
-                    className={`absolute text-center cursor-pointer transition-colors ${item === selected ? 'text-blue-600' : 'text-gray-600'
-                        }`}
+                    className={`absolute text-center cursor-pointer transition-colors ${
+                        item === selected ? 'text-blue-600' : 'text-gray-600'
+                    }`}
                     style={{
                         transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
                     }}
@@ -40,7 +45,11 @@ function CircularTimePicker() {
             <div className="relative w-64 h-64">
                 <div className="relative w-full h-full">
                     {renderCircleItems(hours, selectedHour, setSelectedHour)}
-                    {renderCircleItems(minutes, selectedMinute, setSelectedMinute)}
+                    {renderCircleItems(
+                        minutes,
+                        selectedMinute,
+                        setSelectedMinute
+                    )}
                 </div>
             </div>
         </div>
