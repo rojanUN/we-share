@@ -1,5 +1,5 @@
-import React from 'react';
-import Dashboard from './Dashboard';
+import Dashboard from "./";
+import React from "react";
 
 const Home: React.FC = () => {
     return <Dashboard />;

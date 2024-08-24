@@ -1,9 +1,9 @@
-import Button from './Button';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CookieStorage } from '../../helper/CookieStorage';
-import { SessionStorage } from '../../helper/sessionStorage';
-import { Toast } from '../../helper/toast';
+import Button from "./Button";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CookieStorage } from "../../helper/CookieStorage";
+import { SessionStorage } from "../../helper/sessionStorage";
+import { Toast } from "../../helper/toast";
 
 const Navbar: React.FC = () => {
     const [user, setUserData] = useState<any>(null);
@@ -12,6 +12,7 @@ const Navbar: React.FC = () => {
         const getUserDetails = SessionStorage.getSessionItem('user');
         setUserData(getUserDetails);
     }, []);
+
     const name = user?.fullName || 'User';
     const initials = name.split(' ').map((word) => word[0].toUpperCase());
 

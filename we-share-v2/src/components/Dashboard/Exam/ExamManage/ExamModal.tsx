@@ -1,9 +1,10 @@
-import * as Yup from 'yup';
-import CircularTimePicker from '../../../common/CircularTimePicker';
-import React, { useState } from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { Toast } from '../../../../helper/toast';
-import { addExam } from '../../../../services/examService';
+import * as Yup from "yup";
+import React, { useState } from "react";
+import { DatePicker } from "@hilla/react-components/DatePicker";
+import { TimePicker } from "@hilla/react-components/TimePicker.js";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Toast } from "../../../../helper/toast";
+import { addExam } from "../../../../services/examService";
 
 interface ExamInfoProps {
     onClose: () => void;
@@ -12,7 +13,13 @@ interface ExamInfoProps {
 
 const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
     const [includeCodeQuestions, setIncludeCodeQuestions] = useState(false);
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('en-CA'); // Format as YYYY/MM/DD
+    const formattedTime = now.toTimeString().slice(0, 5);
 
+    const [startDate, setStartDate] = useState(formattedDate);
+    const [startTime, setStartTime] = useState(formattedTime);
+    const [endTime, setEndTime] = useState(formattedTime);
     const validationSchema = Yup.object().shape({
         examTitle: Yup.string().required('Exam Title is required'),
         examDescription: Yup.string().required('Exam Description is required'),
@@ -34,6 +41,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
     });
 
     const handleSubmit = async (values: any) => {
+        console.log('values', values);
         const createExam = await addExam(values, includeCodeQuestions);
         if (createExam) {
             Toast.Success('Exam added successfully');
@@ -48,7 +56,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-            <div className="bg-white p-8 rounded-lg shadow-lg z-10 w-full max-w-lg">
+            <div className="bg-white p-8 rounded-lg shadow-lg z-10 w-full max-h-[calc(100vh-50px)] overflow-y-auto max-w-lg">
                 <h2 className="text-2xl mb-4">Exam Information</h2>
                 <Formik
                     initialValues={{
@@ -64,7 +72,6 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                 >
                     {({ values }) => (
                         <Form>
-                            <CircularTimePicker />
 
                             <div className="mb-4">
                                 <label className="block mb-2">Exam Title</label>
@@ -94,6 +101,29 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     className="text-red-500"
                                 />
                             </div>
+                            <div className="mb-4 flex justify-between">
+
+                                <TimePicker
+                                    label="Start Time"
+                                    value={startTime}
+                                    onChange={(e) => setStartTime(e.target.value)}
+                                />
+                                <TimePicker
+                                    label="End Time"
+                                    value={endTime}
+                                    onChange={(e) => setEndTime(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4">
+
+                                <DatePicker
+                                    label="Select Start Date"
+                                    min={formattedDate}
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+                            </div>
+
 
                             <div className="mb-4">
                                 <label className="block mb-2">
@@ -110,14 +140,12 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     className="text-red-500"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-2">
-                                    Include Code Questions
-                                </label>
+                            <div className="flex items-center gap-2 mb-4 ">
+
                                 <Field
                                     type="checkbox"
                                     name="includeCodeQuestions"
-                                    checked={values.includeCodeQuestions}
+                                    checked={includeCodeQuestions}
                                     onChange={() =>
                                         setIncludeCodeQuestions(
                                             !includeCodeQuestions
@@ -125,6 +153,9 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     }
                                     className="ml-2"
                                 />
+                                <span>
+                                    Include Code Questions
+                                </span>
                             </div>
                             {includeCodeQuestions && (
                                 <>

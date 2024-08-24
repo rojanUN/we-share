@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+
 interface ButtonType {
     children: React.ReactNode;
     variant: 'primary' | 'danger' | 'secondary';
@@ -33,6 +34,7 @@ function Button({
 
     return (
         <button
+
             type={type || 'button'}
             onClick={handleBtnClick}
             disabled={disabled}
