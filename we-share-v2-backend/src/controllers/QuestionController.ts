@@ -44,11 +44,20 @@ export class QuestionController {
   }
 
   public static async getRandomEasyCodeQuestion() {
-    const codeQuestions = await CodeQuestion.findAll({
+    let codeQuestions = await CodeQuestion.findAll({
       where: { difficulty: "EASY" },
       order: [Sequelize.fn("RANDOM")],
       limit: 1,
     });
+    if (codeQuestions.length === 0) {
+      codeQuestions = await CodeQuestion.findAll({
+        where: {
+          [Op.or]: [{ difficulty: "MEDIUM" }, { difficulty: "HARD" }],
+        },
+        order: [Sequelize.fn("RANDOM")],
+        limit: 1,
+      });
+    }
     return codeQuestions;
   }
 

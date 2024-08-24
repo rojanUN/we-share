@@ -47,14 +47,19 @@ export class ExamController {
       });
 
       if (!examSchedule) {
-        throw conflict("Invalid credentials");
+        throw conflict("Invalid credentials or exam might be unscheduled");
       }
 
       if (examSchedule.active === false) {
         throw conflict("Exam is not active");
       }
+      const data = {
+        examId: verifyToken.examId,
+        userId: user.id,
+      };
 
       res.status(200).json({
+        data,
         message: "User logged in successfully",
       });
     } catch (error) {
@@ -75,6 +80,13 @@ export class ExamController {
 
       console.log("this is req.body", req.body);
       const data = {
+        examTitle,
+        examDescription,
+        mcqQuestionMarks,
+        codeQuestionEasyMarks,
+        codeQuestionMediumHardMarks,
+        hasCodeQuestions,
+        totalMarks: mcqQuestionMarks * 25 + codeQuestionEasyMarks + codeQuestionMediumHardMarks,
       };
       console.log("this is data", data);
       const createdExamData = await Exams.create(data);
@@ -87,7 +99,6 @@ export class ExamController {
       next(error);
     }
   }
-
   public static async ScheduleExam(req: Request, res: Response, next: NextFunction) {
     try {
       const { examId } = req.body;

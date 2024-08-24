@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
 import * as sequelize from "sequelize";
-
 import { EnvironmentEnum } from "../enums/environmentEnum";
 
 const mustExist = <T>(value: T | undefined, name: string): T => {
@@ -52,6 +51,13 @@ export const port = mustExist(+process.env.PORT!, "PORT") as number,
   } as {
     url: string;
     cookie: string;
+  },
+  AdminCredentials = {
+    email: mustExist(process.env.ADMIN_EMAIL!, "ADMIN_EMAIL"),
+    password: mustExist(process.env.ADMIN_PASSWORD!, "ADMIN_PASSWORD"),
+  } as {
+    email: string;
+    password: string;
   };
 
 export * from "./instance";

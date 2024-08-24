@@ -1,5 +1,6 @@
 import * as Sequelize from "sequelize";
-
+import Exams from "./exam";
+import User from "./user";
 import { Database } from "../config";
 
 const sequelize = Database.sequelize;
@@ -13,34 +14,50 @@ const Results = sequelize.define(
       primaryKey: true,
       defaultValue: Sequelize.UUIDV4,
     },
-    full_screen_count: {
+    fullScreenCount: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    high_noise_count: {
+    highNoiseCount: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
       allowNull: false,
     },
-    out_of_view_count: {
+    outOfViewCount: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
       allowNull: false,
     },
-    attempted_question_count: {
+    attemptedQuestionCount: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
       allowNull: false,
     },
-    obtained_marks: {
+    obtainedMarks: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
-      allowNull: false,
+      allowNull: true,
     },
-    total_marks: {
+    totalMarks: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
+      allowNull: true,
+    },
+    examId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
+      references: {
+        model: "exams",
+        key: "id",
+      },
+    },
+    userId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "users",
+        key: "id",
+      },
     },
   },
   {
@@ -50,5 +67,12 @@ const Results = sequelize.define(
     freezeTableName: true,
   }
 );
+User.hasMany(Results, { foreignKey: "userId", as: "users" });
+
+Results.belongsTo(User, { foreignKey: "userId" });
+
+Exams.hasMany(Results, { foreignKey: "userId", as: "exams" });
+
+Results.belongsTo(Exams, { foreignKey: "examId" });
 
 export default Results;

@@ -29,15 +29,34 @@ module.exports = {
         defaultValue: 0,
         allowNull: false,
       },
-      obtained_marks: {
+      total_question_count: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
+      obtained_marks: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       total_marks: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
+        allowNull: true,
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
+      exam_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "exams",
+          key: "id",
+        },
       },
       created_at: {
         type: Sequelize.DATE,
