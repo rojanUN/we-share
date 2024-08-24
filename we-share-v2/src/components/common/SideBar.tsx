@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { AiOutlineSetting } from 'react-icons/ai';
+import React, { useState } from "react";
+import { AiOutlineSetting } from "react-icons/ai";
+import { HiUserAdd } from "react-icons/hi";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { Link } from "react-router-dom";
+
 import {
     FaHome,
     FaPaperclip as ExamScheduleIcon,
     FaUserPlus,
 } from 'react-icons/fa';
-import { HiUserAdd } from 'react-icons/hi';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { Link } from 'react-router-dom';
 
 const Sidebar: React.FC = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -23,8 +24,8 @@ const Sidebar: React.FC = () => {
         },
         { path: '/add-exam', label: 'Exam Manage', icon: <AiOutlineSetting /> },
         {
-            path: '/add-exam',
-            label: 'Exam Schedule',
+            path: '/view-result',
+            label: 'View Result',
             icon: <ExamScheduleIcon />,
         },
         {
@@ -32,7 +33,6 @@ const Sidebar: React.FC = () => {
             icon: <AiOutlineSetting />,
             isDropdown: true,
             subItems: [
-                { path: '/profile-settings', label: 'Profile Settings' },
                 { path: '/reset-password', label: 'Reset Password' },
             ],
         },

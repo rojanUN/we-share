@@ -13,6 +13,7 @@ import PrivateRoute from "./components/Routes/PrivateRoutes";
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import ResetPassword from "./components/Settings/ResetPassword";
+import ViewResult from "./components/Dashboard/Exam/ViewResult";
 import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -82,6 +83,10 @@ const App = () => {
                     path: '/reset-password',
                     element: <ResetPassword />,
                 },
+                {
+                    path: '/view-result',
+                    element: <ViewResult />
+                }
             ],
         },
 

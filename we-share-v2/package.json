@@ -36,6 +36,7 @@
         "react-time-picker": "^7.0.0",
         "react-timeit": "^1.2.12",
         "react-toastify": "^10.0.5",
+        "reactstrap": "^9.2.2",
         "styled-components": "^6.1.12",
         "yup": "^1.4.0"
     },

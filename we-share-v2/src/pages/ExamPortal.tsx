@@ -1,26 +1,26 @@
-import "react-toastify/dist/ReactToastify.css";
-import Alert from "../components/common/Alert";
-import Button from "../components/common/Button";
-import CircularProgress from "../components/common/CircularProgress";
-import CodeMirrorView from "../components/CodeMirrorView";
-import DetectNoise from "../components/DetectNoise";
-import MCQQuestionView from "../components/MCQQuestionView";
-import Modal from "../components/common/Modal";
-import QuestionNav from "../components/QuestionNav";
-import WebCam from "../components/WebCam";
-import { useCallback, useEffect, useState } from "react";
-import { AiTwotoneAlert } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setCheckedQuestions, setShowToast } from "../feature/exam/examSlice";
-import { exitFullscreen, formatCountDownTimer } from "../helper/helper";
-import { ClockIcon } from "../helper/icons";
-import { getModel, loadModel } from "../helper/loadModelHelper";
-import { LocalStorage } from "../helper/localStorage";
-import { SessionStorage } from "../helper/sessionStorage";
-import { Toast } from "../helper/toast";
-import { handleExamSubmit } from "../services/examService";
-import { CustomError } from "../types/question";
+import 'react-toastify/dist/ReactToastify.css';
+import Alert from '../components/common/Alert';
+import Button from '../components/common/Button';
+import CircularProgress from '../components/common/CircularProgress';
+import CodeMirrorView from '../components/CodeMirrorView';
+import DetectNoise from '../components/DetectNoise';
+import MCQQuestionView from '../components/MCQQuestionView';
+import Modal from '../components/common/Modal';
+import QuestionNav from '../components/QuestionNav';
+import WebCam from '../components/WebCam';
+import { useCallback, useEffect, useState } from 'react';
+import { AiTwotoneAlert } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setCheckedQuestions, setShowToast } from '../feature/exam/examSlice';
+import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
+import { ClockIcon } from '../helper/icons';
+import { getModel, loadModel } from '../helper/loadModelHelper';
+import { LocalStorage } from '../helper/localStorage';
+import { SessionStorage } from '../helper/sessionStorage';
+import { Toast } from '../helper/toast';
+import { handleExamSubmit } from '../services/examService';
+import { CustomError } from '../types/question';
 
 // import ErrorBoundary from '../components/ErrorBoundary';
 
@@ -47,27 +47,40 @@ const ExamPortal = function ExamPortal() {
     const examId = LocalStorage.getLocalItem('examId');
     const userId = LocalStorage.getLocalItem('userId');
 
-
     useEffect(() => {
         dispatch(setShowToast(true));
     }, []);
     // console.log(questionStore?.checkedQuestions, 'ke ke do you love');
 
-
     const handleMCQSubmit = useCallback(async () => {
-        const codeQuestions = questionStore?.checkedQuestions?.filter((item) => item?.category === "code" && item?.isSolved) || [];
+        const codeQuestions =
+            questionStore?.checkedQuestions?.filter(
+                (item) => item?.category === 'code' && item?.isSolved
+            ) || [];
 
-        const countMCQQuestions = questionStore?.checkedQuestions?.filter((item) => item?.category === "mcq")
-        const solvedMCQQuestions = countMCQQuestions?.filter((item) => item?.isSolved === true) || [];
-        const totalMCQ = questionStore?.questions?.filter((item) => item?.category === "mcq") || [];
-        const { easyDifficulty, hardDifficulty } = codeQuestions.reduce((acc, question) => {
-            if (question.difficulty === "EASY") {
-                acc.easyDifficulty = true;
-            } else if (question.difficulty === "MEDIUM" || question.difficulty === "HARD") {
-                acc.hardDifficulty = true;
-            }
-            return acc;
-        }, { easyDifficulty: false, hardDifficulty: false });
+        const countMCQQuestions = questionStore?.checkedQuestions?.filter(
+            (item) => item?.category === 'mcq'
+        );
+        const solvedMCQQuestions =
+            countMCQQuestions?.filter((item) => item?.isSolved === true) || [];
+        const totalMCQ =
+            questionStore?.questions?.filter(
+                (item) => item?.category === 'mcq'
+            ) || [];
+        const { easyDifficulty, hardDifficulty } = codeQuestions.reduce(
+            (acc, question) => {
+                if (question.difficulty === 'EASY') {
+                    acc.easyDifficulty = true;
+                } else if (
+                    question.difficulty === 'MEDIUM' ||
+                    question.difficulty === 'HARD'
+                ) {
+                    acc.hardDifficulty = true;
+                }
+                return acc;
+            },
+            { easyDifficulty: false, hardDifficulty: false }
+        );
         const examData = {
             fullScreenCount: fullScreenExitedCount,
             highNoiseCount,

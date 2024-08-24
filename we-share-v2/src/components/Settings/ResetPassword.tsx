@@ -1,12 +1,13 @@
-import * as Yup from 'yup';
-import React from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import * as Yup from "yup";
+import React from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Toast } from "../../helper/toast";
 
 // Define validation schema using Yup
 const validationSchema = Yup.object({
     password: Yup.string()
         .required('Password is required')
-        .min(6, 'Password must be at least 6 characters')
+        .min(8, 'Password must be at least 8 characters')
         .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
         .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
         .matches(/[0-9]/, 'Password must contain at least one number')
@@ -24,8 +25,15 @@ const ResetPassword: React.FC = () => {
         password: string;
         confirmPassword: string;
     }) => {
-        // Handle form submission
-        console.log('Form values:', values);
+        if (values.password === values.confirmPassword) {
+            values.password = "";
+            values.confirmPassword = "";
+            Toast.Success('Password Reset Successfully');
+        }
+        else {
+            Toast.Error('Password and Confirm Password must be same');
+        }
+
     };
 
     return (

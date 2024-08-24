@@ -40,7 +40,7 @@ export interface CheckedQuestionCodeType {
 
 export interface CheckedQuestionSetType
     extends CheckedQuestionType,
-    CheckedQuestionCodeType { }
+        CheckedQuestionCodeType {}
 export interface IBlazeFaceModel {
     estimateFaces(input: any, returnTensors: boolean): Promise<any>;
     // Add any other methods or properties you need from BlazeFaceModel

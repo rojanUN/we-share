@@ -1,17 +1,17 @@
-import Button from "../components/common/Button";
-import DetectNoise from "../components/DetectNoise";
-import Dropdown from "../components/common/Dropdown";
-import ErrorBoundary from "../components/ErrorBoundary";
-import Loader from "../components/common/Loader";
-import WebCam from "../components/WebCam";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks";
-import { setShowToast } from "../feature/exam/examSlice";
-import { enterFullscreen } from "../helper/helper";
-import { getModel, loadModel } from "../helper/loadModelHelper";
-import { Toast } from "../helper/toast";
-import { CustomError } from "../types/question";
+import Button from '../components/common/Button';
+import DetectNoise from '../components/DetectNoise';
+import Dropdown from '../components/common/Dropdown';
+import ErrorBoundary from '../components/ErrorBoundary';
+import Loader from '../components/common/Loader';
+import WebCam from '../components/WebCam';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { setShowToast } from '../feature/exam/examSlice';
+import { enterFullscreen } from '../helper/helper';
+import { getModel, loadModel } from '../helper/loadModelHelper';
+import { Toast } from '../helper/toast';
+import { CustomError } from '../types/question';
 
 import {
     BackArrowIcon,
@@ -284,7 +284,7 @@ function ExamDeviceCheck({
             getMediaStream();
         }
 
-        return () => { };
+        return () => {};
     }, [selectedAudioDevice, selectedVideoDevice]);
 
     return (
@@ -469,7 +469,7 @@ function ExamDeviceCheck({
                                 </p>
                             )}
                             {detectSoundOnceRef.current &&
-                                checkMicPermission ? (
+                            checkMicPermission ? (
                                 <p className="text-[#47a992]">
                                     Sound Detected Successfully.
                                 </p>

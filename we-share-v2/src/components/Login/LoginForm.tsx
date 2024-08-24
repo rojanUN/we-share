@@ -1,13 +1,13 @@
-import * as Yup from "yup";
-import React from "react";
-import { useFormik } from "formik";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { CookieStorage } from "../../helper/CookieStorage";
-import { LocalStorage } from "../../helper/localStorage";
-import { SessionStorage } from "../../helper/sessionStorage";
-import { Toast } from "../../helper/toast";
-import { loginExam } from "../../services/examService";
-import { loginAdmin } from "../../services/userServices";
+import * as Yup from 'yup';
+import React from 'react';
+import { useFormik } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CookieStorage } from '../../helper/CookieStorage';
+import { LocalStorage } from '../../helper/localStorage';
+import { SessionStorage } from '../../helper/sessionStorage';
+import { Toast } from '../../helper/toast';
+import { loginExam } from '../../services/examService';
+import { loginAdmin } from '../../services/userServices';
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
@@ -39,9 +39,9 @@ const LoginForm: React.FC = () => {
                 if (login?.success === true) {
                     Toast.Success(login.message);
                     SessionStorage.setSessionItem('token', token);
-                    console.log('login.data.userId', login.data.userId)
-                    LocalStorage.setLocalItem("examId", login.data.examId)
-                    LocalStorage.setLocalItem("userId", login.data?.userId)
+                    console.log('login.data.userId', login.data.userId);
+                    LocalStorage.setLocalItem('examId', login.data.examId);
+                    LocalStorage.setLocalItem('userId', login.data?.userId);
                     navigate('/exam-playground?examId=' + login.data.examId);
                 } else {
                     Toast.Error(login?.message);

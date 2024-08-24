@@ -1,8 +1,8 @@
-import Button from "./common/Button";
-import RadioBtn from "./common/RadioBtn";
-import { useAppDispatch } from "../app/hooks";
-import { SessionStorage } from "../helper/sessionStorage";
-import { CheckedQuestionType, QuestionStateType } from "../types/question";
+import Button from './common/Button';
+import RadioBtn from './common/RadioBtn';
+import { useAppDispatch } from '../app/hooks';
+import { SessionStorage } from '../helper/sessionStorage';
+import { CheckedQuestionType, QuestionStateType } from '../types/question';
 
 import {
     setSelectedQuestion,
@@ -51,13 +51,15 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
             updatedState = questionStore?.checkedQuestions?.map((q) =>
                 q.id === id
                     ? {
-                        ...q,
-                        selectedOption,
-                        selectedOptionIndex,
-                        correctAnswer,
-                        category,
-                        isSolved: selectedOptionIndex ? (selectedOptionIndex + 1) === correctAnswer : false,
-                    }
+                          ...q,
+                          selectedOption,
+                          selectedOptionIndex,
+                          correctAnswer,
+                          category,
+                          isSolved: selectedOptionIndex
+                              ? selectedOptionIndex + 1 === correctAnswer
+                              : false,
+                      }
                     : q
             );
         } else {
@@ -70,7 +72,9 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                     selectedOptionIndex,
                     correctAnswer,
                     category,
-                    isSolved: selectedOptionIndex ? (selectedOptionIndex + 1) === correctAnswer : false,
+                    isSolved: selectedOptionIndex
+                        ? selectedOptionIndex + 1 === correctAnswer
+                        : false,
                 },
             ];
         }
