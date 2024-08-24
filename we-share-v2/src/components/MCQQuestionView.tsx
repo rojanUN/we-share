@@ -1,13 +1,14 @@
+import Button from './common/Button';
+import RadioBtn from './common/RadioBtn';
 import { useAppDispatch } from '../app/hooks';
+import { SessionStorage } from '../helper/sessionStorage';
+import { CheckedQuestionType, QuestionStateType } from '../types/question';
+
 import {
     setSelectedQuestion,
     setActiveQuesIndex,
     setCheckedQuestions,
 } from '../feature/exam/examSlice';
-import { SessionStorage } from '../helper/sessionStorage';
-import { CheckedQuestionType, QuestionStateType } from '../types/question';
-import Button from './common/Button';
-import RadioBtn from './common/RadioBtn';
 
 interface MCQQuestionViewType {
     questionStore: QuestionStateType;
@@ -55,6 +56,9 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                           selectedOptionIndex,
                           correctAnswer,
                           category,
+                          isSolved: selectedOptionIndex
+                              ? selectedOptionIndex + 1 === correctAnswer
+                              : false,
                       }
                     : q
             );
@@ -68,6 +72,9 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                     selectedOptionIndex,
                     correctAnswer,
                     category,
+                    isSolved: selectedOptionIndex
+                        ? selectedOptionIndex + 1 === correctAnswer
+                        : false,
                 },
             ];
         }

@@ -13,16 +13,16 @@ import PrivateRoute from "./components/Routes/PrivateRoutes";
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import ResetPassword from "./components/Settings/ResetPassword";
+import ViewResult from "./components/Dashboard/Exam/ViewResult";
 import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { store } from "./app/store";
 
 const App = () => {
-    const [canAccessExamPortal, setCanAccessExamPortal] = useState(false);
+    const [canAccessExamPortal, setCanAccessExamPortal] = useState(true);
 
     const router = createBrowserRouter([
-
         {
             path: '/exam-playground',
             element: (
@@ -80,17 +80,20 @@ const App = () => {
                 //     element: <ManageAdmin />
                 // },
                 {
-                    path: "/reset-password",
-                    element: <ResetPassword />
+                    path: '/reset-password',
+                    element: <ResetPassword />,
+                },
+                {
+                    path: '/view-result',
+                    element: <ViewResult />
                 }
-
             ],
         },
 
         {
-            path: "*",
-            element: <NotFoundPage />
-        }
+            path: '*',
+            element: <NotFoundPage />,
+        },
     ]);
 
     return (

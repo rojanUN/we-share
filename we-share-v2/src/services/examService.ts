@@ -96,7 +96,6 @@ export const getExam = async () => {
 };
 
 export const addExam = async (values: any, includeCodeQuestions: boolean) => {
-
     const URL = examScheduleEndpoints.addExams;
     console.log('this is values', values);
     const response = await api.post(URL, {
@@ -144,13 +143,19 @@ interface loginData {
     email: string;
     password: string;
     token: string;
+    examId?: number;
 }
 export const loginExam = async (authData: loginData) => {
     try {
         const url = authEndPoints.loginExam;
         const response = await api.post(url, authData);
+        console.log('this is response', response);
         if (response)
-            return { success: true, message: 'Exam login successfully' };
+            return {
+                success: true,
+                data: response.data,
+                message: 'Exam login successfully',
+            };
     } catch (error: any) {
         return {
             success: false,
@@ -181,5 +186,40 @@ export const searchUsers = async (searchData: searchData) => {
 export const handleExamSubmit = async (examData: any) => {
     const URL = examEndpoints.handleResultEvaluation;
     const response = await api.post(URL, examData);
+
     return response;
 };
+
+export const getResult = async (getExam: any) => {
+    try {
+        const URL = examEndpoints.getResult;
+        const response = await api.post(URL, {
+            examId: getExam.examId,
+            userId: getExam.userId
+        });
+        console.log('this is response', response);
+
+        if (response.data) {
+            return response.data;
+        }
+    } catch (error: any) {
+        console.log("here");
+        return { sucess: false, message: error.response.data.message || 'An error occurred while fetching results' }
+    }
+
+}
+export const getDashboardDatas = async () => {
+    try {
+        const URL = examEndpoints.getDashboardData;
+        const response = await api.get(URL);
+
+        if (response.data) {
+            return response.data;
+        }
+    } catch (error: any) {
+        console.log("here");
+        return { sucess: false, message: error.response.data.message || 'An error occurred while fetching results' }
+    }
+
+}
+

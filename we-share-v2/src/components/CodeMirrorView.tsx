@@ -1,17 +1,25 @@
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/dracula.css';
-// language modes
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/rust/rust';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/go/go';
 import 'codemirror/mode/clike/clike';
-// import { Toast } from '../helper/toast';
-import Dropdown from './common/Dropdown';
-import { useEffect, useState } from 'react';
+import 'codemirror/mode/go/go';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/rust/rust';
+import 'codemirror/theme/dracula.css';
 import Button from './common/Button';
-import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
+import CircularProgress from './common/CircularProgress';
+import CodeMirrorIDE from './common/CodeMirrorIDE';
+import Dropdown from './common/Dropdown';
+import Loader from './common/Loader';
+import Modal from './common/Modal';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setCheckedQuestions } from '../feature/exam/examSlice';
 import { asyncHandler } from '../helper/helper';
+import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
+import { Toast } from '../helper/toast';
+
+// language modes
+// import { Toast } from '../helper/toast';
 import {
     CheckedQuestionSetType,
     LeetCodeQuestion,
@@ -23,13 +31,6 @@ import {
     handleSingleQuestionFetch,
     pollSubmissionDetails,
 } from '../services/examService';
-import Loader from './common/Loader';
-import Modal from './common/Modal';
-import { Toast } from '../helper/toast';
-import CircularProgress from './common/CircularProgress';
-import CodeMirrorIDE from './common/CodeMirrorIDE';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setCheckedQuestions } from '../feature/exam/examSlice';
 
 const languages = [
     'JavaScript',
@@ -80,6 +81,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
         async (
             slug: string,
             code: string,
+            difficulty?: string,
             lang: string,
             quesId: number,
             category: string
@@ -97,12 +99,14 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             const codeTestData = {
                 id: quesId,
                 category,
+
                 isSolved:
                     submissionDetails.totalCorrect ===
                     submissionDetails.totalTestcases
                         ? true
                         : false,
                 slug,
+                difficulty,
             };
             let checkedQuestionSet: CheckedQuestionSetType[] = [];
             if (checkedQuestions) {
@@ -201,6 +205,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                             handleRunCodeBtnClick(
                                 question!.question,
                                 code[question!.id],
+                                question!.difficulty,
                                 currentLanguage,
                                 question!.id,
                                 question!.category

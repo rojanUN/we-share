@@ -16,3 +16,11 @@ export interface ExamInterface {
     totalMarks?: number;
     existScheduleExam?: boolean;
 }
+
+export interface ResultInterface {
+    id: number;
+    exam: ExamInterface;
+    user: UserInterface;
+    obtainedMarks: number;
+    totalMarks: number;
+}

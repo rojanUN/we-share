@@ -1,11 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
-import { enterFullscreen } from '../helper/helper';
+import DetectNoise from '../components/DetectNoise';
+import Dropdown from '../components/common/Dropdown';
+import ErrorBoundary from '../components/ErrorBoundary';
+import Loader from '../components/common/Loader';
 import WebCam from '../components/WebCam';
-import { getModel, loadModel } from '../helper/loadModelHelper';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
 import { setShowToast } from '../feature/exam/examSlice';
+import { enterFullscreen } from '../helper/helper';
+import { getModel, loadModel } from '../helper/loadModelHelper';
+import { Toast } from '../helper/toast';
+import { CustomError } from '../types/question';
+
 import {
     BackArrowIcon,
     CheckedIcon,
@@ -15,12 +22,6 @@ import {
     TipsIcon,
     VideoIcon,
 } from '../helper/icons';
-import Dropdown from '../components/common/Dropdown';
-import { CustomError } from '../types/question';
-import { Toast } from '../helper/toast';
-import DetectNoise from '../components/DetectNoise';
-import ErrorBoundary from '../components/ErrorBoundary';
-import Loader from '../components/common/Loader';
 
 function ExamDeviceCheck({
     setCanAccessExamPortal,
@@ -39,6 +40,9 @@ function ExamDeviceCheck({
     const [videoOptions, setVideoOptions] = useState<string[]>([]);
     const [audioOptions, setAudioOptions] = useState<string[]>([]);
     const [showRefreshButton, setshowRefreshButton] = useState<boolean>(false);
+
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get('examId');
 
     let audioStream: any = null;
     let videoStream: any = null;

@@ -1,38 +1,33 @@
-import Card from '../common/Card';
-import React, { useEffect, useState } from 'react';
-import { number } from 'yup';
-import { getExam } from '../../services/examService';
-import { getUsers } from '../../services/userServices';
+import Card from "../common/Card";
+import React, { useEffect, useState } from "react";
+import { getDashboardDatas, getExam } from "../../services/examService";
 
+interface DashboardData {
+    totalExaminee: number;
+    totalCodeQuestions: number;
+    totalMCQquestions: number;
+    totalScheduledExam: number;
+    totalAdmin: number;
+}
 const Dashboard: React.FC = () => {
-    const [userCount, setUserCount] = useState<number>(0);
-    const [examCount, setExamCount] = useState<number>(0);
+    const [dashboardData, setDashboardData] = useState<DashboardData>();
 
-    const countUsers = async () => {
-        const response = await getUsers();
 
-        setUserCount(
-            response.filter(
-                (user: any) => user.role === 'USER' && user.status === 'ACTIVE'
-            ).length
-        );
-    };
-
-    const countExams = async () => {
-        const response = await getExam();
-        setExamCount(response.length);
+    const getDashboardData = async () => {
+        const response = await getDashboardDatas();
+        console.log(response, "thi si srespionse");
+        setDashboardData(response);
     };
     useEffect(() => {
-        countUsers();
-        countExams();
-    });
+        getDashboardData();
+    }, []);
     return (
         <div className="p-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card title="Total Examinee" count={userCount} />
-                <Card title="Total Code Questions" count={examCount} />
-                <Card title="Total MCQ Questions" count={1} />
-                <Card title="Active Exam Schedules" count={1} />
+                <Card title="Total Examinee" count={dashboardData?.totalExaminee ?? "N/A"} />
+                <Card title="Total Code Questions" count={dashboardData?.totalCodeQuestions ?? "N/A"} />
+                <Card title="Total MCQ Questions" count={dashboardData?.totalMCQquestions ?? "N/A"} />
+                <Card title="Active Exam Schedules" count={dashboardData?.totalScheduledExam ?? "N/A"} />
             </div>
         </div>
     );
