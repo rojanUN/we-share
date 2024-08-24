@@ -1,6 +1,6 @@
 import * as Sequelize from "sequelize";
+import ExamSchedule from "./examSchedule";
 import { Database } from "../config";
-import ExamSchedule from "./examSchedule"; // import ExamSchedule model
 
 const sequelize = Database.sequelize;
 

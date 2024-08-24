@@ -6,9 +6,10 @@ import { RouterClass } from "@src/classes";
 import { NextFunction, Request, Response } from "express";
 import { sign } from "jsonwebtoken";
 import { Op } from "sequelize";
+import { AdminCredentials } from "../config";
 
 export class UserController {
-  public constructor() {}
+  public constructor() { }
 
   public static async getUsers(req: Request, res: Response, next: NextFunction) {
     try {
@@ -29,35 +30,75 @@ export class UserController {
     }
   }
 
+  public static async addAdmin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      const isUserExisted = await User.findOne({ where: { email } });
+      if (isUserExisted) {
+        throw conflict("Email already exists!");
+      }
+      const userData = {
+        email,
+        password,
+        role: "ADMIN",
+      };
+      const createdUser = await User.create(userData);
+      if (createdUser) res.status(200).json({ data: createdUser, message: "Admin added successfully" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public static async LoginAdmin(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
+      let firstLoginAdmin: boolean = false;
 
+      const userAdmin = await User.findOne({ where: { role: "ADMIN" } });
+      if (!userAdmin) {
+        if (email === AdminCredentials.email && password === AdminCredentials.password) {
+          firstLoginAdmin = true;
+        } else {
+          throw conflict("Invalid Credentials");
+        }
+      }
       const user = await User.findOne({ where: { email } });
-      if (!user) {
-        throw notFound("User not found");
+      if (!firstLoginAdmin) {
+        if (!user) {
+          throw notFound("User not found");
+        }
+
+        if (password !== user.password) {
+          throw conflict("Invalid Credentials");
+        }
+
+        if (user.role !== "ADMIN") {
+          throw conflict("The user is not authorized");
+        }
+
+        if (user.status !== "ACTIVE") {
+          throw conflict("Admin is not active");
+        }
+      }
+      let payload;
+
+      if (firstLoginAdmin) {
+        payload = {
+          email: AdminCredentials.email,
+          role: "ADMIN",
+          fullName: "Admin",
+        };
+      } else {
+        payload = {
+          email: user?.email,
+          role: user?.role,
+          fullName: user?.fullName,
+        };
       }
 
-      if (password !== user.password) {
-        throw conflict("Invalid Credentials");
-      }
-
-      if (user.role !== "ADMIN") {
-        throw conflict("The user is not authorized");
-      }
-
-      if (user.status !== "ACTIVE") {
-        throw conflict("Admin is not active");
-      }
-
-      const payload = {
-        email: user.email,
-        role: user.role,
-        fullName: user.fullName,
-      };
       const token = await sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
-      res.status(200).json({ data: { token, fullName: user.fullName }, message: "Admin logged in successfully" });
+      res.status(200).json({ data: { token, payload }, message: "Admin logged in successfully" });
     } catch (error) {
       console.log(error, "error>>>>>>>>>>>>>>>");
       next(error);
