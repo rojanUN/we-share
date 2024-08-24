@@ -9,7 +9,7 @@ import { Op } from "sequelize";
 import { AdminCredentials } from "../config";
 
 export class UserController {
-  public constructor() { }
+  public constructor() {}
 
   public static async getUsers(req: Request, res: Response, next: NextFunction) {
     try {

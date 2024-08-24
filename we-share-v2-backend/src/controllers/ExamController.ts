@@ -1,5 +1,7 @@
+import CodeQuestion from "../models/codeQuestionsModel";
 import ExamSchedule from "../models/examSchedule";
 import Exams from "../models/exam";
+import MCQQuestion from "../models/mcqQuestionsModel";
 import User from "../models/user";
 import e, { NextFunction, Request, Response } from "express";
 import { conflict } from "@hapi/boom";
@@ -10,7 +12,7 @@ import { sign, verify } from "jsonwebtoken";
 import { sendEmail } from "../utils/nodemailer/mailer";
 
 export class ExamController {
-  public constructor() {}
+  public constructor() { }
 
   public static async LoginExam(req: Request, res: Response, next: NextFunction) {
     try {
@@ -88,9 +90,7 @@ export class ExamController {
         hasCodeQuestions,
         totalMarks: mcqQuestionMarks * 25 + codeQuestionEasyMarks + codeQuestionMediumHardMarks,
       };
-      console.log("this is data", data);
       const createdExamData = await Exams.create(data);
-      console.log("this is created data exma", createdExamData);
       if (createdExamData) {
         res.status(200).json({ data: createdExamData, message: "Exams added successfully" });
       }
@@ -187,6 +187,35 @@ export class ExamController {
         res.status(200).json({ data: examsWithScheduleCheck, message: "Exams fetched successfully" });
       }
     } catch (error) {
+      next(error);
+    }
+  }
+
+
+  public static async DashboardData(req: Request, res: Response, next: NextFunction) {
+    try {
+      const totalUser = await User.count({ where: { role: "USER" } });
+      const totalAdmin = await User.count({ where: { role: "ADMIN" } });
+      const totalExam = await Exams.count();
+      const totalScheduledExam = await ExamSchedule.count({ where: { active: true } });
+      const totalMCQquestions = await MCQQuestion.count();
+      const totalCodeQuestions = await CodeQuestion.count();
+
+      res.status(200).json({
+        data: {
+          totalExaminee: totalUser,
+          totalAdmin,
+          totalExam,
+          totalScheduledExam,
+          totalMCQquestions,
+          totalCodeQuestions,
+        },
+        message: "Dashboard data fetched successfully",
+      });
+
+
+    }
+    catch (error: any) {
       next(error);
     }
   }

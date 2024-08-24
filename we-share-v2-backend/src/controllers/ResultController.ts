@@ -7,7 +7,7 @@ import { Op, Sequelize } from "sequelize";
 import { sendEmail } from "../utils/nodemailer/resultmailer";
 
 export class ResultController {
-  public constructor() {}
+  public constructor() { }
 
   public static async handleResultEvaluation(req: Request, res: Response, next: NextFunction) {
     try {
@@ -90,4 +90,57 @@ export class ResultController {
       next(error);
     }
   }
+
+  public static async getResult(req: Request, res: Response, next: NextFunction) {
+    const { examId, userId } = req.body;
+    let resultData = [];
+
+    try {
+      if (examId !== undefined && userId !== undefined) {
+        // If both examId and userId are provided
+        resultData = await Results.findAll({
+          where: {
+            examId: examId,
+            userId: userId,
+          },
+          include: [
+            {
+              model: Exams,
+            },
+          ],
+        });
+      } else if (examId !== undefined) {
+        // If only examId is provided
+        resultData = await Results.findAll({
+          where: {
+            examId: examId,
+          },
+          include: [Exams, User],
+        });
+      } else if (userId !== undefined) {
+        // If only userId is provided
+        resultData = await Results.findAll({
+          where: {
+            userId: userId,
+          },
+          include: [Exams, User]
+        });
+      } else {
+        resultData = await Results.findAll({
+          include: [
+            Exams, User
+          ],
+        });
+
+
+        if (resultData.length === 0) {
+          throw notFound("Result not found");
+        }
+      }
+      res.status(200).json({ data: resultData, message: "Result fetched successfully" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }
