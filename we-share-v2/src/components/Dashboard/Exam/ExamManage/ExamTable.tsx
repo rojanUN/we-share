@@ -1,11 +1,11 @@
-import Button from '../../../common/Button';
-import Modal from '../../../common/Modal';
-import ReactPaginate from 'react-paginate';
-import { useState } from 'react';
-import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa';
-import { Toast } from '../../../../helper/toast';
-import { ExamInterface } from '../../../../interfaces/UserInterface';
-import { UnscheduleExam, scheduleExam } from '../../../../services/examService';
+import Button from "../../../common/Button";
+import Modal from "../../../common/Modal";
+import ReactPaginate from "react-paginate";
+import { useState } from "react";
+import { FaAngleLeft, FaAngleRight, FaChevronRight } from "react-icons/fa";
+import { Toast } from "../../../../helper/toast";
+import { ExamInterface } from "../../../../interfaces/UserInterface";
+import { UnscheduleExam, scheduleExam } from "../../../../services/examService";
 
 interface ExamTableProps {
     exams: ExamInterface[];
@@ -118,25 +118,30 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                                     </td>
                                     <td className="py-2">{exam.totalMarks}</td>
                                     <td className="py-2 px-1" align="center">
-                                        {exam.existScheduleExam ? (
-                                            <Button
-                                                variant="primary"
-                                                handleBtnClick={() =>
-                                                    handleUnschedule(exam.id)
-                                                }
-                                            >
-                                                Cancel Exam
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="primary"
-                                                handleBtnClick={() =>
-                                                    handleSchedule(exam.id)
-                                                }
-                                            >
-                                                Schedule
-                                            </Button>
-                                        )}
+                                        <div className="flex flex-wrap gap-2 flex-col max-w-fit">
+                                            {exam.existScheduleExam ? (
+                                                <Button
+                                                    variant="primary"
+                                                    handleBtnClick={() =>
+                                                        handleUnschedule(exam.id)
+                                                    }
+                                                >
+                                                    Cancel Exam
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="primary"
+                                                    handleBtnClick={() =>
+                                                        handleSchedule(exam.id)
+                                                    }
+                                                >
+                                                    Schedule
+                                                </Button>
+
+                                            )}
+                                            <Button variant="primary" >View Participant</Button>
+
+                                        </div>
                                     </td>
                                 </tr>
                             ))
@@ -144,6 +149,8 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                     </tbody>
                 </table>
             </div>
+
+
             <div className="flex justify-center items-center mt-4">
                 <ReactPaginate
                     previousLabel={<FaAngleLeft />}
