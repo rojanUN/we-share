@@ -1,10 +1,10 @@
-import * as Yup from "yup";
-import React, { useState } from "react";
-import { DatePicker } from "@hilla/react-components/DatePicker";
-import { TimePicker } from "@hilla/react-components/TimePicker.js";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Toast } from "../../../../helper/toast";
-import { addExam } from "../../../../services/examService";
+import * as Yup from 'yup';
+import React, { useState } from 'react';
+import { DatePicker } from '@hilla/react-components/DatePicker';
+import { TimePicker } from '@hilla/react-components/TimePicker.js';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Toast } from '../../../../helper/toast';
+import { addExam } from '../../../../services/examService';
 
 interface ExamInfoProps {
     onClose: () => void;
@@ -72,7 +72,6 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                 >
                     {({ values }) => (
                         <Form>
-
                             <div className="mb-4">
                                 <label className="block mb-2">Exam Title</label>
                                 <Field
@@ -102,11 +101,12 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                 />
                             </div>
                             <div className="mb-4 flex justify-between">
-
                                 <TimePicker
                                     label="Start Time"
                                     value={startTime}
-                                    onChange={(e) => setStartTime(e.target.value)}
+                                    onChange={(e) =>
+                                        setStartTime(e.target.value)
+                                    }
                                 />
                                 <TimePicker
                                     label="End Time"
@@ -115,15 +115,15 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                 />
                             </div>
                             <div className="mb-4">
-
                                 <DatePicker
                                     label="Select Start Date"
                                     min={formattedDate}
                                     value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
                                 />
                             </div>
-
 
                             <div className="mb-4">
                                 <label className="block mb-2">
@@ -141,7 +141,6 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                 />
                             </div>
                             <div className="flex items-center gap-2 mb-4 ">
-
                                 <Field
                                     type="checkbox"
                                     name="includeCodeQuestions"
@@ -153,9 +152,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     }
                                     className="ml-2"
                                 />
-                                <span>
-                                    Include Code Questions
-                                </span>
+                                <span>Include Code Questions</span>
                             </div>
                             {includeCodeQuestions && (
                                 <>

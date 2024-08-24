@@ -1,17 +1,25 @@
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/dracula.css';
+import "codemirror/lib/codemirror.css";
+import "codemirror/mode/clike/clike";
+import "codemirror/mode/go/go";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/python/python";
+import "codemirror/mode/rust/rust";
+import "codemirror/theme/dracula.css";
+import Button from "./common/Button";
+import CircularProgress from "./common/CircularProgress";
+import CodeMirrorIDE from "./common/CodeMirrorIDE";
+import Dropdown from "./common/Dropdown";
+import Loader from "./common/Loader";
+import Modal from "./common/Modal";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { setCheckedQuestions } from "../feature/exam/examSlice";
+import { asyncHandler } from "../helper/helper";
+import { ConsoleIcon, PlayIcon, TipsIcon } from "../helper/icons";
+import { Toast } from "../helper/toast";
+
 // language modes
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/rust/rust';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/clike/clike';
 // import { Toast } from '../helper/toast';
-import Dropdown from './common/Dropdown';
-import { useEffect, useState } from 'react';
-import Button from './common/Button';
-import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
-import { asyncHandler } from '../helper/helper';
 import {
     CheckedQuestionSetType,
     LeetCodeQuestion,
@@ -23,13 +31,6 @@ import {
     handleSingleQuestionFetch,
     pollSubmissionDetails,
 } from '../services/examService';
-import Loader from './common/Loader';
-import Modal from './common/Modal';
-import { Toast } from '../helper/toast';
-import CircularProgress from './common/CircularProgress';
-import CodeMirrorIDE from './common/CodeMirrorIDE';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setCheckedQuestions } from '../feature/exam/examSlice';
 
 const languages = [
     'JavaScript',
@@ -80,6 +81,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
         async (
             slug: string,
             code: string,
+            difficulty?: string,
             lang: string,
             quesId: number,
             category: string
@@ -97,12 +99,14 @@ function CodeMirrorView(props: CodeMirrorViewType) {
             const codeTestData = {
                 id: quesId,
                 category,
+
                 isSolved:
                     submissionDetails.totalCorrect ===
-                    submissionDetails.totalTestcases
+                        submissionDetails.totalTestcases
                         ? true
                         : false,
                 slug,
+                difficulty,
             };
             let checkedQuestionSet: CheckedQuestionSetType[] = [];
             if (checkedQuestions) {
@@ -201,9 +205,10 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                             handleRunCodeBtnClick(
                                 question!.question,
                                 code[question!.id],
+                                question!.difficulty,
                                 currentLanguage,
                                 question!.id,
-                                question!.category
+                                question!.category,
                             )
                         }
                         outline
@@ -256,7 +261,7 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                     >
                         <div className="mb-3 text-center text-[18px]">
                             {submissionDetails!.totalCorrect ===
-                            submissionDetails!.totalTestcases ? (
+                                submissionDetails!.totalTestcases ? (
                                 <p className="text-[#47a992]">
                                     Congrats! You have passed all test cases.
                                 </p>
@@ -312,30 +317,30 @@ function CodeMirrorView(props: CodeMirrorViewType) {
                         </div>
                         {+submissionDetails!.totalTestcases !==
                             +submissionDetails!.totalCorrect && (
-                            <p className="mt-5 text-[17px] flex items-center justify-center">
-                                <span className="text-[#47a992] font-bold inline-flex">
-                                    <TipsIcon
-                                        style={{
-                                            fontSize: '34px',
-                                            marginTop: '-5px',
-                                            marginRight: '2px',
-                                        }}
-                                    />{' '}
-                                    <span
-                                        style={{
-                                            marginTop: '3px',
-                                            marginRight: '10px',
-                                        }}
-                                    >
-                                        Tips:{' '}
+                                <p className="mt-5 text-[17px] flex items-center justify-center">
+                                    <span className="text-[#47a992] font-bold inline-flex">
+                                        <TipsIcon
+                                            style={{
+                                                fontSize: '34px',
+                                                marginTop: '-5px',
+                                                marginRight: '2px',
+                                            }}
+                                        />{' '}
+                                        <span
+                                            style={{
+                                                marginTop: '3px',
+                                                marginRight: '10px',
+                                            }}
+                                        >
+                                            Tips:{' '}
+                                        </span>
                                     </span>
-                                </span>
-                                <span className="inline-block mt-[3px]">
-                                    Check the last test case to solve the
-                                    problem.
-                                </span>
-                            </p>
-                        )}
+                                    <span className="inline-block mt-[3px]">
+                                        Check the last test case to solve the
+                                        problem.
+                                    </span>
+                                </p>
+                            )}
                     </Modal>
                 )}
             </div>

@@ -1,6 +1,7 @@
-import { questionEndPoints } from '../helper/endpoint';
-import { api } from '../helper/axios';
-import { RandomQuestionResponse } from '../types/question';
+import { api } from "../helper/axios";
+import { questionEndPoints } from "../helper/endpoint";
+import { LocalStorage } from "../helper/localStorage";
+import { RandomQuestionResponse } from "../types/question";
 
 interface Option {
     text: string;
@@ -46,7 +47,8 @@ export const submitCodeQuestions = async (questions: CodeQuestion[]) => {
 };
 
 export const getRandomQuestions = async () => {
-    const URL = questionEndPoints.getRandomQuestions;
+    const localData = LocalStorage.getLocalItem('examId');
+    const URL = questionEndPoints.getRandomQuestions + "/" + parseInt(localData);
     const response: RandomQuestionResponse = await api.get(URL);
     console.log('hereeeeeeeee');
     return response;

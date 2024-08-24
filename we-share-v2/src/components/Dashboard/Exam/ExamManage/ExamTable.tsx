@@ -1,11 +1,11 @@
-import Button from "../../../common/Button";
-import Modal from "../../../common/Modal";
-import ReactPaginate from "react-paginate";
-import { useState } from "react";
-import { FaAngleLeft, FaAngleRight, FaChevronRight } from "react-icons/fa";
-import { Toast } from "../../../../helper/toast";
-import { ExamInterface } from "../../../../interfaces/UserInterface";
-import { UnscheduleExam, scheduleExam } from "../../../../services/examService";
+import Button from '../../../common/Button';
+import Modal from '../../../common/Modal';
+import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
+import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa';
+import { Toast } from '../../../../helper/toast';
+import { ExamInterface } from '../../../../interfaces/UserInterface';
+import { UnscheduleExam, scheduleExam } from '../../../../services/examService';
 
 interface ExamTableProps {
     exams: ExamInterface[];
@@ -123,7 +123,9 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                                                 <Button
                                                     variant="primary"
                                                     handleBtnClick={() =>
-                                                        handleUnschedule(exam.id)
+                                                        handleUnschedule(
+                                                            exam.id
+                                                        )
                                                     }
                                                 >
                                                     Cancel Exam
@@ -137,10 +139,10 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                                                 >
                                                     Schedule
                                                 </Button>
-
                                             )}
-                                            <Button variant="primary" >View Participant</Button>
-
+                                            <Button variant="primary">
+                                                View Participant
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>
@@ -149,7 +151,6 @@ const ExamTable = ({ exams, onUpdated }: ExamTableProps) => {
                     </tbody>
                 </table>
             </div>
-
 
             <div className="flex justify-center items-center mt-4">
                 <ReactPaginate

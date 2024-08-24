@@ -22,7 +22,7 @@ export const authEndPoints = {
 export const questionEndPoints = {
     addMCQQuestion: `${baseUrl}/api/questions/add/mcqquestions`,
     addCodeQuestion: `${baseUrl}/api/questions/add/codequestions`,
-    getRandomQuestions: `${baseUrl}/api/questions/get/questioncollections/1`,
+    getRandomQuestions: `${baseUrl}/api/questions/get/questioncollections`,
 };
 
 export const userEndPoints = {

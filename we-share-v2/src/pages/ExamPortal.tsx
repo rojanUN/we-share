@@ -1,25 +1,28 @@
-import { useState, useEffect, useCallback } from 'react';
-import WebCam from '../components/WebCam';
-import 'react-toastify/dist/ReactToastify.css';
-import QuestionNav from '../components/QuestionNav';
-import Button from '../components/common/Button';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setCheckedQuestions, setShowToast } from '../feature/exam/examSlice';
-import { ClockIcon } from '../helper/icons';
-import { CustomError } from '../types/question';
-import Modal from '../components/common/Modal';
-import CircularProgress from '../components/common/CircularProgress';
-import { exitFullscreen, formatCountDownTimer } from '../helper/helper';
-import { SessionStorage } from '../helper/sessionStorage';
-import { useNavigate } from 'react-router-dom';
-import Alert from '../components/common/Alert';
-import { getModel, loadModel } from '../helper/loadModelHelper';
-import DetectNoise from '../components/DetectNoise';
+import "react-toastify/dist/ReactToastify.css";
+import Alert from "../components/common/Alert";
+import Button from "../components/common/Button";
+import CircularProgress from "../components/common/CircularProgress";
+import CodeMirrorView from "../components/CodeMirrorView";
+import DetectNoise from "../components/DetectNoise";
+import MCQQuestionView from "../components/MCQQuestionView";
+import Modal from "../components/common/Modal";
+import QuestionNav from "../components/QuestionNav";
+import WebCam from "../components/WebCam";
+import { useCallback, useEffect, useState } from "react";
+import { AiTwotoneAlert } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { setCheckedQuestions, setShowToast } from "../feature/exam/examSlice";
+import { exitFullscreen, formatCountDownTimer } from "../helper/helper";
+import { ClockIcon } from "../helper/icons";
+import { getModel, loadModel } from "../helper/loadModelHelper";
+import { LocalStorage } from "../helper/localStorage";
+import { SessionStorage } from "../helper/sessionStorage";
+import { Toast } from "../helper/toast";
+import { handleExamSubmit } from "../services/examService";
+import { CustomError } from "../types/question";
+
 // import ErrorBoundary from '../components/ErrorBoundary';
-import { Toast } from '../helper/toast';
-import MCQQuestionView from '../components/MCQQuestionView';
-import CodeMirrorView from '../components/CodeMirrorView';
-import { handleExamSubmit } from '../services/examService';
 
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
@@ -41,20 +44,46 @@ const ExamPortal = function ExamPortal() {
     const [isModelsLoaded, setIsModelsLoaded] = useState(false);
     const [soundLevel, setSoundLevel] = useState(0);
 
+    const examId = LocalStorage.getLocalItem('examId');
+    const userId = LocalStorage.getLocalItem('userId');
+
+
     useEffect(() => {
         dispatch(setShowToast(true));
     }, []);
     // console.log(questionStore?.checkedQuestions, 'ke ke do you love');
 
+
     const handleMCQSubmit = useCallback(async () => {
+        const codeQuestions = questionStore?.checkedQuestions?.filter((item) => item?.category === "code" && item?.isSolved) || [];
+
+        const countMCQQuestions = questionStore?.checkedQuestions?.filter((item) => item?.category === "mcq")
+        const solvedMCQQuestions = countMCQQuestions?.filter((item) => item?.isSolved === true) || [];
+        const totalMCQ = questionStore?.questions?.filter((item) => item?.category === "mcq") || [];
+        const { easyDifficulty, hardDifficulty } = codeQuestions.reduce((acc, question) => {
+            if (question.difficulty === "EASY") {
+                acc.easyDifficulty = true;
+            } else if (question.difficulty === "MEDIUM" || question.difficulty === "HARD") {
+                acc.hardDifficulty = true;
+            }
+            return acc;
+        }, { easyDifficulty: false, hardDifficulty: false });
         const examData = {
-            fullScreenExitedCount,
+            fullScreenCount: fullScreenExitedCount,
             highNoiseCount,
             outOfViewCount: questionStore?.outOfViewCount,
-            solvedQuestions: questionStore?.checkedQuestions,
+            attemptedQuestionCount: questionStore?.checkedQuestions?.length,
+            totalQuestionCount: questionStore?.questions?.length,
+            examId: examId,
+            userId: userId,
+            easyDifficulty: easyDifficulty,
+            mediumHardDifficulty: hardDifficulty,
+            mcqCount: totalMCQ.length,
+            attemptedMcqCount: countMCQQuestions?.length ?? 0,
+            solvedMcqCount: solvedMCQQuestions?.length ?? 0,
         };
+        console.log(examData, 'exam data');
         try {
-            console.log(examData, 'exam Data>>>');
             setCountDownTimer(examDuration || 3600);
             SessionStorage.removeAllSession();
             dispatch(setCheckedQuestions([]));

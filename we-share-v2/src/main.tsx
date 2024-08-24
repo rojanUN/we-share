@@ -19,10 +19,9 @@ import { ToastContainer } from "react-toastify";
 import { store } from "./app/store";
 
 const App = () => {
-    const [canAccessExamPortal, setCanAccessExamPortal] = useState(false);
+    const [canAccessExamPortal, setCanAccessExamPortal] = useState(true);
 
     const router = createBrowserRouter([
-
         {
             path: '/exam-playground',
             element: (
@@ -80,17 +79,16 @@ const App = () => {
                 //     element: <ManageAdmin />
                 // },
                 {
-                    path: "/reset-password",
-                    element: <ResetPassword />
-                }
-
+                    path: '/reset-password',
+                    element: <ResetPassword />,
+                },
             ],
         },
 
         {
-            path: "*",
-            element: <NotFoundPage />
-        }
+            path: '*',
+            element: <NotFoundPage />,
+        },
     ]);
 
     return (

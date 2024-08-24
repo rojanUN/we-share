@@ -1,9 +1,9 @@
-import Button from "./Button";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CookieStorage } from "../../helper/CookieStorage";
-import { SessionStorage } from "../../helper/sessionStorage";
-import { Toast } from "../../helper/toast";
+import Button from './Button';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CookieStorage } from '../../helper/CookieStorage';
+import { SessionStorage } from '../../helper/sessionStorage';
+import { Toast } from '../../helper/toast';
 
 const Navbar: React.FC = () => {
     const [user, setUserData] = useState<any>(null);

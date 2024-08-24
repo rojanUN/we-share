@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { AiOutlineSetting } from "react-icons/ai";
-import { FaHome, FaPaperclip as ExamScheduleIcon, FaUserPlus } from "react-icons/fa";
-import { HiUserAdd } from "react-icons/hi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { AiOutlineSetting } from 'react-icons/ai';
+import {
+    FaHome,
+    FaPaperclip as ExamScheduleIcon,
+    FaUserPlus,
+} from 'react-icons/fa';
+import { HiUserAdd } from 'react-icons/hi';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 const Sidebar: React.FC = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -12,9 +16,17 @@ const Sidebar: React.FC = () => {
     const menuItems = [
         { path: '/', label: 'Dashboard', icon: <FaHome /> },
         { path: '/manage-user', label: 'Manage User', icon: <FaUserPlus /> },
-        { path: '/quiz-manage', label: 'Quiz Manage', icon: <AiOutlineSetting /> },
+        {
+            path: '/quiz-manage',
+            label: 'Quiz Manage',
+            icon: <AiOutlineSetting />,
+        },
         { path: '/add-exam', label: 'Exam Manage', icon: <AiOutlineSetting /> },
-        { path: '/add-exam', label: 'Exam Schedule', icon: <ExamScheduleIcon /> },
+        {
+            path: '/add-exam',
+            label: 'Exam Schedule',
+            icon: <ExamScheduleIcon />,
+        },
         {
             label: 'Manage Settings',
             icon: <AiOutlineSetting />,
@@ -56,7 +68,11 @@ const Sidebar: React.FC = () => {
                                 <span className="flex-1">{item.label}</span>
                                 {item.isDropdown && (
                                     <span className="ml-2">
-                                        {isDropdownOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                        {isDropdownOpen ? (
+                                            <IoIosArrowUp />
+                                        ) : (
+                                            <IoIosArrowDown />
+                                        )}
                                     </span>
                                 )}
                             </Link>

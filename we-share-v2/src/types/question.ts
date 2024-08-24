@@ -4,6 +4,7 @@ export interface Question {
     options?: string[];
     correctAnswer?: number;
     category: string;
+    difficulty?: string;
     createdAt?: string | Date;
     updatedAt?: string | Date;
     deletedAt?: null | string | Date;
@@ -28,6 +29,8 @@ export interface CheckedQuestionType {
     selectedOptionIndex?: number;
     correctAnswer?: number;
     category?: string;
+    difficulty?: string;
+    isSolved?: boolean;
 }
 
 export interface CheckedQuestionCodeType {
@@ -37,7 +40,7 @@ export interface CheckedQuestionCodeType {
 
 export interface CheckedQuestionSetType
     extends CheckedQuestionType,
-        CheckedQuestionCodeType {}
+    CheckedQuestionCodeType { }
 export interface IBlazeFaceModel {
     estimateFaces(input: any, returnTensors: boolean): Promise<any>;
     // Add any other methods or properties you need from BlazeFaceModel
