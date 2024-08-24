@@ -1,5 +1,5 @@
-import { api } from "../helper/axios";
-import { SubmissionResponse } from "../types/question";
+import { api } from '../helper/axios';
+import { SubmissionResponse } from '../types/question';
 
 import {
     authEndPoints,

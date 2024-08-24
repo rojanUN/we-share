@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { AiOutlineSetting } from "react-icons/ai";
-import { HiUserAdd } from "react-icons/hi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { HiUserAdd } from 'react-icons/hi';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 import {
     FaHome,
@@ -32,9 +32,7 @@ const Sidebar: React.FC = () => {
             label: 'Manage Settings',
             icon: <AiOutlineSetting />,
             isDropdown: true,
-            subItems: [
-                { path: '/reset-password', label: 'Reset Password' },
-            ],
+            subItems: [{ path: '/reset-password', label: 'Reset Password' }],
         },
     ];
 
@@ -50,7 +48,7 @@ const Sidebar: React.FC = () => {
 
     return (
         <div className="bg-gray-800 text-white w-64 min-h-screen hidden md:block">
-            <div className="p-4 font-bold">We-Share-V2</div>
+            <div className="p-4 font-bold">Exam Portal</div>
             <ul>
                 {menuItems.map((item, index) => (
                     <React.Fragment key={index}>
