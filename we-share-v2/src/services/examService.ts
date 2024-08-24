@@ -1,5 +1,5 @@
-import { api } from "../helper/axios";
-import { SubmissionResponse } from "../types/question";
+import { api } from '../helper/axios';
+import { SubmissionResponse } from '../types/question';
 
 import {
     authEndPoints,
@@ -96,7 +96,6 @@ export const getExam = async () => {
 };
 
 export const addExam = async (values: any, includeCodeQuestions: boolean) => {
-
     const URL = examScheduleEndpoints.addExams;
     console.log('this is values', values);
     const response = await api.post(URL, {

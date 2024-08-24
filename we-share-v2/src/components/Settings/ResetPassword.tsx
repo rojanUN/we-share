@@ -1,6 +1,6 @@
-import * as Yup from "yup";
-import React from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from 'yup';
+import React from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 // Define validation schema using Yup
 const validationSchema = Yup.object({
@@ -10,14 +10,20 @@ const validationSchema = Yup.object({
         .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
         .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
         .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[\W_]/, 'Password must contain at least one special character'),
+        .matches(
+            /[\W_]/,
+            'Password must contain at least one special character'
+        ),
     confirmPassword: Yup.string()
         .required('Confirm Password is required')
-        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
 
 const ResetPassword: React.FC = () => {
-    const handleSubmit = (values: { password: string; confirmPassword: string }) => {
+    const handleSubmit = (values: {
+        password: string;
+        confirmPassword: string;
+    }) => {
         // Handle form submission
         console.log('Form values:', values);
     };
@@ -30,9 +36,14 @@ const ResetPassword: React.FC = () => {
                 onSubmit={handleSubmit}
             >
                 <Form className="w-1/3 p-6 bg-white rounded shadow border-2 border-indigo-500">
-                    <h2 className="text-2xl font-bold mb-6 flex justify-center">Reset Password</h2>
+                    <h2 className="text-2xl font-bold mb-6 flex justify-center">
+                        Reset Password
+                    </h2>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block mb-2 font-medium">
+                        <label
+                            htmlFor="password"
+                            className="block mb-2 font-medium"
+                        >
                             New Password
                         </label>
                         <Field
@@ -48,7 +59,10 @@ const ResetPassword: React.FC = () => {
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="confirmPassword" className="block mb-2 font-medium">
+                        <label
+                            htmlFor="confirmPassword"
+                            className="block mb-2 font-medium"
+                        >
                             Confirm Password
                         </label>
                         <Field
