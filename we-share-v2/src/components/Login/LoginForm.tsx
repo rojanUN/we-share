@@ -1,13 +1,14 @@
-import * as Yup from 'yup';
-import React from 'react';
-import { useFormik } from 'formik';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CookieStorage } from '../../helper/CookieStorage';
-import { LocalStorage } from '../../helper/localStorage';
-import { SessionStorage } from '../../helper/sessionStorage';
-import { Toast } from '../../helper/toast';
-import { loginExam } from '../../services/examService';
-import { loginAdmin } from '../../services/userServices';
+import * as Yup from "yup";
+import CryptoJS from "crypto-js";
+import React from "react";
+import { useFormik } from "formik";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { CookieStorage } from "../../helper/CookieStorage";
+import { LocalStorage } from "../../helper/localStorage";
+import { SessionStorage } from "../../helper/sessionStorage";
+import { Toast } from "../../helper/toast";
+import { loginExam } from "../../services/examService";
+import { loginAdmin } from "../../services/userServices";
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
@@ -47,9 +48,11 @@ const LoginForm: React.FC = () => {
                     Toast.Error(login?.message);
                 }
             } else {
+                const encryptedPassword = CryptoJS.AES.encrypt(values.password, import.meta.env.VITE_SECRET_KEY).toString();
+
                 const response = await loginAdmin({
                     email: values.email,
-                    password: values.password,
+                    password: encryptedPassword,
                 });
 
                 if (response?.status === 404) {

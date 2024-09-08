@@ -1,7 +1,7 @@
-import * as Yup from "yup";
-import React from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { Toast } from "../../helper/toast";
+import * as Yup from 'yup';
+import React from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Toast } from '../../helper/toast';
 
 // Define validation schema using Yup
 const validationSchema = Yup.object({
@@ -26,14 +26,12 @@ const ResetPassword: React.FC = () => {
         confirmPassword: string;
     }) => {
         if (values.password === values.confirmPassword) {
-            values.password = "";
-            values.confirmPassword = "";
+            values.password = '';
+            values.confirmPassword = '';
             Toast.Success('Password Reset Successfully');
-        }
-        else {
+        } else {
             Toast.Error('Password and Confirm Password must be same');
         }
-
     };
 
     return (

@@ -1,4 +1,4 @@
-import { getResult } from "../services/examService";
+import { getResult } from '../services/examService';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 

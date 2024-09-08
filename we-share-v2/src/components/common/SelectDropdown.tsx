@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 interface SelectDropwdownProps {
     isOpen: boolean;
@@ -24,7 +24,9 @@ const SelectDropwdown: React.FC<SelectDropwdownProps> = ({
             setSelectedOption(options[0]);
             setIsLoading(false);
         } else {
-            setSelectedOption(isLoading ? 'Loading...' : 'No options available');
+            setSelectedOption(
+                isLoading ? 'Loading...' : 'No options available'
+            );
         }
     }, [options]);
 

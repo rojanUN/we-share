@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { AiOutlineSetting } from "react-icons/ai";
-import { HiUserAdd } from "react-icons/hi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { HiUserAdd } from 'react-icons/hi';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 import {
     FaHome,
@@ -32,9 +32,7 @@ const Sidebar: React.FC = () => {
             label: 'Manage Settings',
             icon: <AiOutlineSetting />,
             isDropdown: true,
-            subItems: [
-                { path: '/reset-password', label: 'Reset Password' },
-            ],
+            subItems: [{ path: '/reset-password', label: 'Reset Password' }],
         },
     ];
 
