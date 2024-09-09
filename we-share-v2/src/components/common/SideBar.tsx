@@ -17,11 +17,6 @@ const Sidebar: React.FC = () => {
     const menuItems = [
         { path: '/', label: 'Dashboard', icon: <FaHome /> },
         { path: '/manage-user', label: 'Manage User', icon: <FaUserPlus /> },
-        {
-            path: '/quiz-manage',
-            label: 'Quiz Manage',
-            icon: <AiOutlineSetting />,
-        },
         { path: '/add-exam', label: 'Exam Manage', icon: <AiOutlineSetting /> },
         {
             path: '/view-result',
@@ -48,7 +43,7 @@ const Sidebar: React.FC = () => {
 
     return (
         <div className="bg-gray-800 text-white w-64 min-h-screen hidden md:block">
-            <div className="p-4 font-bold">We-Share-V2</div>
+            <div className="p-4 font-bold">Exam Portal</div>
             <ul>
                 {menuItems.map((item, index) => (
                     <React.Fragment key={index}>

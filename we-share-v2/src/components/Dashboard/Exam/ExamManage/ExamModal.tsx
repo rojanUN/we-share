@@ -5,6 +5,7 @@ import { TimePicker } from '@hilla/react-components/TimePicker.js';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Toast } from '../../../../helper/toast';
 import { addExam } from '../../../../services/examService';
+import Button from '../../../common/Button';
 
 interface ExamInfoProps {
     onClose: () => void;
@@ -100,7 +101,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     className="text-red-500"
                                 />
                             </div>
-                            <div className="mb-4 flex justify-between">
+                            {/* <div className="mb-4 flex justify-between">
                                 <TimePicker
                                     label="Start Time"
                                     value={startTime}
@@ -123,7 +124,7 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                         setStartDate(e.target.value)
                                     }
                                 />
-                            </div>
+                            </div> */}
 
                             <div className="mb-4">
                                 <label className="block mb-2">
@@ -188,20 +189,17 @@ const ExamInfo: React.FC<ExamInfoProps> = ({ onClose, onExamAdded }) => {
                                     </div>
                                 </>
                             )}
-                            <div className="flex justify-end">
-                                <button
-                                    type="button"
-                                    className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
-                                    onClick={onClose}
+                            <div className="flex justify-end gap-3">
+                                <Button
+                                    variant="danger"
+                                    outline
+                                    handleBtnClick={onClose}
                                 >
                                     Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                >
+                                </Button>
+                                <Button variant="primary" type="submit">
                                     Save
-                                </button>
+                                </Button>
                             </div>
                         </Form>
                     )}
