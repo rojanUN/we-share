@@ -6,11 +6,6 @@ import SelectDropdown from '../../common/SelectDropdown';
 import { useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa';
 import { Toast } from '../../../helper/toast';
-import {
-    ExamInterface,
-    ResultInterface,
-    UserInterface,
-} from '../../../interfaces/UserInterface';
 import { getExam, getResult } from '../../../services/examService';
 import { getUsers } from '../../../services/userServices';
 
