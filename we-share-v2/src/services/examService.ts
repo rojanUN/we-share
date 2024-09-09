@@ -195,7 +195,7 @@ export const getResult = async (getExam: any) => {
         const URL = examEndpoints.getResult;
         const response = await api.post(URL, {
             examId: getExam.examId,
-            userId: getExam.userId
+            userId: getExam.userId,
         });
         console.log('this is response', response);
 
@@ -203,11 +203,15 @@ export const getResult = async (getExam: any) => {
             return response.data;
         }
     } catch (error: any) {
-        console.log("here");
-        return { sucess: false, message: error.response.data.message || 'An error occurred while fetching results' }
+        console.log('here');
+        return {
+            sucess: false,
+            message:
+                error.response.data.message ||
+                'An error occurred while fetching results',
+        };
     }
-
-}
+};
 export const getDashboardDatas = async () => {
     try {
         const URL = examEndpoints.getDashboardData;
@@ -217,9 +221,12 @@ export const getDashboardDatas = async () => {
             return response.data;
         }
     } catch (error: any) {
-        console.log("here");
-        return { sucess: false, message: error.response.data.message || 'An error occurred while fetching results' }
+        console.log('here');
+        return {
+            sucess: false,
+            message:
+                error.response.data.message ||
+                'An error occurred while fetching results',
+        };
     }
-
-}
-
+};

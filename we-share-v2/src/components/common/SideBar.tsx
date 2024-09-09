@@ -17,11 +17,6 @@ const Sidebar: React.FC = () => {
     const menuItems = [
         { path: '/', label: 'Dashboard', icon: <FaHome /> },
         { path: '/manage-user', label: 'Manage User', icon: <FaUserPlus /> },
-        {
-            path: '/quiz-manage',
-            label: 'Quiz Manage',
-            icon: <AiOutlineSetting />,
-        },
         { path: '/add-exam', label: 'Exam Manage', icon: <AiOutlineSetting /> },
         {
             path: '/view-result',
