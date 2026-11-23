@@ -1,4 +1,3 @@
-// import { exceptionHandler } from "@src/middlewares";
 import { leetCodeAuthCheck } from "../middlewares/leetcodeauth";
 import { RouterClass } from "../classes";
 import { ProblemController } from "../controllers";

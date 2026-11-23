@@ -97,7 +97,6 @@ export class ResultController {
 
     try {
       if (examId !== undefined && userId !== undefined) {
-        // If both examId and userId are provided
         resultData = await Results.findAll({
           where: {
             examId: examId,
@@ -110,7 +109,6 @@ export class ResultController {
           ],
         });
       } else if (examId !== undefined) {
-        // If only examId is provided
         resultData = await Results.findAll({
           where: {
             examId: examId,
@@ -118,7 +116,6 @@ export class ResultController {
           include: [Exams, User],
         });
       } else if (userId !== undefined) {
-        // If only userId is provided
         resultData = await Results.findAll({
           where: {
             userId: userId,

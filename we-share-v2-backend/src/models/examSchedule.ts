@@ -42,7 +42,6 @@ const ExamSchedule = sequelize.define(
   }
 );
 
-// Define the association
 Exams.hasMany(ExamSchedule, { foreignKey: "examId", as: "examSchedules" });
 
 ExamSchedule.belongsTo(Exams, { foreignKey: "examId" });

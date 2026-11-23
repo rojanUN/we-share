@@ -100,7 +100,6 @@ function buildError(err: any) {
     };
   }
 
-  // Return INTERNAL_SERVER_ERROR for all other cases
   else {
     return {
       success: false,

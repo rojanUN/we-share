@@ -3,7 +3,6 @@ import { ExamController } from "../controllers/ExamController";
 import { ResultController } from "../controllers/ResultController";
 import { exceptionHandler } from "../middlewares";
 
-// import { exceptionHandler } from "@src/middlewares";
 export class ExamRouter extends RouterClass {
   constructor() {
     super();

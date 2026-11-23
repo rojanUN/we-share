@@ -22,10 +22,8 @@ class Server {
 
     this.app.get("/", (req, res) => res.send(`Server running at port ${this.app.get("port")}`));
 
-    //API Routes
     this.app.use("/api", ProxyRouter.map());
 
-    //Error Handler
     this.app.use(methodNotAllowed);
     this.app.use(notFound);
     this.app.use(genericErrorHandler);

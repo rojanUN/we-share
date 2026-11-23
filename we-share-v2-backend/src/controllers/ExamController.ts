@@ -3,10 +3,9 @@ import ExamSchedule from "../models/examSchedule";
 import Exams from "../models/exam";
 import MCQQuestion from "../models/mcqQuestionsModel";
 import User from "../models/user";
-import e, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { conflict } from "@hapi/boom";
 import { UserInterface } from "@src/interfaces";
-import { create } from "axios";
 import { generate } from "generate-password";
 import { sign, verify } from "jsonwebtoken";
 import { sendEmail } from "../utils/nodemailer/mailer";
@@ -138,7 +137,6 @@ export class ExamController {
 
         const token = await sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
-        //send mail to user
         sendEmail(userData, scheduleData, token);
       });
       res.status(200).json({ message: "Exam scheduled successfully" });
