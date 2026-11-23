@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-// import { detectNoise } from '../helper/helper';
 import { Toast } from '../helper/toast';
 import { CustomError } from '../types/question';
 import '@tensorflow/tfjs';
@@ -27,7 +26,6 @@ const WebCam = ({
     const isDeviceCheckedRef = useRef<boolean>(isDeviceChecked ?? false);
     const dispatch = useAppDispatch();
 
-    // Update the ref when the prop changes
     useEffect(() => {
         isDeviceCheckedRef.current = isDeviceChecked ?? false;
     }, [isDeviceChecked]);
@@ -58,10 +56,9 @@ const WebCam = ({
             startVideo();
         }
         return () => {
-            // Cleanup function to stop the video stream when component unmounts
             if (mediaStreamRef.current) {
                 const tracks = mediaStreamRef.current.getTracks();
-                tracks.forEach((track) => track.stop()); // Stop all tracks in the stream
+                tracks.forEach((track) => track.stop());
             }
         };
     }, [videoRef, isModelsLoaded]);

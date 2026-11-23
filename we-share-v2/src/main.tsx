@@ -57,7 +57,6 @@ const App = () => {
                     <Layout />{' '}
                 </PrivateRoute>
             ),
-            // element: <Layout />,
             children: [
                 {
                     path: '/',
@@ -75,10 +74,6 @@ const App = () => {
                     path: '/add-exam',
                     element: <ManageExams />,
                 },
-                // {
-                //     path: "/manage-admin",
-                //     element: <ManageAdmin />
-                // },
                 {
                     path: '/reset-password',
                     element: <ResetPassword />,

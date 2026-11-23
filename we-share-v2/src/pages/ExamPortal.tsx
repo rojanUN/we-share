@@ -22,8 +22,6 @@ import { Toast } from '../helper/toast';
 import { handleExamSubmit } from '../services/examService';
 import { CustomError } from '../types/question';
 
-// import ErrorBoundary from '../components/ErrorBoundary';
-
 const examDuration = import.meta.env.VITE_EXAM_DURATION;
 
 const ExamPortal = function ExamPortal() {
@@ -153,7 +151,6 @@ const ExamPortal = function ExamPortal() {
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('popstate', handlePopState);
 
-        // Push the initial state to the history
         window.history.pushState(null, '', window.location.pathname);
 
         const timerId = setInterval(() => {
@@ -171,14 +168,6 @@ const ExamPortal = function ExamPortal() {
             clearInterval(timerId);
         };
     }, [coutdownTime, handleMCQSubmit]);
-
-    // Retrieve the saved state from sessionStorage when the component mounts
-    // useEffect(() => {
-    //     const savedState = SessionStorage.getSessionItem('questionsState');
-    //     if (savedState) {
-    //         dispatch(setCheckedQuestions(JSON.parse(savedState)));
-    //     }
-    // }, [dispatch]);
 
     const [showToastOnce, setShowToastOnce] = useState(false);
     const closePreviousToast = () => {

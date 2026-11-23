@@ -1,8 +1,4 @@
-// import Button from '../components/common/Button';
-// import { useNavigate } from 'react-router-dom';
-
 function ExamCompletion() {
-    // const navigate = useNavigate();
     return (
         <div className="w-dvw h-dvh grid place-content-center bg-[#f4fbf9] text-center">
             <h2 className="mb-4">
@@ -19,17 +15,6 @@ function ExamCompletion() {
                     your email.
                 </strong>
             </p>
-            {/* <div className="w-fit mx-auto mt-4">
-                <Button
-                    variant="primary"
-                    handleBtnClick={() => {
-                        navigate('/');
-                    }}
-                    outline
-                >
-                    Go To Home
-                </Button>
-            </div> */}
         </div>
     );
 }

@@ -3,7 +3,6 @@ import React from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Toast } from '../../helper/toast';
 
-// Define validation schema using Yup
 const validationSchema = Yup.object({
     password: Yup.string()
         .required('Password is required')

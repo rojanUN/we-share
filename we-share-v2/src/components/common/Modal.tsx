@@ -22,13 +22,6 @@ const Modal = ({
     title,
     children,
 }: ModalType) => {
-    // const handleSubmitBtnClick = () => {
-    //     sessionStorage.removeItem('countdownTimer');
-    //     sessionStorage.removeItem('questionsState');
-    //     onClose();
-    //     handleSubmit();
-    // };
-
     if (!isOpen) return null;
 
     return (

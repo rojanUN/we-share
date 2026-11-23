@@ -43,15 +43,8 @@ export interface CheckedQuestionSetType
         CheckedQuestionCodeType {}
 export interface IBlazeFaceModel {
     estimateFaces(input: any, returnTensors: boolean): Promise<any>;
-    // Add any other methods or properties you need from BlazeFaceModel
 }
 export interface QuestionStateType {
-    // id: number | null;
-    // question: string | null;
-    // options?: string[] | null;
-    // correctAnswer?: number | null;
-    // category: string | null;
-    // questionNo: number | null;
     selectedQuestion: Question | null;
     activeQuesIndex?: number | null;
     questions?: Question[] | null;

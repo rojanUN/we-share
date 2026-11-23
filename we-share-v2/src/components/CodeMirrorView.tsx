@@ -17,9 +17,6 @@ import { setCheckedQuestions } from '../feature/exam/examSlice';
 import { asyncHandler } from '../helper/helper';
 import { ConsoleIcon, PlayIcon, TipsIcon } from '../helper/icons';
 import { Toast } from '../helper/toast';
-
-// language modes
-// import { Toast } from '../helper/toast';
 import {
     CheckedQuestionSetType,
     LeetCodeQuestion,

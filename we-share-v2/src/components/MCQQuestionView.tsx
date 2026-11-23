@@ -47,7 +47,6 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
         let updatedState;
 
         if (existingQuestion) {
-            // Update the existing question
             updatedState = questionStore?.checkedQuestions?.map((q) =>
                 q.id === id
                     ? {
@@ -63,7 +62,6 @@ function MCQQuestionView({ questionStore }: MCQQuestionViewType) {
                     : q
             );
         } else {
-            // Add new question
             updatedState = [
                 ...questionStore.checkedQuestions!,
                 {

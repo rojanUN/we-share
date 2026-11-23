@@ -1,5 +1,4 @@
 import QuestionIndicator from './common/QuestionIndicator';
-// import { questions } from '../mock-data/questions';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {

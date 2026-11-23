@@ -1,4 +1,3 @@
-// src/feature/selectedLeetCodeQuestions/selectedLeetCodeQuestionsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SelectedQuestion {

@@ -47,7 +47,6 @@ function CodeMirrorIDE(props: CodeMirrorIDEType) {
     }, [currentLanguage, algorithmQuestion]);
 
     useEffect(() => {
-        // Load code from session storage when the component mounts
         if (question) {
             const savedCode = SessionStorage.getSessionItem(
                 `code-${question.id}-${currentLanguage}`

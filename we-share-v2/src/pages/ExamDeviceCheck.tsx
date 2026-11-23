@@ -50,9 +50,6 @@ function ExamDeviceCheck({
     const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>('');
     const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>('');
 
-    // const [mediaPermissionError, setMediaPermissionError] =
-    //     useState<boolean>(false);
-
     const [isFaceDetected, setIsFaceDetected] = useState<boolean>(false);
     const [soundLevel, setSoundLevel] = useState(0);
     const detectSoundOnceRef = useRef(false);
@@ -187,7 +184,6 @@ function ExamDeviceCheck({
                     console.log('video stream', videoStream);
                 }
 
-                // Combine audio and video devices
                 const audioDevices = audioStream
                     ? await navigator.mediaDevices.enumerateDevices()
                     : [];
@@ -206,7 +202,6 @@ function ExamDeviceCheck({
 
                 setDevices(filteredDevices);
 
-                // Cleanup streams
                 if (audioStream) {
                     audioStream
                         .getTracks()
@@ -276,7 +271,6 @@ function ExamDeviceCheck({
                     await navigator.mediaDevices.getUserMedia(VideoConstraints);
             } catch (error) {
                 console.error('Error accessing selected devices:', error);
-                // Handle errors
             }
         };
 

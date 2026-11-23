@@ -20,7 +20,6 @@ const Dropdown = ({
     selectedOption,
     setSelectedOption,
 }: DropdownType) => {
-    // const [selectedOption, setSelectedOption] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
