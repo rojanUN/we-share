@@ -9,7 +9,9 @@
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
         "prepare": "husky",
         "format": "prettier --write .",
-        "prettier-format": "prettier --check ."
+        "prettier-format": "prettier --check .",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage"
     },
     "dependencies": {
         "@emotion/react": "^11.13.0",
@@ -42,6 +44,8 @@
         "yup": "^1.4.0"
     },
     "devDependencies": {
+        "@testing-library/dom": "^10.4.2",
+        "@testing-library/react": "^16.3.3",
         "@types/crypto-js": "^4.2.2",
         "@types/jsonwebtoken": "^9.0.6",
         "@types/react": "^18.2.15",
@@ -49,15 +53,19 @@
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
         "@vitejs/plugin-react": "^4.0.3",
+        "@vitest/coverage-v8": "^2.1.9",
         "autoprefixer": "^10.4.19",
         "eslint": "^8.57.0",
         "eslint-plugin-react": "^7.34.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.4.3",
+        "happy-dom": "^15.11.7",
+        "jsdom": "^29.1.1",
         "postcss": "^8.4.38",
         "prettier": "^3.2.5",
         "tailwindcss": "^3.4.4",
         "typescript": "^5.0.2",
-        "vite": "^4.4.5"
+        "vite": "^4.4.5",
+        "vitest": "^2.1.9"
     }
 }
