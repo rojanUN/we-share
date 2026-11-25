@@ -1,0 +1,35 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies & build
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# Env & secrets
+**/.env
+**/*.env
+**/credentials.json
+**/google-services.json
+
+# Logs & coverage
+**/*.log
+**/logs/
+**/coverage/
+**/loc_out.txt
+**/loc_report.json
+
+# Misc
+report.json
+*.local
