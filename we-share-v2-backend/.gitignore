@@ -1,0 +1,11 @@
+node_modules/
+*.logs
+*.env
+.env
+dist/
+public/dist/
+public/bundle/
+.DS_Store
+log
+*.rdb
+credentials.json
