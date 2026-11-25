@@ -43,7 +43,7 @@ class _ModalState extends State<Modal> {
           ),
           (Route<dynamic> route) => false,
         );
-      } catch (error) {
+      } on Object catch (error) {
         print("Error creating folder: $error");
         setState(() {
           isLoading = false;

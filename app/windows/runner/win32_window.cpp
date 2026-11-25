@@ -68,8 +68,7 @@ class WindowClassRegistrar {
     return instance_;
   }
 
-  // Returns the name of the window class, registering the class if it hasn't
-  // previously been registered.
+  // Window class name; registers the class on first use.
   const wchar_t* GetWindowClass();
 
   // Unregisters the window class. Should only be called if there are no

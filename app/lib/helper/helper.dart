@@ -23,7 +23,6 @@ void Toastify({BuildContext? context, String? msg, ToastStatus? status}) {
     type: ToastificationType.success,
     style: ToastificationStyle.fillColored,
     autoCloseDuration: const Duration(seconds: 3),
-    // you can also use RichText widget for title and description parameters
     description: RichText(
         text: TextSpan(text: msg, style: TextStyle(color: Colors.white))),
     alignment: Alignment.topRight,
@@ -70,7 +69,6 @@ String truncateFilename(String filename) {
   if (filename.length <= 24) {
     return filename;
   }
-  // Truncate the filename and add "..."
   return filename.substring(0, 24) + " ...";
 }
 
@@ -104,7 +102,7 @@ void handlePreviewFile(context, file) async {
     Navigator.of(context).pop();
     if (downloadedFile == null) return;
     OpenFile.open(downloadedFile);
-  } catch (e) {
+  } on Object catch (e) {
     print('Error downloading file: $e');
     throw e;
   }

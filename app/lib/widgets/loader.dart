@@ -9,7 +9,7 @@ class Loader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size, // Adjust height as needed
+      height: size,
       width: size,
       child: CircularProgressIndicator(
         color: color,

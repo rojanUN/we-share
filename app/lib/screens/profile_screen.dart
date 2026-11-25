@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
         await getFavoritesList();
         await getDownloadCount();
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user: $error');
     }
   }
@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
           userProfileUrl = loggedUser.profilePic!;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user profile url: $error');
     }
   }
@@ -74,7 +74,7 @@ class _ProfileState extends State<Profile> {
           updatedUserName = loggedUser.firstName + " " + loggedUser.lastName;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user profile url: $error');
     }
   }
@@ -92,7 +92,7 @@ class _ProfileState extends State<Profile> {
         favourites = favouritesList;
         _isLoading = false;
       });
-    } catch (e) {
+    } on Object catch (e) {
       print('Error getting favorites: $e');
       setState(() {
         _isLoading = false;
@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> {
         downloadCount = userDownloadCount;
         _isLoading = false;
       });
-    } catch (e) {
+    } on Object catch (e) {
       print('Error getting download count: $e');
       setState(() {
         _isLoading = false;
@@ -158,7 +158,7 @@ class _ProfileState extends State<Profile> {
           ),
         );
       }
-    } catch (e) {
+    } on Object catch (e) {
       setState(() {
         _isProfileUpdating = false;
       });
@@ -201,7 +201,7 @@ class _ProfileState extends State<Profile> {
       });
       Navigator.of(context).pop();
       getFavoritesList();
-    } catch (e) {
+    } on Object catch (e) {
       print("Error deleting favourite files: $e");
       throw e;
     }
@@ -296,7 +296,7 @@ class _ProfileState extends State<Profile> {
                                   padding: EdgeInsets.all(5),
                                   side: BorderSide(
                                       color: Colors.white,
-                                      width: 2), // Adjust width as needed
+                                      width: 2),
                                 ),
                                 child: Icon(
                                   Icons.logout,

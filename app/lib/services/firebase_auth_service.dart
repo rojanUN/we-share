@@ -37,7 +37,7 @@ class FirebaseAuthService {
           format: PutStringFormat.dataUrl, metadata: newMetaData);
       print("Folder created (simulated) at: $folderPath");
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       print("Error creating folder: $error");
       return false;
     }
@@ -49,7 +49,7 @@ class FirebaseAuthService {
       await storageRef.delete();
       print('File deleted successfully');
       return true;
-    } catch (e) {
+    } on Object catch (e) {
       print('Error deleting file: $e');
       return false;
     }
@@ -75,7 +75,7 @@ class FirebaseAuthService {
       final fileUrl = await storage.ref().child(filePath).getDownloadURL();
       print('fileUrl => $fileUrl');
       return fileUrl;
-    } catch (e) {
+    } on Object catch (e) {
       print('Error getting download URL: $e');
       return null;
     }
@@ -91,7 +91,7 @@ class FirebaseAuthService {
         print('User document not found');
         return 0; // Handle user not found case (optional)
       }
-    } catch (e) {
+    } on Object catch (e) {
       print('Error getting download count: $e');
       return 0; // Handle errors (optional)
     }
@@ -107,7 +107,7 @@ class FirebaseAuthService {
       } else {
         print('User document not found');
       }
-    } catch (e) {
+    } on Object catch (e) {
       print('Error updating download count: $e');
     }
   }
@@ -117,7 +117,7 @@ class FirebaseAuthService {
       final storageRef = storage.ref().child(fullPath);
       await storageRef.delete();
       print('Existing image deleted from storage');
-    } catch (e) {
+    } on Object catch (e) {
       print('Error deleting image from storage: $e');
     }
   }
@@ -145,7 +145,7 @@ class FirebaseAuthService {
         isAdmin: user?.isAdmin,
         profilePic: user?.profilePic,
       );
-    } catch (e) {
+    } on Object catch (e) {
       print("Error updating user name: $e");
       return null;
     }
@@ -189,7 +189,7 @@ class FirebaseAuthService {
         isAdmin: profileData?['isAdmin'] ?? false,
         profilePic: userProfile?.downloadUrl,
       );
-    } catch (e) {
+    } on Object catch (e) {
       print('Error updating profile picture: $e');
       return null;
     }
@@ -216,7 +216,7 @@ class FirebaseAuthService {
       if (userId != null) {
         await updateDownloadCount(userId);
       }
-    } catch (e) {
+    } on Object catch (e) {
       print("Error downloading file publicly: $e");
       return null;
     }
@@ -240,7 +240,7 @@ class FirebaseAuthService {
       }
 
       return path;
-    } catch (e) {
+    } on Object catch (e) {
       print('Error downloading file privately: $e');
       return null;
     }
@@ -284,7 +284,7 @@ class FirebaseAuthService {
       final fullStoragePath = storageRef.fullPath;
       return UserProfile(
           downloadUrl: downloadUrl, fullStoragePath: fullStoragePath);
-    } catch (e) {
+    } on Object catch (e) {
       print("Error uploading file => $e");
       return null;
     }
@@ -318,7 +318,7 @@ class FirebaseAuthService {
       //upload to blog
       DocumentReference doc = await db.collection("blogs").add(blog.toJson());
       print("completely called");
-    } catch (error) {
+    } on Object catch (error) {
       print(error);
     }
   }
@@ -350,7 +350,7 @@ class FirebaseAuthService {
       );
 
       return data;
-    } catch (error) {
+    } on Object catch (error) {
       print(error);
       return [];
     }
@@ -427,7 +427,7 @@ class FirebaseAuthService {
       }
 
       return foldersAndFiles;
-    } catch (e) {
+    } on Object catch (e) {
       print('Error listing folders and files: $e');
       throw e;
     }
@@ -437,7 +437,7 @@ class FirebaseAuthService {
     try {
       await db.collection('favourites').doc(documentId).delete();
       print('File removed from favourite list successfully');
-    } catch (e) {
+    } on Object catch (e) {
       print('Error removing file from favourite list: $e');
       throw e;
     }
@@ -459,7 +459,7 @@ class FirebaseAuthService {
       });
 
       return files;
-    } catch (e) {
+    } on Object catch (e) {
       print('Error listing favourite files: $e');
       throw e;
     }
@@ -489,7 +489,7 @@ class FirebaseAuthService {
       DocumentReference doc =
           await db.collection("favourites").add(favouriteFile);
       print('File added to favourite list successfully, ${doc.id}');
-    } catch (e) {
+    } on Object catch (e) {
       print('Error adding file to favourite list: $e');
       throw e;
     }
@@ -518,7 +518,7 @@ class FirebaseAuthService {
 
       DocumentReference doc = await db.collection("users").add(user);
       print('User created successfully, ${doc.id}');
-    } catch (e) {
+    } on Object catch (e) {
       print(e);
       throw e;
     }
@@ -595,7 +595,7 @@ class FirebaseAuthService {
         isAdmin: userData['isAdmin'] ?? false,
         profilePic: userData['profile']?['downloadUrl'] ?? "",
       );
-    } catch (e) {
+    } on Object catch (e) {
       print("google login failed => $e");
       throw e;
     }
@@ -625,7 +625,7 @@ class FirebaseAuthService {
         isAdmin: userData['isAdmin'] ?? false,
         profilePic: userData['profile']?['downloadUrl'] ?? "",
       );
-    } catch (e) {
+    } on Object catch (e) {
       print(e);
       throw e;
     }
@@ -645,7 +645,7 @@ class FirebaseAuthService {
       String hashedPw = BCrypt.hashpw(newPassword, BCrypt.gensalt());
       user.docs.first.reference.update({"password": hashedPw});
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       print("Error updating Password");
       return false;
     }
@@ -672,7 +672,7 @@ class FirebaseAuthService {
       //store in otp field
       user_ref.docs[0].reference.update({"one_time_password": otp});
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       print("Error storing otp");
       return false;
     }
@@ -686,7 +686,7 @@ class FirebaseAuthService {
 
       if (dbOtp != otp) throw "error";
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       print("incorrect otp");
       return false;
     }

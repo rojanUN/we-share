@@ -12,15 +12,16 @@ import 'package:flutter_final_project/widgets/centraltextloader.dart';
 import 'package:flutter_final_project/widgets/loader.dart';
 import 'package:flutter_final_project/widgets/popUpMenu.dart';
 
-class Notes extends StatefulWidget {
+class FolderBrowser extends StatefulWidget {
+  final String rootFolder;
   final List<String>? initialBreadCrumbs;
-  const Notes({super.key, this.initialBreadCrumbs});
+  const FolderBrowser({super.key, required this.rootFolder, this.initialBreadCrumbs});
 
   @override
-  State<Notes> createState() => _NotesState();
+  State<FolderBrowser> createState() => _FolderBrowserState();
 }
 
-class _NotesState extends State<Notes> {
+class _FolderBrowserState extends State<FolderBrowser> {
   List<dynamic> folders = [];
   List<String> breadCrumbs = [];
   bool _isLoading = false;
@@ -34,7 +35,7 @@ class _NotesState extends State<Notes> {
       breadCrumbs = List<String>.from(widget.initialBreadCrumbs!);
     }
     loadUserFromLocalStorage();
-    getFilesAndFolders("Notes");
+    getFilesAndFolders(widget.rootFolder);
   }
 
   Future<void> loadUserFromLocalStorage() async {
@@ -45,7 +46,7 @@ class _NotesState extends State<Notes> {
           user = loggedUser;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user: $error');
     }
   }
@@ -56,8 +57,7 @@ class _NotesState extends State<Notes> {
         _isLoading = true;
         selectedItems = [];
       });
-      // initially add Notes to the breadcrumbs
-      if (breadCrumbs.length < 1) {
+            if (breadCrumbs.length < 1) {
         breadCrumbs.add(folderName);
       }
 
@@ -68,7 +68,7 @@ class _NotesState extends State<Notes> {
         folders = foldersName;
         _isLoading = false;
       });
-    } catch (error) {
+    } on Object catch (error) {
       print("Error getting files: $error");
       setState(() {
         _isLoading = false;
@@ -137,7 +137,7 @@ class _NotesState extends State<Notes> {
           await FirebaseAuthService().uploadFileToFirebase(file, folderPath);
           uploadedFiles++;
           Navigator.of(context).pop();
-        } catch (error) {
+        } on Object catch (error) {
           print('Error uploading file "${file.path.split('/').last}": $error');
           allUploadsSuccessful = false; // Mark upload failure
           break; // Exit the loop on error to prevent unnecessary attempts
@@ -211,8 +211,8 @@ class _NotesState extends State<Notes> {
         selectedItems = [];
       });
       Navigator.of(context).pop();
-      getFilesAndFolders("Notes");
-    } catch (e) {
+      getFilesAndFolders(widget.rootFolder);
+    } on Object catch (e) {
       print("Error deleting files: $e");
       throw e;
     }

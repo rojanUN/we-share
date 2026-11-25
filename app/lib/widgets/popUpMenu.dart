@@ -37,7 +37,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           user = loggedUser;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user: $error');
     }
   }
@@ -85,7 +85,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           ),
           (Route<dynamic> route) => false,
         );
-      } catch (e) {
+      } on Object catch (e) {
         print('Error removing file: $e');
         throw e;
       }
@@ -192,7 +192,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           ),
         );
         return true;
-      } catch (e) {
+      } on Object catch (e) {
         print('Error downloading file publicly: $e');
         return false;
       }
@@ -246,7 +246,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
             ),
           ),
         );
-      } catch (e) {
+      } on Object catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -305,7 +305,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
             ),
           ),
         );
-      } catch (e) {
+      } on Object catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -455,7 +455,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
                 ),
               ),
           ],
-          offset: Offset(-35.0, 0.0), // Adjust offset for left positioning
+          offset: Offset(-35.0, 0.0),
         ),
       ],
     );

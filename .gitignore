@@ -30,6 +30,13 @@ Thumbs.db
 **/loc_out.txt
 **/loc_report.json
 
+# Assessment / tooling (local only)
+scripts/
+**/__pycache__/
+**/assess_report.json
+**/valuation*.json
+**/*.canvas.tsx
+
 # Misc
 report.json
 *.local

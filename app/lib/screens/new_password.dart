@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_final_project/helper/helper.dart';
 import 'package:flutter_final_project/services/firebase_auth_service.dart';
+import 'package:flutter_final_project/widgets/app_logo.dart';
 import 'package:flutter_final_project/widgets/loader.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:toastification/toastification.dart';
@@ -65,23 +65,7 @@ class _NewPasswordState extends State<NewPassword> {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: ListView(
               children: [
-                Container(
-                  height: 180.0,
-                  padding: EdgeInsets.all(25),
-                  width: 180.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.deepPurple, // Adjust border color as needed
-                      width: 2.0, // Adjust border width as needed
-                    ),
-                  ),
-                  child: Image.asset(
-                    'assets/logo2.gif',
-                    height: 95.0,
-                    width: 98.0,
-                  ),
-                ),
+                AppLogo(),
                 SizedBox(
                   height: 20,
                 ),

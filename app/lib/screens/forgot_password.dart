@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';\nimport 'package:flutter_final_project/widgets/app_logo.dart';
 import 'package:flutter_final_project/helper/helper.dart';
 import 'package:flutter_final_project/services/firebase_auth_service.dart';
 import 'package:form_validator/form_validator.dart';
@@ -41,7 +41,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             status: ToastStatus.success);
         Navigator.popAndPushNamed(context, "/verify-otp", arguments: email);
         //redirect garni kaam
-      } catch (error) {
+      } on Object catch (error) {
         setState(() {
           _isSubmitting = false;
           _error = error.toString();
@@ -63,23 +63,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           alignment: Alignment.center,
           child: ListView(
             children: [
-              Container(
-                height: 180.0,
-                padding: EdgeInsets.all(25),
-                width: 180.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.deepPurple, // Adjust border color as needed
-                    width: 2.0, // Adjust border width as needed
-                  ),
-                ),
-                child: Image.asset(
-                  'assets/logo2.gif',
-                  height: 95.0,
-                  width: 98.0,
-                ),
-              ),
+              AppLogo(),
               const SizedBox(
                 height: 20,
               ),

@@ -61,7 +61,7 @@ class _UploadBlogState extends State<UploadBlog> {
           ),
           (Route<dynamic> route) => false,
         );
-      } catch (err) {
+      } on Object catch (err) {
         print(err);
         setState(() {
           isUploading = false;
@@ -87,7 +87,7 @@ class _UploadBlogState extends State<UploadBlog> {
         fileName = result.files.single.name;
       });
       print(filePath);
-    } catch (error) {
+    } on Object catch (error) {
       print(error);
     }
   }

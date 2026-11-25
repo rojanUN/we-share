@@ -41,7 +41,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         setState(() {
           isUpdating = false;
         });
-      } catch (e) {
+      } on Object catch (e) {
         print("Error updating user name: $e");
         setState(() {
           isUpdating = false;

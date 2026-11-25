@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project/helper/storage.dart';
 import 'package:flutter_final_project/screens/blogs_screen.dart';
-import 'package:flutter_final_project/screens/notes_screen.dart';
+import 'package:flutter_final_project/screens/folder_browser_screen.dart';
 import 'package:flutter_final_project/screens/profile_screen.dart';
-import 'package:flutter_final_project/screens/questions_screen.dart';
 import 'package:flutter_final_project/types/user.dart';
 import 'package:flutter_final_project/widgets/loader.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -45,7 +44,7 @@ class _HomeState extends State<Home> {
           userProfileUrl = loggedUser.profilePic!;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user: $error');
     }
   }
@@ -64,7 +63,7 @@ class _HomeState extends State<Home> {
       setState(() {
         _isProfileUpdating = false;
       });
-    } catch (error) {
+    } on Object catch (error) {
       setState(() {
         _isProfileUpdating = false;
       });
@@ -80,7 +79,7 @@ class _HomeState extends State<Home> {
           updatedUserName = loggedUser.firstName + " " + loggedUser.lastName;
         });
       }
-    } catch (error) {
+    } on Object catch (error) {
       print('Error retrieving user profile url: $error');
     }
   }
@@ -97,8 +96,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
-      Notes(initialBreadCrumbs: breadCrumbs),
-      Questions(initialBreadCrumbs: breadCrumbs),
+      FolderBrowser(rootFolder: 'Notes', initialBreadCrumbs: breadCrumbs),
+      FolderBrowser(rootFolder: 'Questions', initialBreadCrumbs: breadCrumbs),
       Blogs(),
       Profile(),
     ];
@@ -172,7 +171,7 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.all(10),
                         side: BorderSide(
                             color: Colors.white,
-                            width: 2), // Adjust width as needed
+                            width: 2),
                       ),
                       child: Icon(
                         Icons.logout,

@@ -41,7 +41,7 @@ Future<bool> sendMail({String? recipientEmail, String? recipientName}) async {
     final sendReport = await send(message, smtpServer);
     print('Mail send successfull' + sendReport.toString());
     return true;
-  } catch (error) {
+  } on Object catch (error) {
     print("Error sending mail: $error");
     return false;
   }

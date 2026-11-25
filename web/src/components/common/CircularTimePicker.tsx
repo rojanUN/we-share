@@ -12,7 +12,7 @@ function CircularTimePicker() {
         selected: number | null,
         setSelected: (value: number) => void
     ) => {
-        const radius = 100; // Adjust radius as needed
+        const radius = 100;
         const angleStep = 360 / items.length;
 
         return items.map((item, index) => {
