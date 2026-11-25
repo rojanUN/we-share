@@ -6,9 +6,9 @@ Monorepo for the we-share project.
 
 | Path | Description |
 |------|-------------|
-| `we-share-v2/` | Frontend (Vite / React) |
-| `we-share-v2-backend/` | Backend API |
-| `flutter-final-project/` | Flutter mobile app |
+| `app/` | Flutter mobile app |
+| `web/` | Frontend (Vite / React) |
+| `server/` | Backend API |
 | `scripts/` | Utility scripts |
 
 ## Getting started
